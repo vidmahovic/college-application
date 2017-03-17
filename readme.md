@@ -12,6 +12,19 @@ Laravel Lumen is a stunningly fast PHP micro-framework for building web applicat
 
 Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
 
+## Begin Project
+
+After pulling a project to your local repository, do the following:
+* php composer.phar install (install the dependencies)
+* npm install (install node dependencies)
+* php artisan key:generate (generate application key)
+* php artisan migrate --seed (migrate and seed the database with dummy data)
+
+After each consecutive pull from a branch, run:
+* php composer.phar install
+* npm install
+* php artisan migrate --seed
+
 ## Security Vulnerabilities
 
 If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
