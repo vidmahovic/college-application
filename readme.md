@@ -12,18 +12,50 @@ Laravel Lumen is a stunningly fast PHP micro-framework for building web applicat
 
 Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
 
-## Begin Project
+## Installation
 
-After pulling a project to your local repository, do the following:
-* php composer.phar install (install the dependencies)
-* npm install (install node dependencies)
-* php artisan key:generate (generate application key)
-* php artisan migrate --seed (migrate and seed the database with dummy data)
+This section contains instructions for installing the project in your local environment.
 
-After each consecutive pull from a branch, run:
-* php composer.phar install
-* npm install
-* php artisan migrate --seed
+#### Begin Project
+
+##### After pulling a project to your local repository for the first time, do the following:
+1. cp .env.example .env (copy DOTENV config file so Lumen can use it)
+    * also, configure .env file according to your needs
+2. php composer.phar install (install the dependencies)
+3. npm install (install node dependencies)
+4. npm run dev (build scripts and SASS)
+5. php artisan key:generate (generate application key)
+6. php artisan migrate --seed (migrate and seed the database with dummy data)
+
+##### After each consecutive pull
+1. php composer.phar install
+2. npm install
+3. npm run dev
+4. php artisan migrate --seed
+
+#### NPM Scripts
+
+For frontend development there are several options available for running NPM scripts:
+* npm run dev (runs scripts and other files - as defined in webpack.mix.js - for development environment)
+* npm run watch-poll (supports automatic build on Homestead machine when .vue file is saved with cmd+s)
+* npm run hot (start webpack dev server with support of hot module replacement - that means you do not have to refresh a page for changes to be seen)
+* npm run production (runs scripts and other files - as defined in webpack.mix.js - and applies production-specific loaders for production environment)
+
+#### Database Setup
+
+1. <span style="color:gray">[OPTIONAL] Set-up your DB_DATABASE database name</span>
+2. <span style="color:gray">[OPTIONAL] If your DB_DATABASE is not set to default name run this command in your Homestead environment:
+    * mysql -u DB_USERNAME -p
+    * when prompted, type your DB_PASSWORD</span>
+3. run the following command:
+    * php artisan migrate --seed (seeds a database with "clean" migrations)
+    * php artisan migrate:refresh --seed (roll-back and migrate the database)
+
+##### Database and PhpStorm
+If you are using PhpStorm and you want to see the Schema inside it, do the following:
+1. Go to PhpStorm -> Preferences -> Tools -> Database
+2. In "General" fill in the DB_DATABASE, DB_USERNAME and DB_PASSWORD
+3. <span style="color:gray">[OPTIONAL] If you are using Homestead, go to "SSH/SSL" tab, check "Use SSH Tunnel" and fill in the fields below</span>
 
 ## Security Vulnerabilities
 
