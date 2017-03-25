@@ -39,6 +39,7 @@ For frontend development there are several options available for running NPM scr
 * npm run dev (runs scripts and other files - as defined in webpack.mix.js - for development environment)
 * npm run watch-poll (supports automatic build on Homestead machine when .vue file is saved with cmd+s)
 * npm run hot (start webpack dev server with support of hot module replacement - that means you do not have to refresh a page for changes to be seen)
+    * You should modify --output-public-path and --port switches to reflect your development URL
 * npm run production (runs scripts and other files - as defined in webpack.mix.js - and applies production-specific loaders for production environment)
 
 #### Database Setup
