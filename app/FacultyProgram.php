@@ -10,6 +10,7 @@ class FacultyProgram extends Model
 
     protected $fillable = ['name', 'faculty_id', 'allow_double_degree', 'is_regular', 'min_points'];
     protected $guarded = ['id'];
+    protected $with = ['faculty'];
 
     protected $casts = [
         'name' => 'string',
@@ -23,22 +24,23 @@ class FacultyProgram extends Model
         return $this->belongsTo(Faculty::class);
     }
 
-    public function scopeFacultyFilter($query, $id){
-        return $query->where('faculty_id', $id);
+    public function scopeFilter($query, $filters){
+        if(intval($filters['fid']) > 0){
+            $query->where('faculty_id', $filters['fid']);
+        }
+        if(intval($filters['min_points']) > 0){
+            $query->where('min_points', '>', $filters['min_points']);
+        }
+        if($filters['is_regular'] == "true" || $filters['is_regular'] == "false"){
+            $is_regular = $filters['is_regular'] == "true" ? 1 : 0;
+            $query->where('is_regular', $is_regular);
+        }
+
+        return $query->orderBy('id', 'desc')->get();
     }
 
     /*
     public function scopeFilter($query, $filters){
-        if($month = $filters['month']){
-            $query->whereMonth('created_at', Carbon::parse($month)->month);
-        }
-
-        if($year = $filters['year']){
-            $query->whereYear('created_at', Carbon::parse($year)->year);
-        }
-
-        // return $query->get();
-    }
 
     public static function archives()
     {

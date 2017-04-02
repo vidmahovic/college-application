@@ -18,13 +18,17 @@ class FacultyProgramController extends Controller
 
     public function index(Request $request){
         $fractal = new Manager();
-        $fid = $request->input('fid');
 
-        if(intval($fid) > 0)
-            $facultyPrograms = FacultyProgram::with('faculty')->latest()->facultyFilter($fid)->get()->toArray();
+        $filters['fid'] = $request->input('fid');
+        $filters['min_points'] = $request->input('min_points');
+        $filters['is_regular'] = $request->input('is_regular');
+
+        if(intval($filters['fid']) > 0 || intval($filters['min_points']) > 0 || $filters['is_regular'] == "true" || $filters['is_regular'] == "false")
+            $facultyPrograms = FacultyProgram::latest()->filter($filters)->toArray();
         else
             $facultyPrograms = FacultyProgram::latest()->get()->toArray();
 
+        /*
         $resource = new Collection($facultyPrograms, function(array $facultyProgram) {
             return [
                 'id'      => (int) $facultyProgram['id'],
@@ -37,6 +41,8 @@ class FacultyProgramController extends Controller
         });
 
         return $fractal->createData($resource)->toJson();
+        */
+        return $facultyPrograms;
     }
 
     public function show($id){

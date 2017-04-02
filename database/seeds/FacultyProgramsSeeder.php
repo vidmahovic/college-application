@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use \App\FacultyProgram;
+use \App\Faculty;
+use \App\City;
 
 class FacultyProgramsSeeder extends Seeder
 {
@@ -115,6 +117,56 @@ class FacultyProgramsSeeder extends Seeder
             'allow_double_degree'  => 1,
             'is_regular'  => true,
             'min_points' => 72
+        ));
+
+        // OTHER DATA
+        Faculty::create(array(
+            'id' => 1,
+            'name' => "Fakulteta za računalništvo in informatiko",
+            'address'  => "Večna pot 113",
+            'city_id' => 1000
+        ));
+
+        Faculty::create(array(
+            'id' => 2,
+            'name' => "Fakulteta za upravo",
+            'address'  => "Gosarjeva ulica 5",
+            'city_id' => 1000
+        ));
+
+        Faculty::create(array(
+            'id' => 3,
+            'name' => "Fakulteta za matematiko in fiziko",
+            'address'  => "Jadranska ulica 19",
+            'city_id' => 1000
+        ));
+
+        Faculty::create(array(
+            'id' => 4,
+            'name' => "Biotehniška fakulteta",
+            'address'  => "Jamnikarjeva ulica 101",
+            'city_id' => 1000
+        ));
+
+        Faculty::create(array(
+            'id' => 5,
+            'name' => "Fakulteta za arhitekturo",
+            'address'  => "Zoisova cesta 12",
+            'city_id' => 1000
+        ));
+
+        Faculty::create(array(
+            'id' => 6,
+            'name' => "Filozofska fakulteta",
+            'address'  => "Aškerčeva cesta 2",
+            'city_id' => 1000
+        ));
+
+        City::create(array(
+            'id' => 1,
+            'name' => "Ljubljana",
+            'zip_code'  => 1000,
+            'state' => 386
         ));
     }
 }

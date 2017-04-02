@@ -18,6 +18,7 @@ class CreateCitiesTable extends Migration
             $table->string('name', 256);
             $table->string('zip_code', 15);
             $table->string('state', 15);
+            $table->timestamps();
         });
     }
 
