@@ -10,3 +10,4 @@ Homestead.yaml
 public/hot
 public/mix-manifest.json
 
+.DS_Store
