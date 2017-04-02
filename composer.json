@@ -9,7 +9,8 @@
         "laravel/lumen-framework": "5.4.*",
         "vlucas/phpdotenv": "~2.2",
         "vluzrmos/tinker": "^1.3",
-        "iatstuti/laravel-cascade-soft-deletes": "^1.2"
+        "iatstuti/laravel-cascade-soft-deletes": "^1.2",
+        "league/fractal": "^0.15.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
