@@ -20,4 +20,6 @@ class FacultyProgram extends Model
         'min_points' => 'integer'
     ];
 
+
+
 }
