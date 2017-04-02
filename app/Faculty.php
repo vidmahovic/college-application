@@ -20,4 +20,8 @@ class Faculty extends Model
     public function facultyPrograms(){
         return $this->hasMany(FacultyProgram::class);
     }
+
+    public function city(){
+        return $this->BelongsTo(City::class);
+    }
 }

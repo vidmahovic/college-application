@@ -19,8 +19,9 @@ class FacultyProgramController extends Controller
     public function index(Request $request){
         $fractal = new Manager();
         $fid = $request->input('fid');
+
         if(intval($fid) > 0)
-            $facultyPrograms = FacultyProgram::latest()->facultyFilter($fid)->get()->toArray();
+            $facultyPrograms = FacultyProgram::with('faculty')->latest()->facultyFilter($fid)->get()->toArray();
         else
             $facultyPrograms = FacultyProgram::latest()->get()->toArray();
 
@@ -35,13 +36,11 @@ class FacultyProgramController extends Controller
             ];
         });
 
-        //$faculties = FacultyProgram::latest()->faculty()->get();return $faculties;
-
         return $fractal->createData($resource)->toJson();
     }
 
     public function show($id){
-        $task = FacultyProgram::findOrFail($id);
-        return $task;
+        $facultyProgram = FacultyProgram::findOrFail($id);
+        return $facultyProgram;
     }
 }
