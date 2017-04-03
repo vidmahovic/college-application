@@ -4,17 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Faculty extends Model // VISOKOSOLSKI ZAVOD - id, ime, kratica, id_obcina, id_univerza
+class Faculty extends Model // VISOKOSOLSKI ZAVOD
 {
     protected $table = 'faculties';
 
-    protected $fillable = ['name', 'address', 'city_id'];
+    protected $fillable = ['name', 'acronym', 'district_id', 'universtiy_id'];
     protected $guarded = ['id'];
 
     protected $casts = [
         'name' => 'string',
-        'address' => 'string',
-        'city_id' => 'integer'
+        'acronym' => 'string',
+        'district_id' => 'integer',
+        'universtiy_id' => 'integer'
     ];
 
     public function facultyPrograms(){
