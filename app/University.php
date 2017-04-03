@@ -14,4 +14,9 @@ class University extends Model // UNIVERZA
         'id' => 'integer',
         'name' => 'string'
     ];
+
+    public function faculties()
+    {
+        return $this->hasMany(Faculty::class);
+    }
 }

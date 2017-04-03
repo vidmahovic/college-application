@@ -14,4 +14,9 @@ class District extends Model // OBCINA
         'id' => 'integer',
         'name' => 'string'
     ];
+
+    public function faculties()
+    {
+        return $this->hasMany(Faculty::class);
+    }
 }

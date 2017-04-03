@@ -15,7 +15,7 @@ class UpdateFacultyProgramsTable extends Migration
     {
         Schema::table('faculty_programs', function($table) {
             $table->string('id')->change();
-            //$table->integer('type');
+            $table->integer('type');
             $table->boolean('allow_double_degree')->change();
         });
     }

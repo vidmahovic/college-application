@@ -21,4 +21,12 @@ class Faculty extends Model // VISOKOSOLSKI ZAVOD
     public function facultyPrograms(){
         return $this->hasMany(FacultyProgram::class);
     }
+
+    public function university(){
+        return $this->belongsTo(University::class);
+    }
+
+    public function district(){
+        return $this->belongsTo(District::class);
+    }
 }
