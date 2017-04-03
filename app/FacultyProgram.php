@@ -8,14 +8,14 @@ class FacultyProgram extends Model // PROGRAM
 {
     protected $table = 'faculty_programs';
 
-    protected $fillable = ['name', 'faculty_id', 'allow_double_degree', 'is_regular', 'min_points'];
+    protected $fillable = ['name', 'faculty_id', 'allow_double_degree', 'is_regular', 'type', 'min_points'];
     protected $guarded = ['id'];
-    protected $with = ['faculty'];
 
     protected $casts = [
         'name' => 'string',
+        'type' => 'integer',
         'faculty_id' => 'integer',
-        'allow_double_degree' => 'integer',
+        'allow_double_degree' => 'boolean',
         'is_regular' => 'boolean',
         'min_points' => 'integer'
     ];
