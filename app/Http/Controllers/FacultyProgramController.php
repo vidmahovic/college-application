@@ -23,9 +23,9 @@ class FacultyProgramController extends Controller
         $types = [0,1,2];
         $is_regular = [0,1];
 
-        $filters['fid'] = $request->input('fid'); // fakulteta ID
-        $filters['type'] = $request->input('type'); // uni, vs, mag program
-        $filters['is_regular'] = $request->input('is_regular'); // redni, izredni studij
+        $filters['fid'] = $request->input('fid');
+        $filters['type'] = $request->input('type');
+        $filters['is_regular'] = $request->input('is_regular');
 
         if(intval($filters['fid']) > 0 || intval($filters['type']) >= 0 || intval($filters['type']) <= 2 || $filters['is_regular'] == "true" || $filters['is_regular'] == "false")
             $facultyPrograms = FacultyProgram::latest()->filter($filters)->toArray();
@@ -39,9 +39,7 @@ class FacultyProgramController extends Controller
             return [
                 'id'      => (int) $facultyProgram['id'],
                 'name'   => $facultyProgram['name'],
-                'faculty_id'    => (int) $facultyProgram['faculty_id'],
-                'allow_double_degree'    => (int) $facultyProgram['allow_double_degree'],
-                'is_regular'    => (boolean) $facultyProgram['is_regular'],
+                'acronym'    => $facultyProgram['acronym'],
                 'min_points'    => (int) $facultyProgram['min_points']
             ];
         });

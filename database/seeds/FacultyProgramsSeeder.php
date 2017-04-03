@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use \App\FacultyProgram;
-use \App\Faculty;
-use \App\City;
+
 
 class FacultyProgramsSeeder extends Seeder
 {
@@ -14,6 +12,7 @@ class FacultyProgramsSeeder extends Seeder
      */
     public function run()
     {
-        // TODO: parse .xlsx
+        $excel = App::make('excel');
+
     }
 }
