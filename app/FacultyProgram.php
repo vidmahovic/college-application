@@ -4,7 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FacultyProgram extends Model
+class FacultyProgram extends Model // PROGRAM
+    // nacin studija (neznan, redni, izredni - 0,1,2)
+    // vrsta studija (neznana, uni, vs - 0,1,2)
 {
     protected $table = 'faculty_programs';
 
