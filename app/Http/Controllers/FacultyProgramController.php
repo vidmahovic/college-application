@@ -19,14 +19,20 @@ class FacultyProgramController extends Controller
     public function index(Request $request){
         $fractal = new Manager();
 
-        $filters['fid'] = $request->input('fid');
-        $filters['min_points'] = $request->input('min_points');
-        $filters['is_regular'] = $request->input('is_regular');
+        $faculties = Faculty::all();
+        $types = [0,1,2];
+        $is_regular = [0,1];
 
-        if(intval($filters['fid']) > 0 || intval($filters['min_points']) > 0 || $filters['is_regular'] == "true" || $filters['is_regular'] == "false")
+        $filters['fid'] = $request->input('fid'); // fakulteta ID
+        $filters['type'] = $request->input('type'); // uni, vs, mag program
+        $filters['is_regular'] = $request->input('is_regular'); // redni, izredni studij
+
+        if(intval($filters['fid']) > 0 || intval($filters['type']) >= 0 || intval($filters['type']) <= 2 || $filters['is_regular'] == "true" || $filters['is_regular'] == "false")
             $facultyPrograms = FacultyProgram::latest()->filter($filters)->toArray();
         else
             $facultyPrograms = FacultyProgram::latest()->get()->toArray();
+
+        // TODO: pagination
 
         /*
         $resource = new Collection($facultyPrograms, function(array $facultyProgram) {
