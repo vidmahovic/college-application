@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Seeder;
 
-
 class FacultyProgramsSeeder extends Seeder
 {
     /**
@@ -12,7 +11,6 @@ class FacultyProgramsSeeder extends Seeder
      */
     public function run()
     {
-        $excel = App::make('excel');
 
     }
 }

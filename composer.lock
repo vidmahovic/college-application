@@ -1754,16 +1754,16 @@
         },
         {
             "name": "laravel/lumen-framework",
-            "version": "v5.4.5",
+            "version": "v5.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/lumen-framework.git",
-                "reference": "26afc242c42c6901104e0e85d5c912ea8e4047dc"
+                "reference": "5997a38fe261ed88cac215cb191f45cf35f70a02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/lumen-framework/zipball/26afc242c42c6901104e0e85d5c912ea8e4047dc",
-                "reference": "26afc242c42c6901104e0e85d5c912ea8e4047dc",
+                "url": "https://api.github.com/repos/laravel/lumen-framework/zipball/5997a38fe261ed88cac215cb191f45cf35f70a02",
+                "reference": "5997a38fe261ed88cac215cb191f45cf35f70a02",
                 "shasum": ""
             },
             "require": {
@@ -1834,7 +1834,7 @@
                 "laravel",
                 "lumen"
             ],
-            "time": "2017-03-01T16:00:46+00:00"
+            "time": "2017-04-03T21:20:22+00:00"
         },
         {
             "name": "league/fractal",
