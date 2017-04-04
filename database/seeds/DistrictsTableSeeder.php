@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use App\District;
+use \App\District;
 
 class DistrictsTableSeeder extends Seeder
 {
@@ -15,13 +15,13 @@ class DistrictsTableSeeder extends Seeder
     {
         $excel = App::make('excel');
 
-        $data = $excel::load('database/files/Obcina.xls', function($reader) {})->get();
+        $data = $excel->load('database/files/Obcina.xls', function($reader) {})->get();
         if(!empty($data) && $data->count()){
             foreach ($data as $key => $value) {
-                $insert[] = ['id' => $value->ID_OBCINA, 'name' => $value->IME_OBCINA];
-            }
-            if(!empty($insert)){
-                District::create(array($insert));
+                $insert = ['id' => $value->ID_OBCINA, 'name' => $value->IME_OBCINA];
+                District::create(array(
+                    "id" => intval($insert['id']),
+                    "name" => (string)$insert['name']));
             }
         }
     }
