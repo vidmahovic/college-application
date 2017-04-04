@@ -21,18 +21,17 @@ class FacultyProgramController extends Controller
 
         $faculties = Faculty::all();
         $types = [0,1,2];
-        $is_regular = [0,1];
+        $is_regular = [0, 1];
 
         $filters['fid'] = $request->input('fid');
         $filters['type'] = $request->input('type');
         $filters['is_regular'] = $request->input('is_regular');
 
-        if(intval($filters['fid']) > 0 || intval($filters['type']) >= 0 || intval($filters['type']) <= 2 || $filters['is_regular'] == "true" || $filters['is_regular'] == "false")
-            $facultyPrograms = FacultyProgram::latest()->filter($filters)->toArray();
+        if(!count($request->all()))
+            $facultyPrograms = FacultyProgram::all();
         else
-            $facultyPrograms = FacultyProgram::latest()->get()->toArray();
-
-        // TODO: pagination
+            $facultyPrograms = FacultyProgram::latest()->filter($filters)->toArray();
+            // $facultyPrograms = FacultyProgram::latest()->filter($filters)->simplePaginate(2);
 
         /*
         $resource = new Collection($facultyPrograms, function(array $facultyProgram) {
@@ -46,11 +45,12 @@ class FacultyProgramController extends Controller
 
         return $fractal->createData($resource)->toJson();
         */
+
         return $facultyPrograms;
     }
 
     public function show($id){
-        $facultyProgram = FacultyProgram::findOrFail($id);
+        $facultyProgram = FacultyProgram::with('faculty')->findOrFail($id);
         return $facultyProgram;
     }
 }

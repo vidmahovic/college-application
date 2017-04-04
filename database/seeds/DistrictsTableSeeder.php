@@ -17,11 +17,10 @@ class DistrictsTableSeeder extends Seeder
 
         $data = $excel->load('database/files/Obcina.xls', function($reader) {})->get();
         if(!empty($data) && $data->count()){
-            foreach ($data as $key => $value) {
-                $insert = ['id' => $value->ID_OBCINA, 'name' => $value->IME_OBCINA];
+            foreach ($data as $d) {
                 District::create(array(
-                    "id" => intval($insert['id']),
-                    "name" => (string)$insert['name']));
+                    "id" => intval($d['id_obcina']),
+                    "name" => (string)$d['ime_obcina']));
             }
         }
     }

@@ -18,7 +18,4 @@ $app->get('/', function () use ($app) {
 });
 
 $app->get('/faculty_programs','FacultyProgramController@index');
-$app->get('faculty_programs/{id:[0-9]+}', 'FacultyProgramController@show');
-//$app->get('faculty_programs/{id}/faculty_id/{fid}', 'FacultyProgramController@faculty', ['id' => $id, 'fid' => $fid]);
-
-// php artisan make:seeder FacultyProgramsSeeder
+$app->get('/faculty_programs/{id}', 'FacultyProgramController@show');

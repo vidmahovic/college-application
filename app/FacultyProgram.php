@@ -27,16 +27,14 @@ class FacultyProgram extends Model // PROGRAM
 
     public function scopeFilter($query, $filters){
         if(intval($filters['fid']) > 0){
-            $query->where('faculty_id', $filters['fid']);
+            $query->where('faculty_id', intval($filters['fid']));
         }
-        if(intval($filters['type']) >= 0 || intval($filters['type']) <= 2){
+        if(intval($filters['type']) >= 0 && intval($filters['type']) <= 2 && $filters['type'] != null){
             $query->where('type', $filters['type']);
         }
-        if($filters['is_regular'] == "true" || $filters['is_regular'] == "false"){
-            $is_regular = $filters['is_regular'] == "true" ? 1 : 0;
-            $query->where('is_regular', $is_regular);
+        else if((intval($filters['is_regular']) == 0 || intval($filters['is_regular']) == 1) && $filters['is_regular'] != null){
+            $query->where('is_regular', intval($filters['is_regular']));
         }
-
         return $query->orderBy('id', 'asc')->orderBy('type', 'asc')->orderBy('is_regular', 'asc')->get();
     }
 }

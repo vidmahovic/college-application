@@ -17,38 +17,34 @@ class FacultyProgramsSeeder extends Seeder
 
         $data = $excel->load('database/files/Program.xls', function($reader) {})->get();
         if(!empty($data) && $data->count()){
-            foreach ($data as $key => $value) {
+            foreach ($data as $d) {
                 $doubleDegree = 0; // enopredmetni
                 $is_regular = 1; // redni
 
-                if (strpos($value->IME_PROGRAM, 'DVOPREDMETNI') == true) {
+                if (strpos($d['ime_program'], 'DVOPREDMETNI') == true) {
                     $doubleDegree = 1; // dvopredmetni
                 }
-                if (strpos($value->ID_NACIN, '2') == true) {
+                if ($d['id_nacin_studija'] == 2) {
                     $is_regular = 0; // izredni
                 }
-                if (substr($value->IME_PROGRAM, -2) == "VS") {
+                if (substr($d['ime_program'], -2) == "VS") {
                     $type = 1; // vs
                 }
-                else if (substr($value->IME_PROGRAM, -2) == "UN") {
+                else if (substr($d['ime_program'], -2) == "UN") {
                     $type = 0; // uni
                 }
                 else {
                     $type = 2; // mag
                 }
-
-                $insert = ['id' => $value->ID_PROGRAM_PRG, 'name' => $value->IME_PROGRAM,
-                    'faculty_id' => $value->ID_VIS_ZAVOD_PRG, 'is_regular' => $is_regular,
-                    'allow_double_degree' => $doubleDegree, 'type' => $type];
-
-                FacultyProgram::create(array(
-                    "id" => (string)$insert['id'],
-                    "name" => (string)$insert['name'],
-                    "faculty_id" => intval($insert['faculty_id']),
-                    'min_points' => 0,
-                    'type' => intval($insert['type']),
-                    'allow_double_degree' => intval($insert['faculty_id']),
-                    'is_regular' => intval($insert['faculty_id'])));
+                if(FacultyProgram::find((string)$d['id_program_prg']) == null)
+                    FacultyProgram::create(array(
+                        "id" => (string)$d['id_program_prg'],
+                        "name" => (string)$d['ime_program'],
+                        "faculty_id" => intval($d['id_vis_zavod_prg']),
+                        'min_points' => 0,
+                        'type' => intval($type),
+                        'allow_double_degree' => intval($doubleDegree),
+                        'is_regular' => intval($is_regular)));
             }
         }
     }

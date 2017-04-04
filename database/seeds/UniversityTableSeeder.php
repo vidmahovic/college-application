@@ -17,11 +17,10 @@ class UniversityTableSeeder extends Seeder
 
         $data = $excel->load('database/files/Univerza.xlsx', function($reader) {})->get();
         if(!empty($data) && $data->count()){
-            foreach ($data as $key => $value) {
-                $insert = ['id' => $value->ID_UNIVERZA, 'name' => $value->IME_UNIVERZA];
+            foreach ($data as $d) {
                 University::create(array(
-                    "id" => intval($insert['id']),
-                    "name" => (string)$insert['name']));
+                    "id" => intval($d['id_univerza']),
+                    "name" => (string)$d['ime_univerza']));
             }
         }
     }
