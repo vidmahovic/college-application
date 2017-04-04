@@ -8,14 +8,15 @@ class Faculty extends Model // VISOKOSOLSKI ZAVOD
 {
     protected $table = 'faculties';
 
-    protected $fillable = ['name', 'acronym', 'district_id', 'university_id'];
-    protected $guarded = ['id'];
+    protected $fillable = ['id', 'name', 'acronym', 'id_district', 'id_university'];
+    //protected $guarded = ['id'];
 
     protected $casts = [
+        'id' => 'integer',
         'name' => 'string',
         'acronym' => 'string',
-        'district_id' => 'integer',
-        'university_id' => 'integer'
+        'id_district' => 'integer',
+        'id_university' => 'integer'
     ];
 
     public function facultyPrograms(){
