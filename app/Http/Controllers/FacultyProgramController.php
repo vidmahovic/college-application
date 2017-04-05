@@ -28,10 +28,9 @@ class FacultyProgramController extends Controller
         $filters['is_regular'] = $request->input('is_regular');
 
         if(!count($request->all()))
-            $facultyPrograms = FacultyProgram::all();
+            $facultyPrograms = FacultyProgram::with('faculty')->paginate();
         else
-            $facultyPrograms = FacultyProgram::latest()->filter($filters)->toArray();
-            // $facultyPrograms = FacultyProgram::latest()->filter($filters)->simplePaginate(2);
+            $facultyPrograms = FacultyProgram::with('faculty')->latest()->arrangeBy($filters)->paginate(2);
 
         /*
         $resource = new Collection($facultyPrograms, function(array $facultyProgram) {

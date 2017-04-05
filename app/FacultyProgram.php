@@ -25,7 +25,7 @@ class FacultyProgram extends Model // PROGRAM
         return $this->belongsTo(Faculty::class);
     }
 
-    public function scopeFilter($query, $filters){
+    public function scopeArrangeBy($query, $filters){
         if(intval($filters['fid']) > 0){
             $query->where('faculty_id', intval($filters['fid']));
         }
@@ -35,6 +35,6 @@ class FacultyProgram extends Model // PROGRAM
         else if((intval($filters['is_regular']) == 0 || intval($filters['is_regular']) == 1) && $filters['is_regular'] != null){
             $query->where('is_regular', intval($filters['is_regular']));
         }
-        return $query->orderBy('id', 'asc')->orderBy('type', 'asc')->orderBy('is_regular', 'asc')->get();
+        return $query->orderBy('id', 'asc')->orderBy('type', 'asc')->orderBy('is_regular', 'asc');
     }
 }
