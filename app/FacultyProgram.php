@@ -25,6 +25,10 @@ class FacultyProgram extends Model // PROGRAM
         return $this->belongsTo(Faculty::class);
     }
 
+    public function applicationsPrograms(){
+        return $this->hasMany(ApplicationsPrograms::class);
+    }
+
     public function scopeArrangeBy($query, $filters){
         if(intval($filters['fid']) > 0){
             $query->where('faculty_id', intval($filters['fid']));

@@ -49,7 +49,9 @@ class FacultyProgramController extends Controller
     }
 
     public function show($id){
-        $facultyProgram = FacultyProgram::with('faculty')->findOrFail($id);
+        $facultyProgram = FacultyProgram::with('faculty', 'applicationsPrograms')->findOrFail($id);
+        // http://localhost/smrpo/college-application/faculty_programs/ZB00
+        // column not found??
         return $facultyProgram;
     }
 }

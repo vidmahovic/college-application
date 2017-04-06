@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
         $this->call('DistrictsTableSeeder');
         $this->call('UniversityTableSeeder');
         $this->call('FacultyTableSeeder');
+        $this->call('ApplicationsProgramsTableSeeder');
     }
 }
