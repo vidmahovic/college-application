@@ -14,7 +14,7 @@ class ApplicationsPrograms extends Model // PIVOT MED VPISNIM LISTOM IN PROGRAMO
     protected $casts = [
         'id' => 'integer',
         'application_id' => 'integer',
-        'program_id' => 'integer',
+        'program_id' => 'string',
         'status' => 'boolean', // sprejet, zavrnjen
         'choice_number' => 'integer' //1,2,3
     ];
