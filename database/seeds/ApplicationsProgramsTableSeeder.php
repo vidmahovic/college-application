@@ -17,7 +17,7 @@ class ApplicationsProgramsTableSeeder extends Seeder
             ApplicationsPrograms::create(array(
                 'id' => $i, // 100 vpisnih listov
                 'application_id' => $i, // vsi oddali le eno prijavo
-                'program_id' => $programs[intval(rand(0,count($programs)-1))],
+                'faculty_program_id' => $programs[intval(rand(0,count($programs)-1))],
                 'status' => intval(rand(0,1)) == 1,
                 'choice_number' => intval(rand(1,3))
             ));

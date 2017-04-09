@@ -8,13 +8,13 @@ class ApplicationsPrograms extends Model // PIVOT MED VPISNIM LISTOM IN PROGRAMO
 {
     protected $table = 'applications_programs';
 
-    protected $fillable = ['id', 'application_id', 'program_id', 'status', 'choice_number'];
+    protected $fillable = ['id', 'application_id', 'faculty_program_id', 'status', 'choice_number'];
     //protected $guarded = ['id'];
 
     protected $casts = [
         'id' => 'integer',
         'application_id' => 'integer',
-        'program_id' => 'string',
+        'faculty_program_id' => 'string',
         'status' => 'boolean', // sprejet, zavrnjen
         'choice_number' => 'integer' //1,2,3
     ];

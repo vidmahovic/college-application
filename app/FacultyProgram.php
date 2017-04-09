@@ -11,6 +11,8 @@ class FacultyProgram extends Model // PROGRAM
     protected $fillable = ['id', 'name', 'faculty_id', 'allow_double_degree', 'is_regular', 'type', 'min_points'];
     //protected $guarded = ['id'];
 
+    // TODO: število razpisanih
+
     protected $casts = [
         'id' => 'string',
         'name' => 'string',
@@ -27,6 +29,14 @@ class FacultyProgram extends Model // PROGRAM
 
     public function applicationsPrograms(){
         return $this->hasMany(ApplicationsPrograms::class);
+    }
+
+    public function countAll(){
+       return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count');
+    }
+
+    public function countAccepted(){
+       return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count')->where('status', '=', 1);
     }
 
     public function scopeArrangeBy($query, $filters){

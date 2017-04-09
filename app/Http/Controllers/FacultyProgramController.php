@@ -28,9 +28,9 @@ class FacultyProgramController extends Controller
         $filters['is_regular'] = $request->input('is_regular');
 
         if(!count($request->all()))
-            $facultyPrograms = FacultyProgram::with('faculty')->paginate();
+            $facultyPrograms = FacultyProgram::with('faculty','countAll', 'countAccepted')->paginate();
         else
-            $facultyPrograms = FacultyProgram::with('faculty')->latest()->arrangeBy($filters)->paginate(2);
+            $facultyPrograms = FacultyProgram::with('faculty','countAll', 'countAccepted')->latest()->arrangeBy($filters)->paginate(2);
 
         /*
         $resource = new Collection($facultyPrograms, function(array $facultyProgram) {
@@ -49,9 +49,7 @@ class FacultyProgramController extends Controller
     }
 
     public function show($id){
-        $facultyProgram = FacultyProgram::with('faculty', 'applicationsPrograms')->findOrFail($id);
-        // http://localhost/smrpo/college-application/faculty_programs/ZB00
-        // column not found??
+        $facultyProgram = FacultyProgram::with('faculty','countAll', 'countAccepted')->findOrFail($id);
         return $facultyProgram;
     }
 }
