@@ -16,5 +16,13 @@ class DatabaseSeeder extends Seeder
         $this->call('UniversityTableSeeder');
         $this->call('FacultyTableSeeder');
         $this->call('ApplicationsProgramsTableSeeder');
+        $this->call('CitiesTableSeeder');
+        $this->call('CitizensTableSeeder');
+        $this->call('GraduationTypeTableSeeder');
+        $this->call('ProfessionsTableSeeder');
+        $this->call('CountriesTableSeeder');
+        $this->call('ProfessionsTableSeeder');
+        $this->call('MiddleSchoolsTableSeeder');
+        // $this->call('EducationTypeTableSeeder'); // TODO
     }
 }
