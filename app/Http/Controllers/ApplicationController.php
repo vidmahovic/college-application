@@ -31,14 +31,13 @@ class ApplicationController extends Controller
         $citizens = Citizen::all();
         $faculties = Faculty::all();
         $facultyPrograms = FacultyProgram::all();
-        $is_regular = [0 => "Izredni", 1 => "Redni"];
         $education_types = EducationType::all();
         $graduation_types = GraduationType::all();
 
-        return [$countries, $cities, $citizens, $faculties, $facultyPrograms, $is_regular,  $education_types, $graduation_types];
+        return [$countries, $cities, $citizens, $faculties, $facultyPrograms,  $education_types, $graduation_types];
     }
 
-    public function create(){
+    public function create(ApplicationRequest $request){
 
     }
 }
