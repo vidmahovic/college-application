@@ -19,3 +19,6 @@ $app->get('/', function () use ($app) {
 
 $app->get('/faculty_programs','FacultyProgramController@index');
 $app->get('/faculty_programs/{id}', 'FacultyProgramController@show');
+
+$app->get('/application','ApplicationController@show');
+$app->post('/application','ApplicationController@create');

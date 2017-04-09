@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call('CountriesTableSeeder');
         $this->call('ProfessionsTableSeeder');
         $this->call('MiddleSchoolsTableSeeder');
-        // $this->call('EducationTypeTableSeeder'); // TODO
+        $this->call('EducationTypeTableSeeder');
     }
 }
