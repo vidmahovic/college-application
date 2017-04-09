@@ -4,17 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EducationType extends Model // IZOBRAZBA - KLASIUS SRV
+class Country extends Model // DRŽAVA
 {
-    protected $table = 'education_types';
+    protected $table = 'countries';
 
-    protected $fillable = ['id', 'name', 'level', 'graduation_type'];
+    protected $fillable = ['id', 'name', 'eu'];
 
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'level' => 'string',
-        'graduation_type' => 'string'
+        'eu' => 'boolean'
     ];
 
     public function applications()
