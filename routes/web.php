@@ -1,5 +1,7 @@
 <?php
 
+use \App\Http\Controllers;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -14,3 +16,9 @@
 $app->get('/', function () use ($app) {
     return view('index');
 });
+
+$app->get('/faculty_programs','FacultyProgramController@index');
+$app->get('/faculty_programs/{id}', 'FacultyProgramController@show');
+
+$app->get('/application','ApplicationController@show');
+$app->post('/application','ApplicationController@create');
