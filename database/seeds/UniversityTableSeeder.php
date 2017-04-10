@@ -15,13 +15,13 @@ class UniversityTableSeeder extends Seeder
     {
         $excel = App::make('excel');
 
-        $data = $excel->load('database/files/Univerza.xlsx', function($reader) {})->get();
-        if(!empty($data) && $data->count()){
-            foreach ($data as $d) {
-                University::create(array(
-                    "id" => intval($d['id_univerza']),
-                    "name" => (string)$d['ime_univerza']));
-            }
+        $data = collect($excel->load('database/files/Univerza.xlsx', function($reader) {})->get());
+        if($data->isNotEmpty()) {
+            $data->each(function($datum) {
+                University::create([
+                    "name" => $datum['ime_univerza']
+                ]);
+            });
         }
     }
 }

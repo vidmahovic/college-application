@@ -15,13 +15,13 @@ class CitizensTableSeeder extends Seeder
     {
         $excel = App::make('excel');
 
-        $data = $excel->load('database/files/Drzavljan.xlsx', function($reader) {})->get();
-        if(!empty($data) && $data->count()){
-            foreach ($data as $d) {
-                Citizen::create(array(
-                    "id" => intval($d['id_drzavljan']),
-                    "name" => (string)$d['text_za_izpis']));
-            }
+        $data = collect($excel->load('database/files/Drzavljan.xlsx', function($reader) {})->get());
+        if($data->isNotEmpty()){
+            $data->each(function($datum) {
+                Citizen::create([
+                    "name" => $datum['text_za_izpis']
+                ]);
+            });
         }
     }
 }

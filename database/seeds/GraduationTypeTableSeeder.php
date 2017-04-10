@@ -15,13 +15,14 @@ class GraduationTypeTableSeeder extends Seeder
     {
         $excel = App::make('excel');
 
-        $data = $excel->load('database/files/Koncal_sr_sola.xlsx', function($reader) {})->get();
-        if(!empty($data) && $data->count()){
-            foreach ($data as $d) {
-                GraduationType::create(array(
-                    "id" => intval($d['id_koncal_sr_sola']),
-                    "name" => (string)$d['ime_okrajsano']));
-            }
+        $data = collect($excel->load('database/files/Koncal_sr_sola.xlsx', function($reader) {})->get());
+
+        if($data->isNotEmpty()) {
+            $data->each(function($datum) {
+                GraduationType::create([
+                    'name' => $datum['ime_okrajsano']
+                ]);
+            });
         }
     }
 }

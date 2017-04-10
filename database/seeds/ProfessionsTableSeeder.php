@@ -15,13 +15,13 @@ class ProfessionsTableSeeder extends Seeder
     {
         $excel = App::make('excel');
 
-        $data = $excel->load('database/files/Poklic.xlsx', function($reader) {})->get();
-        if(!empty($data) && $data->count()){
-            foreach ($data as $d) {
-                Profession::create(array(
-                    "id" => intval($d['id_poklic']),
-                    "name" => (string)$d['ime_poklic']));
-            }
+        $data = collect($excel->load('database/files/Poklic.xlsx', function($reader) {})->get());
+        if($data->isNotEmpty()) {
+            $data->each(function($datum) {
+                Profession::create([
+                    "name" => $datum['ime_poklic']
+                ]);
+            });
         }
     }
 }

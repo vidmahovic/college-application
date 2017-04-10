@@ -22,8 +22,8 @@ class FacultyTableSeeder extends Seeder
                     "id" => intval($d['id_vis_zavod']),
                     "name" => (string)$d['ime_vis_zavod'],
                     "acronym" => (string)$d['kratica'],
-                    "id_university" => intval($d['id_univerza']),
-                    "id_district" => intval($d['id_obcina'])));
+                    "university_id" => intval($d['id_univerza']),
+                    "district_id" => intval($d['id_obcina'])));
             }
         }
     }
