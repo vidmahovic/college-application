@@ -13,13 +13,14 @@ class UpdateUniversitiesTable extends Migration
      */
     public function up()
     {
-        Schema::table('universities', function($table) {
-            $table->integer('id')->change();
-        });
-
-        Schema::table('districts', function($table) {
-            $table->integer('id')->change();
-        });
+        // TODO (Vid to Rok): Tukaj spreminjas increments v integer. Pomoje to ni potrebno, ker gre za isto stvar.
+//        Schema::table('universities', function($table) {
+//            $table->integer('id')->change();
+//        });
+//
+//        Schema::table('districts', function($table) {
+//            $table->integer('id')->change();
+//        });
     }
 
     /**
@@ -29,6 +30,12 @@ class UpdateUniversitiesTable extends Migration
      */
     public function down()
     {
-        //
+//        Schema::table('universities', function($table) {
+//            $table->increments('id')->change();
+//        });
+//
+//        Schema::table('districts', function($table) {
+//            $table->increments('id')->change();
+//        });
     }
 }

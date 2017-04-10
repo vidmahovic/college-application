@@ -15,7 +15,7 @@ class CreateUniversitiesTable extends Migration
     {
         Schema::create('universities', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 256);
+            $table->string('name');
             $table->timestamps();
         });
     }

@@ -15,8 +15,8 @@ class CreateApplicationCitiesTable extends Migration
     {
         Schema::create('application_cities', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('application_id');
-            $table->integer('city_id');
+            $table->integer('application_id')->unsigned();
+            $table->integer('city_id')->unsigned();
             $table->string('address');
             $table->integer('address_type');
             $table->timestamps();

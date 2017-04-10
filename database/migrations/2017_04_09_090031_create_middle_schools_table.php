@@ -14,8 +14,8 @@ class CreateMiddleSchoolsTable extends Migration
     public function up()
     {
         Schema::create('middle_schools', function (Blueprint $table) {
-            $table->integer('id');
-            $table->string('name',256);
+            $table->increments('id');
+            $table->string('name');
             $table->timestamps();
         });
     }

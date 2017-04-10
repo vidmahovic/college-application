@@ -25,6 +25,8 @@ class UpdateApplicationsProgramsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('applications_programs', function (Blueprint $table) {
+            $table->renameColumn('faculty_program_id', 'program_id');
+        });
     }
 }

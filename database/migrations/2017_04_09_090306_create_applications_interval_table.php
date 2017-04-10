@@ -13,12 +13,12 @@ class CreateApplicationsIntervalTable extends Migration
      */
     public function up()
     {
-        Schema::create('applications_interval', function (Blueprint $table) {
+        Schema::create('application_intervals', function (Blueprint $table) {
             $table->increments('id');
             $table->date('starts_at');
             $table->date('ends_at');
-            $table->date('deleted_at');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +29,6 @@ class CreateApplicationsIntervalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applications_interval');
+        Schema::dropIfExists('application_intervals');
     }
 }

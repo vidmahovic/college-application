@@ -16,8 +16,8 @@ class CreateFacultyProgramsTable extends Migration
         Schema::create('faculty_programs', function (Blueprint $table) {
             $table->increments('id'); // PK
             $table->string('name', 256);
-            $table->integer('faculty_id'); // FK
-            $table->integer('allow_double_degree'); // int(1)
+            $table->integer('faculty_id')->unsigned(); // FK
+            $table->boolean('allow_double_degree'); // int(1)
             $table->boolean('is_regular');
             $table->integer('min_points'); //int(3)
             $table->timestamps();

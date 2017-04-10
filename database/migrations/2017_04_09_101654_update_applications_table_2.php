@@ -25,6 +25,8 @@ class UpdateApplicationsTable2 extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('applications', function(Blueprint $table) {
+            $table->string('address');
+        });
     }
 }

@@ -13,11 +13,11 @@ class UpdateApplicationsTable extends Migration
      */
     public function up()
     {
-        Schema::table('applications', function($table) {
+        Schema::table('applications', function(Blueprint $table) {
             $table->string('address');
-            $table->integer('country_id');
-            $table->integer('citizen_id');
-            $table->integer('applications_cities_id');
+            $table->integer('country_id')->unsigned();
+            $table->integer('citizen_id')->unsigned();
+            $table->integer('application_city_id')->unsigned();
         });
     }
 
@@ -28,6 +28,8 @@ class UpdateApplicationsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('applications', function(Blueprint $table) {
+            $table->dropColumn(['address', 'country_id', 'citizen_id', 'application_city_id']);
+        });
     }
 }

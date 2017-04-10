@@ -15,9 +15,9 @@ class CreateFacultyTable extends Migration
     {
         Schema::create('faculties', function (Blueprint $table) {
             $table->increments('id'); // PK
-            $table->string('name', 256);
-            $table->string('address', 256); // street name
-            $table->integer('city_id'); // FK
+            $table->string('name');
+            $table->string('address'); // street name
+            $table->integer('city_id')->unsigned(); // FK
             $table->timestamps();
         });
     }

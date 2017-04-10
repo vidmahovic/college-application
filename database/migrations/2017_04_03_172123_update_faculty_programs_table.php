@@ -13,10 +13,9 @@ class UpdateFacultyProgramsTable extends Migration
      */
     public function up()
     {
-        Schema::table('faculty_programs', function($table) {
+        Schema::table('faculty_programs', function(Blueprint $table) {
             $table->string('id')->change();
             $table->integer('type');
-            $table->boolean('allow_double_degree')->change();
         });
     }
 
@@ -27,6 +26,9 @@ class UpdateFacultyProgramsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('faculty_programs', function(Blueprint $table) {
+           $table->increments('id')->change();
+           $table->dropColumn('type');
+        });
     }
 }

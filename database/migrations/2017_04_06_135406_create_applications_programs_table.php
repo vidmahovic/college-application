@@ -15,10 +15,10 @@ class CreateApplicationsProgramsTable extends Migration
     {
         Schema::create('applications_programs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('application_id');
+            $table->integer('application_id')->unsigned();
             $table->string('program_id');
             $table->boolean('status');
-            $table->integer('choice_number');
+            $table->tinyInteger('choice_number');
             $table->timestamps();
         });
     }

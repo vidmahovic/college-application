@@ -13,12 +13,10 @@ class UpdateFacultiesTable extends Migration
      */
     public function up()
     {
-        Schema::table('faculties', function($table) {
-            $table->dropColumn('address');
-            $table->dropColumn('city_id');
-
-            $table->integer('id_university');
-            $table->integer('id_district');
+        Schema::table('faculties', function(Blueprint $table) {
+            $table->dropColumn(['address', 'city_id']);
+            $table->integer('university_id')->unsigned();
+            $table->integer('district_id')->unsigned();
             $table->string('acronym');
         });
     }
@@ -30,6 +28,10 @@ class UpdateFacultiesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('faculties', function(Blueprint $table) {
+            $table->string('address');
+            $table->integer('city_id')->unsigned();
+            $table->dropColumn(['university_id', 'district_id', 'acronym']);
+        });
     }
 }

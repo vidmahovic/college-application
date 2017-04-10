@@ -13,8 +13,8 @@ class UpdateFaculyProgramsTable2 extends Migration
      */
     public function up()
     {
-        Schema::table('faculty_programs', function($table) {
-            $table->integer('max_accept')->default(100);
+        Schema::table('faculty_programs', function(Blueprint $table) {
+            $table->integer('max_accepted')->default(100);
         });
     }
 
@@ -25,6 +25,8 @@ class UpdateFaculyProgramsTable2 extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('faculty_programs', function(Blueprint $table) {
+            $table->dropColumn('max_accepted');
+        });
     }
 }

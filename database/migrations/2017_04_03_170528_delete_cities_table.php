@@ -23,6 +23,12 @@ class DeleteCitiesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::create('cities', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('zip_code', 15);
+            $table->string('state', 15);
+            $table->timestamps();
+        });
     }
 }

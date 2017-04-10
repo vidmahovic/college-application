@@ -16,6 +16,8 @@ class CreateEducationTypesTable extends Migration
         Schema::create('education_types', function (Blueprint $table) {
             $table->integer('id');
             $table->string('name');
+            $table->string('graduation_type');
+            $table->string('level');
             $table->timestamps();
         });
     }

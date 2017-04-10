@@ -14,8 +14,8 @@ class CreateCitizensTable extends Migration
     public function up()
     {
         Schema::create('citizens', function (Blueprint $table) {
-            $table->integer('id');
-            $table->string('name', 256);         
+            $table->increments('id');
+            $table->string('name');
             $table->timestamps();
         });
     }
