@@ -19,16 +19,15 @@ class CreateUsersTable extends Migration
             $table->string('username')->unique();
             $table->string('name');
             $table->string('password');
+            $table->string('api_token')->unique();
             $table->integer('role_id')->unsigned();
+            $table->timestamp('activation_email_sent_at')->nullable();
+            $table->timestamp('activation_expires_at')->nullable();
             $table->timestamp('activated_at')->nullable();
-            $table->timestamp('last_login')->nullable();
+            $table->timestamp('last_login')->nullable()->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
-        });
-
-        Schema::table('users', function(Blueprint $table) {
-           $table->foreign('role_id')->references('id')->on('roles')->onDelete('restrict');
         });
     }
 
@@ -39,9 +38,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function(Blueprint $table) {
-            $table->dropForeign(['role_id']);
-        });
         Schema::dropIfExists('users');
     }
 }
