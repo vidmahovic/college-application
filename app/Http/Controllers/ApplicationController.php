@@ -30,14 +30,15 @@ class ApplicationController extends Controller
         $cities = City::all();
         $citizens = Citizen::all();
         $faculties = Faculty::all();
+        $districts = District::all();
         $facultyPrograms = FacultyProgram::all();
         $education_types = EducationType::all();
         $graduation_types = GraduationType::all();
 
-        return [$countries, $cities, $citizens, $faculties, $facultyPrograms,  $education_types, $graduation_types];
+        return [$countries, $cities, $citizens, $faculties, $facultyPrograms,  $districts, $education_types, $graduation_types];
     }
 
     public function create(ApplicationRequest $request){
-
+        
     }
 }

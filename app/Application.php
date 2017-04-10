@@ -57,4 +57,9 @@ class Application extends Model // PRIJAVA
     {
         return $this->hasMany(ApplicationCity::class);
     }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
 }
