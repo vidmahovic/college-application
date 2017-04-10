@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Citizen extends Model // DRZAVLJAN
+class City extends Model // POŠTA
 {
-    protected $table = 'citizens';
+    protected $table = 'cities';
 
     protected $fillable = ['id', 'name'];
 
@@ -15,8 +15,8 @@ class Citizen extends Model // DRZAVLJAN
         'name' => 'string'
     ];
 
-    public function applications()
+    public function applicationCities()
     {
-        return $this->hasMany(Application::class);
+        return $this->hasMany(ApplicationCity::class);
     }
 }

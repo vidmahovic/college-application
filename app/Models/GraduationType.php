@@ -1,12 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Profession extends Model // POKLIC
+class GraduationType extends Model // ZAKLJUČEK ŠOLE
 {
-    protected $table = 'professions';
+    protected $table = 'graduation_types';
 
     protected $fillable = ['id', 'name'];
 

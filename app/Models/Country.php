@@ -1,18 +1,19 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class GraduationType extends Model // ZAKLJUČEK ŠOLE
+class Country extends Model // DRŽAVA
 {
-    protected $table = 'graduation_types';
+    protected $table = 'countries';
 
-    protected $fillable = ['id', 'name'];
+    protected $fillable = ['id', 'name', 'eu'];
 
     protected $casts = [
         'id' => 'integer',
-        'name' => 'string'
+        'name' => 'string',
+        'eu' => 'boolean'
     ];
 
     public function applications()

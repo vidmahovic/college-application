@@ -1,19 +1,18 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Country extends Model // DRŽAVA
+class Profession extends Model // POKLIC
 {
-    protected $table = 'countries';
+    protected $table = 'professions';
 
-    protected $fillable = ['id', 'name', 'eu'];
+    protected $fillable = ['id', 'name'];
 
     protected $casts = [
         'id' => 'integer',
-        'name' => 'string',
-        'eu' => 'boolean'
+        'name' => 'string'
     ];
 
     public function applications()

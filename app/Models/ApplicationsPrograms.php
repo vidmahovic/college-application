@@ -1,12 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class ApplicationsPrograms extends Model // PIVOT MED VPISNIM LISTOM IN PROGRAMOM
 {
-    protected $table = 'applications_programs';
 
     protected $fillable = ['id', 'application_id', 'faculty_program_id', 'status', 'choice_number'];
     //protected $guarded = ['id'];
@@ -19,7 +18,7 @@ class ApplicationsPrograms extends Model // PIVOT MED VPISNIM LISTOM IN PROGRAMO
         'choice_number' => 'integer' //1,2,3
     ];
 
-    public function facultyProgram(){
+    public function facultyProgram() {
         return $this->belongsTo(FacultyProgram::class);
     }
 }
