@@ -76,6 +76,6 @@ const routes = [
     path: '*',
     component: NotFoundView
   }
-]
+];
 
 export default routes

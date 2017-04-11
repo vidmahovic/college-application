@@ -20,14 +20,14 @@ import AppView from './components/App.vue'
  * Mapping from urls to Vue Components is done in routes.js and we
  * just import it here
  */
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 
 const router = new VueRouter({
 	mode: 'history',
 	base: __dirname,
 	routes: routes
-})
+});
 
 const app = new Vue({
   el: '#college-app',
