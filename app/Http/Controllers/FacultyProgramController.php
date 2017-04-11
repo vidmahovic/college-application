@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 
 class FacultyProgramController extends Controller
 {
-    //$fractal = new Manager();
     public function __construct()
     {
         //$this->middleware('auth');

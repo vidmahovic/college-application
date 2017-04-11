@@ -27,7 +27,7 @@ class FacultyProgram extends Model // PROGRAM
         return $this->belongsTo(Faculty::class);
     }
 
-    public function applicationsPrograms(){
+    public function applicationPrograms(){
         return $this->hasMany(ApplicationsPrograms::class);
     }
 

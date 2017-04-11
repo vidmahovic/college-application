@@ -2,15 +2,25 @@
 
 namespace App\Models;
 
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Application extends Model // PRIJAVA
 {
+
+    use SoftDeletes, CascadeSoftDeletes;
+
     protected $table = 'applications';
 
     protected $fillable = ['emso', 'date_of_birth', 'user_id', 'profession_id', 'middle_school_id', 
         'education_type_id', 'application_interval_id','country_id', 'citizen_id', 'applications_cities_id'];
+
     protected $guarded = ['id'];
+
+    protected $cascadeDeletes = ['applicationCities', 'applicationPrograms'];
+
+    protected $dates = ['deleted_at'];
 
     protected $casts = [
         'emso' => 'integer',
@@ -56,6 +66,11 @@ class Application extends Model // PRIJAVA
     public function applicationCities()
     {
         return $this->hasMany(ApplicationCity::class);
+    }
+
+    public function applicationPrograms()
+    {
+        return $this->hasMany(ApplicationsPrograms::class);
     }
 
     public function district()

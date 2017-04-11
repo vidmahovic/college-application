@@ -21,4 +21,8 @@ class ApplicationsPrograms extends Model // PIVOT MED VPISNIM LISTOM IN PROGRAMO
     public function facultyProgram() {
         return $this->belongsTo(FacultyProgram::class);
     }
+
+    public function application() {
+        return $this->belongsTo(Application::class);
+    }
 }

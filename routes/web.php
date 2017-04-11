@@ -22,5 +22,6 @@ $app->get('/faculty_programs/{id}', 'FacultyProgramController@show');
 
 $app->get('/application','ApplicationController@show');
 $app->post('/application','ApplicationController@create');
+$app->get('/application/{id}','ApplicationController@show');
 $app->put('/application/{id}','ApplicationController@update');
 $app->delete('/application/{id}','ApplicationController@delete');

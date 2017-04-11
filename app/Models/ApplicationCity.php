@@ -19,11 +19,13 @@ class ApplicationCity extends Model // PIVOT MED PIJAVO IN POŠTO
         'address_type' => 'integer'
     ];
 
-     public function city(){
+    public function city()
+    {
         return $this->belongsTo(City::class);
     }
 
-     public function application(){
+    public function application()
+    {
         return $this->belongsTo(Application::class);
     }
 }

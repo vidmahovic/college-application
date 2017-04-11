@@ -29,13 +29,20 @@ class ApplicationController extends Controller
         $countries = Country::all();
         $cities = City::all();
         $citizens = Citizen::all();
-        $faculties = Faculty::all();
         $districts = District::all();
-        $facultyPrograms = FacultyProgram::all();
+        $universities = University::all();
+        $faculties = Faculty::all();
+        $facultyPrograms = FacultyProgram::all()->with('faculty');
+        $middleSchools = MiddleSchool::all();
+        $professions = Profession::all();   
         $education_types = EducationType::all();
         $graduation_types = GraduationType::all();
 
-        return [$countries, $cities, $citizens, $faculties, $facultyPrograms,  $districts, $education_types, $graduation_types];
+        $application = Application::with('educationType','profession', 'graduationType', 'citizen', 'country','district')
+            ->findOrFail($id);
+
+        return [$countries, $cities, $citizens, $districts, $universities,  $faculties, $facultyPrograms, 
+            $middleSchools, $professions, $education_types, $graduation_types, $application];
     }
 
     public function create(ApplicationRequest $request){
@@ -48,25 +55,31 @@ class ApplicationController extends Controller
         return response()->setStatusCode(201, 'The application was created successfully!');
     }
 
-    public function update($id){
-        $countries = Country::all();
-        $cities = City::all();
-        $citizens = Citizen::all();
-        $faculties = Faculty::all();
-        $districts = District::all();
-        $facultyPrograms = FacultyProgram::all();
-        $education_types = EducationType::all();
-        $graduation_types = GraduationType::all();
+    public function update($id, ApplicationRequest $request){
+        $application = Application::findOrFail($id);
 
-        $application = Application::with('educationType','profession', 'graduationType', 'citizen', 'country','district')
-            ->findOrFail($id);
+        $application->update([ 
+                // TODO
+            ]);
 
-        return [$application, $countries, $cities, $citizens, $faculties, $facultyPrograms,  $districts, $education_types, $graduation_types];
+        return response()->setStatusCode(200, 'The application was updated successfully!');
     }
 
     public function delete($id){
-        Application::destroy($id);
+        $interval = ApplicationInterval::latest()->first();
+        $start_date = $interval->start_at->format('Y-m-d');
+        $end_date = $interval->ends_at->format('Y-m-d');
+       
+        $curr_date = date('Y-m-d'));
+        if($curr_date >= $start_date && $curr_date <= $end_date){ // TODO: razen, če je vpisna služba, ona lahko briše po roku
+            $application = Application::find($id);
+            $application->delete(); // soft delete
 
-        return response()->setStatusCode(204, 'The application was deleted successfully!');
+            return response()->setStatusCode(204, 'The application was deleted successfully!');
+        }
+        else {
+            return response()->setStatusCode(403, 'The application delete was denied!');
+        }
+        
     }
 }
