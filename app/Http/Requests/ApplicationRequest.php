@@ -22,7 +22,8 @@ class ApplicationRequest extends FormRequest {
 
     public function rules(){
 
-        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $request->input('country');
+        // TODO: get country, district from user data
+        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $request->input('country_id');
         $isBornInSLovenia = District::where('name','TUJINA')->pluck('id') == $request->input('district_birth');
 
         if(!(isFromSlovenia && isBornInSLovenia)){
@@ -34,7 +35,7 @@ class ApplicationRequest extends FormRequest {
             return false;
         }
 
-        $gender = 'M' // TODO: get from user data!
+        $gender = 'M' // TODO: get gender from user data!
 
         if(!validateEMSO($request->input('emso'), $isFromSlovenia, $gender)){
             return false;

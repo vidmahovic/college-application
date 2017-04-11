@@ -53,7 +53,6 @@ class ApplicationController extends Controller
 
     public function update($id, ApplicationRequest $request){
         $application = Application::findOrFail($id);
-
         $application->update(request()->all()); 
 
         return response()->setStatusCode(200, 'The application was updated successfully!');
