@@ -9,7 +9,10 @@
     </nav>
     
     <div class="wrapper">
-      <router-view></router-view>
+      <router-view keep-alive
+                   transition
+                   transition-mode="out-in">
+      </router-view>
       <div id="app"></div>
     </div>
   </div>
@@ -30,8 +33,8 @@
     methods: {
 
       callAPI: function (method, url, data) {
-        this.callingAPI = true
-        url = url || this.serverURI // if no url is passed then inheret local server URI
+        this.callingAPI = true;
+        url = url || this.serverURI; // if no url is passed then inheret local server URI
         return this.caller({
           url: url,
           method: method,
@@ -39,12 +42,12 @@
         })
       },
       logout: function () {
-        this.$store.commit('SET_USER', null)
-        this.$store.commit('SET_TOKEN', null)
+        this.$store.commit('SET_USER', null);
+        this.$store.commit('SET_TOKEN', null);
 
         if (window.localStorage) {
-          window.localStorage.setItem('user', null)
-          window.localStorage.setItem('token', null)
+          window.localStorage.setItem('user', null);
+          window.localStorage.setItem('token', null);
         }
 
         this.$router.push('/login')

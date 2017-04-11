@@ -11,16 +11,16 @@
     <title>College Application</title>
 
     <!-- Styles -->
-    <link href="{{ asset('/css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
 
 </head>
 <body>
     <div id="college-app">
-        <h3>Loading....</h3>
+        <h3>Loading...</h3>
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('/js/app.js') }}"></script>
+    <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 </html>
 

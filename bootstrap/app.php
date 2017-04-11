@@ -83,7 +83,7 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Vluzrmos\Tinker\TinkerServiceProvider::class);
 $app->register(Maatwebsite\Excel\ExcelServiceProvider::class);
-$app->register(Dingo\Api\Provider\LumenServiceProvider::class);
+//$app->register(Dingo\Api\Provider\LumenServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
