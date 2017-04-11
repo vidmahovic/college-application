@@ -14,7 +14,7 @@ class Application extends Model // PRIJAVA
     protected $table = 'applications';
 
     protected $fillable = ['emso', 'date_of_birth', 'user_id', 'profession_id', 'middle_school_id', 
-        'education_type_id', 'application_interval_id','country_id', 'citizen_id', 'applications_cities_id'];
+        'education_type_id', 'graduation_type_id', 'application_interval_id','country_id', 'citizen_id', 'applications_cities_id'];
 
     protected $guarded = ['id'];
 

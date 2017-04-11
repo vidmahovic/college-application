@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\FacultyProgram;
-use App\Faculty;
-use League\Fractal\Manager;
-use League\Fractal\Resource\Collection;
+use App\Models\FacultyProgram;
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 
 class FacultyProgramController extends Controller
@@ -16,8 +14,6 @@ class FacultyProgramController extends Controller
     }
 
     public function index(Request $request){
-        $fractal = new Manager();
-
         $faculties = Faculty::all();
         $types = [0,1,2];
         $is_regular = [0, 1];
@@ -27,28 +23,20 @@ class FacultyProgramController extends Controller
         $filters['is_regular'] = $request->input('is_regular');
 
         if(!count($request->all()))
-            $facultyPrograms = FacultyProgram::with('faculty','countAll', 'countAccepted')->paginate();
+            $facultyPrograms = FacultyProgram::with('faculty','countAll', 'countAccepted')->paginate(10);
         else
-            $facultyPrograms = FacultyProgram::with('faculty','countAll', 'countAccepted')->latest()->arrangeBy($filters)->paginate(2);
+            $facultyPrograms = FacultyProgram::with('faculty','countAll', 'countAccepted')->latest()->arrangeBy($filters)->paginate(5);
 
-        /*
-        $resource = new Collection($facultyPrograms, function(array $facultyProgram) {
-            return [
-                'id'      => (int) $facultyProgram['id'],
-                'name'   => $facultyProgram['name'],
-                'acronym'    => $facultyProgram['acronym'],
-                'min_points'    => (int) $facultyProgram['min_points']
-            ];
-        });
-
-        return $fractal->createData($resource)->toJson();
-        */
+        // return $this->response->paginator($facultyPrograms, new FacultyProgramTransformer);
 
         return $facultyPrograms;
     }
 
     public function show($id){
         $facultyProgram = FacultyProgram::with('faculty','countAll', 'countAccepted')->findOrFail($id);
+
+        // return $this->response->item($facultyProgram, new FacultyProgramTransformer);
+
         return $facultyProgram;
     }
 }

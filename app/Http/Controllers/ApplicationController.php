@@ -38,7 +38,7 @@ class ApplicationController extends Controller
         $education_types = EducationType::all();
         $graduation_types = GraduationType::all();
 
-        $application = Application::with('educationType','profession', 'graduationType', 'citizen', 'country','district')
+        $application = Application::with('educationType','profession', 'graduationType', 'citizen', 'country', 'district')
             ->findOrFail($id);
 
         return [$countries, $cities, $citizens, $districts, $universities,  $faculties, $facultyPrograms, 
@@ -46,21 +46,15 @@ class ApplicationController extends Controller
     }
 
     public function create(ApplicationRequest $request){
-        $application = Application::create(request(
-            ['emso', 'date_of_birth', 'user_id', 'profession_id', 'middle_school_id', 'education_type_id', 
-            'application_interval_id','country_id', 'citizen_id', 'applications_cities_id'
-            ]
-        ));
-        
+        $application = Application::create(request()->all());
+
         return response()->setStatusCode(201, 'The application was created successfully!');
     }
 
     public function update($id, ApplicationRequest $request){
         $application = Application::findOrFail($id);
 
-        $application->update([ 
-                // TODO
-            ]);
+        $application->update(request()->all()); 
 
         return response()->setStatusCode(200, 'The application was updated successfully!');
     }

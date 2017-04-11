@@ -36,7 +36,9 @@ class ApplicationRequest extends FormRequest {
 
         $gender = 'M' // TODO: get from user data!
 
-        $validEMSO = validateEMSO($request->input('emso'), $isFromSlovenia, $gender);
+        if(!validateEMSO($request->input('emso'), $isFromSlovenia, $gender)){
+            return false;
+        }
 
         $interval = ApplicationInterval::latest()->first();
         $start_date = $interval->start_at->format('Y-m-d');
@@ -49,13 +51,15 @@ class ApplicationRequest extends FormRequest {
         }
 
         return [
-            'city' => 'required', Rule::in(City::all()->pluck('id')),
-            'country' => 'required', Rule::in(Country::all()->pluck('id')),
-            'citizen' => 'required', Rule::in(Citizen::all()->pluck('id')),
+            'application_city_id' => 'required', Rule::in(City::all()->pluck('id')),
+            'country_id' => 'required', Rule::in(Country::all()->pluck('id')),
+            'citizen_id' => 'required', Rule::in(Citizen::all()->pluck('id')),
             'district_birth' => 'required', Rule::in(District::all()->pluck('id')),
             'faculty' => 'required', Rule::in(Faculty::all()->pluck('id')),
-            'education_type' => 'required', Rule::in(EducationType::all()->pluck('id')),
-            'graduation_type' => 'required', Rule::in(GraduationType::all()->pluck('id')),
+            'profession_id' => 'required', Rule::in(Profession::all()->pluck('id')),
+            'middle_school_id' => 'required', Rule::in(MiddleSchool::all()->pluck('id')),
+            'education_type_id' => 'required', Rule::in(EducationType::all()->pluck('id')),
+            'graduation_type_id' => 'required', Rule::in(GraduationType::all()->pluck('id')),
             'faculty_program_1' => Rule::in(FacultyProgram::all()->pluck('id')),
             'faculty_program_2' => Rule::in(FacultyProgram::all()->pluck('id')),
             'faculty_program_3' => Rule::in(FacultyProgram::all()->pluck('id'))
