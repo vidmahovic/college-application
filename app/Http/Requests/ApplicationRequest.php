@@ -12,6 +12,7 @@ use \App\Faculty;
 use \App\EducationType;
 use \App\GraduationType;
 use \App\FacultyProgram;
+use \App\ApplicationInterval;
 
 class ApplicationRequest extends FormRequest {
 
@@ -29,13 +30,23 @@ class ApplicationRequest extends FormRequest {
         }
 
         $dob = $request->input('date_of_birth');
-        if(!checkdate(month, day, year)){ // TODO
+        if(!checkdate(date("m",strtotime($dob), date("d",strtotime($dob), date("Y",strtotime($dob))){
             return false;
         }
 
-        $validEMSO = validateEMSO($request->input('emso'));
+        $gender = 'M' // TODO: get from user data!
 
-        // TODO application interval
+        $validEMSO = validateEMSO($request->input('emso'), $isFromSlovenia, $gender);
+
+        $interval = ApplicationInterval::latest()->first();
+        $start_date = $interval->start_at->format('Y-m-d');
+        $end_date = $interval->ends_at->format('Y-m-d');
+
+       
+        $curr_date = date('Y-m-d'));
+        if(!($curr_date >= $start_date && $curr_date <= $end_date)){
+            return false;
+        }
 
         return [
             'city' => 'required', Rule::in(City::all()->pluck('id')),
@@ -51,14 +62,14 @@ class ApplicationRequest extends FormRequest {
         ];
     }
 
-    public function validateEMSO($emso){
-        // 29 02 932  50 552 6
+    public function validateEMSO($emso,  $isFromSlovenia, $gender){
+        // 29 02 932 50 552 6
 
         if(strlen($emso) != 13){
             return false;
         }
 
-        $day = intval(substr($emso,0,2));
+        $day = intval(substr($emso,0,2);
         $month = intval(substr($emso,2,4));
         $year = intval(substr($emso,4,7)) + 1000; // 1900 - 1999
 
@@ -66,7 +77,20 @@ class ApplicationRequest extends FormRequest {
             return false;
         }
 
-        // TODO register, zaporedna stevilka: 50 552
+        // slovenija - register = 50
+        // tujci != 50
+        if(!($isFromSlovenia && intval(substr($emso,7,9) == 50)){
+            return false;
+        }
+
+         // zaporedna številka; moski imajo med 000-499, zenske 500-999
+        $gnumber = intval(substr($emso,10,13));
+        if(!($gender = 'M' && $gnumber <= 499)){
+            return false;
+        }
+        if(!($gender = 'F' && $gnumber >= 500 && $gnumber <= 999)){
+            return false;
+        }
 
         $factors = [];
         $factors[0] = $emso[0] * 7;
@@ -88,5 +112,7 @@ class ApplicationRequest extends FormRequest {
         if($control != $emso[12]){
             return false;
         }
+
+        return true;
     }
 }

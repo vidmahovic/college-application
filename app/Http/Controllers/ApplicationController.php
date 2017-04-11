@@ -45,6 +45,28 @@ class ApplicationController extends Controller
             ]
         ));
         
-        return response()->setStatusCode(201, 'The application is created successfully!');
+        return response()->setStatusCode(201, 'The application was created successfully!');
+    }
+
+    public function update($id){
+        $countries = Country::all();
+        $cities = City::all();
+        $citizens = Citizen::all();
+        $faculties = Faculty::all();
+        $districts = District::all();
+        $facultyPrograms = FacultyProgram::all();
+        $education_types = EducationType::all();
+        $graduation_types = GraduationType::all();
+
+        $application = Application::with('educationType','profession', 'graduationType', 'citizen', 'country','district')
+            ->findOrFail($id);
+
+        return [$application, $countries, $cities, $citizens, $faculties, $facultyPrograms,  $districts, $education_types, $graduation_types];
+    }
+
+    public function delete($id){
+        Application::destroy($id);
+
+        return response()->setStatusCode(204, 'The application was deleted successfully!');
     }
 }
