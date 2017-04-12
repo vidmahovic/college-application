@@ -14,9 +14,12 @@
               <li>
                   <router-link to="/referent">Referent</router-link>
               </li>
+              <li>
+                  <router-link to="/vpisna_sluzba">Vpisna služba</router-link>
+              </li>
           </ul>
       </div>
-       
+
     </div>
     <div class="container">
         <router-view></router-view>
@@ -30,7 +33,7 @@
     data: function(router) {
         return {
           section: 'Admin'
-        }    
+        }
     },
     mounted() {
       console.log('admin dashboard mounted.');

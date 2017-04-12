@@ -21,6 +21,7 @@ import AppView from './components/App.vue'
  * just import it here
  */
 Vue.use(VueRouter)
+Vue.component('datatable', require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
 
 
 const router = new VueRouter({

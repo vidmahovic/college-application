@@ -11,11 +11,15 @@ import ReferentDashboard from './components/referent/Dashboard.vue'
 import StudentView from './components/Student.vue'
 import StudentDashboard from './components/student/Dashboard.vue'
 import StudentApplication from './components/student/Application.vue'
+
+import VpisnaSluzbaView from './components/vpisnaSluzba.vue'
+import VpisnaSluzbaDashboard from './components/vpisnaSluzba/Dashboard.vue'
+
 const routes = [
 	{
 		path: '/login',
 		component: LoginView,
-		
+
 	},
 	{
 		path: '/',
@@ -52,6 +56,20 @@ const routes = [
 		]
 	},
 	{
+		path: '/vpisna_sluzba',
+		component: VpisnaSluzbaView,
+		/*name: 'vpisnaSluzba',*/
+		meta: {description: 'Vpisna sluzba /'},
+		children: [
+			{
+				path: '',
+				component: VpisnaSluzbaDashboard,
+				name: 'VpisnaSluzbaDashboard',
+				meta: {description: 'VpisnaSluzbaDashboard'}
+      		}
+		]
+	},
+	{
 		path: '/student',
 		component: StudentView,
 		/*name: 'Student',*/
@@ -62,7 +80,7 @@ const routes = [
 				component: StudentDashboard,
 				name: 'StudentDashboard',
 				meta: {description: 'StudentDashboard'}
-      		}, 
+      		},
       		{
 		        path: '/application',
 		        component: StudentApplication,
