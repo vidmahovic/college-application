@@ -10,7 +10,7 @@ use Illuminate\Auth\Events\Lockout;
 trait ThrottlesLogins
 {
 
-    protected $login_attempts = 5;
+    protected $login_attempts = 3;
     protected $decay_in_minutes = 1;
 
     /**

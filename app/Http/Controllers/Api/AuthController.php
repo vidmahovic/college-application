@@ -32,48 +32,46 @@ class AuthController extends ApiController
 
     public function login()
     {
-        $this->validate($this->request, [
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
+        // First, we need to validate Request params
+        $this->validateLoginParams($this->request);
 
-        try {
+        // Then, we need to check if we need to send
+        // a lockout response to the User
+        if ($this->hasTooManyLoginAttempts($this->request)) {
+            $this->fireLockoutEvent($this->request);
 
-            if (! $token = $this->jwt->attempt($this->request->only('email', 'password'))) {
-                return response()->json(['user_not_found'], 404);
-            }
-
-        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-
-            return response()->json(['token_expired'], 500);
-
-        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-
-            return response()->json(['token_invalid'], 500);
-
-        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-
-            return response()->json(['token_absent' => $e->getMessage()], 500);
-
+            return $this->sendLockoutResponse($this->request);
         }
 
-        return response()->json(compact('token'));
-//        if ($this->hasTooManyLoginAttempts($this->request)) {
-//            $this->fireLockoutEvent($this->request);
-//
-//            return $this->sendLockoutResponse($this->request);
-//        }
-//
-//        if ($this->attemptLogin($this->request)) {
-//            return $this->sendLoginResponse($this->request);
-//        }
+        try {
+            // We can now try to authenticate the User against
+            // his credentials...
+            if ($jwt_token = $this->attemptLogin($this->request)) {
+
+                $this->clearLoginAttempts($this->request);
+                $this->saveToken($this->request, $jwt_token);
+
+                return response()->json(compact('jwt_token'));
+
+            }
+
+            $response = response()->json(['user_not_found'], 404);
+
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+            $response = response()->json(['token_expired'], 500);
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+            $response = response()->json(['token_invalid'], 500);
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+            $response = response()->json(['token_absent' => $e->getMessage()], 500);
+        }
 
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
-//        $this->incrementLoginAttempts($this->request);
-//
-//        return $this->sendFailedLoginResponse($this->request);
+        $this->incrementLoginAttempts($this->request);
+
+        return $response;
+
     }
 
 
@@ -81,10 +79,12 @@ class AuthController extends ApiController
         $this->validateRegisterParams($this->request);
         // Validate the request
         // Parse the data
-
+        // etc.
+        // TODO (Vid): implement registration logic.
     }
 
     public function password() {
 
     }
+
 }

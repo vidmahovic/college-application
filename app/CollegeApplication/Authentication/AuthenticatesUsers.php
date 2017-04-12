@@ -2,11 +2,13 @@
 
 namespace CollegeApplication\Authentication;
 
+use App\User;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\ProvidesConvenienceMethods;
+use Tymon\JWTAuth\JWTAuth;
 
 trait AuthenticatesUsers
 {
@@ -22,7 +24,7 @@ trait AuthenticatesUsers
     {
         $this->validate($request, [
             $this->username() => 'required',
-            'password' => 'required|min:8'
+            'password' => 'required|min:6' // TODO (Vid): validate password adhering to specifications.
         ]);
     }
 
@@ -53,7 +55,20 @@ trait AuthenticatesUsers
      */
     protected function guard()
     {
-        return Auth::guard();
+        //return Auth::guard();
+        return app(JWTAuth::class);
+    }
+
+    protected function credentials(Request $request)
+    {
+        return $request->only([$this->username(), 'password']);
+    }
+
+    protected function saveToken(Request $request, string $token) : void
+    {
+        $user = User::where($this->username(), $request->only($this->username()))->firstOrFail();
+        $user->api_token = $token;
+        $user->save();
     }
 
 
