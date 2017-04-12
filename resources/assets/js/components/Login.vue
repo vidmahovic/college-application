@@ -17,6 +17,7 @@
                 <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
               </div>
               <button type="submit" class="btn btn-primary">Login</button>
+              <p v-show="showResponse" class="bg-danger" style="padding-top: 10px; padding-bottom: 10px; margin-top: 15px;"> {{ response }} </p>
             </form>
 
           </div>
@@ -27,25 +28,45 @@
 
 <script>
 module.exports = {
-	name: 'Login',
+	props: ['user'],
+  name: 'Login',
  	data: function (router) {
 		return {
 			section: 'Login',
 			loading: '',
 			username: '',
 			password: '',
-			response: ''
+			response: '',
+      showResponse: false
 		}
 	},
 	methods: {
     	checkCreds: function () {
 
+
+        // make api call, gets user
+
+        user = {
+          name: this.username,
+          loggedIn: true
+        }
+
+        this.$parent.user = user;
+        //this.loggedIn = true;
         // Mock user login..username => role: student | admin | referent | vpisna_sluzba
         //this.$router.push('/'+this.username)
 
-        this.$http.post('api/login', {username: this.username, password: this.password})
+        this.$http.post('api/login', {email: this.username, password: this.password})
           .then(function(res){
-            console.log(res);
+            this.$router.push('/vpisna_sluzba')
+          }, function(err){
+            this.showResponse = true;
+            if(err.status == 423){
+              this.response = "Vaš IP naslov je začasno zaklenjen."
+            }
+            else {
+              this.response = "Uporabniško ime ali geslo ni pravilno.";
+            }
           });
 
     },
@@ -55,4 +76,5 @@ module.exports = {
 
   }
 }
+
 </script>
