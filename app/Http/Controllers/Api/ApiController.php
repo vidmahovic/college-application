@@ -29,12 +29,17 @@ class ApiController extends Controller
 
             foreach($this->request->query() as $filter => $val) {
                 if(strlen($val) > 0 && in_array($filter, $available_filters)) {
-                    $model = $model->filter($filter, $val);
+                    $model = $model->filter($filter, $this->parseFilterVals($val));
                 }
             }
         }
 
         return $model;
+    }
+
+    private function parseFilterVals(string $filter_val) {
+        $vals = (explode(',', $filter_val));
+        return count($vals) > 1 ? $vals : $vals[0];
     }
 
 }

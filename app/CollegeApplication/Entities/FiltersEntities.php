@@ -5,8 +5,13 @@ namespace CollegeApplication\Entities;
 trait FiltersEntities
 {
 
+
+
     public function scopeFilter($query, $filter, $value, $relation = '=') {
-        return $query->where($filter, $relation, $value);
+        if(is_array($value)) {
+            return $query->whereIn($filter, $value);
+        }
+        return $query->whereIn($filter, $relation, $value);
     }
 
 //    public function __get($name)
