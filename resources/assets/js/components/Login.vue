@@ -27,7 +27,8 @@
 
 <script>
 module.exports = {
-	name: 'Login',
+	props: ['user'],
+  name: 'Login',
  	data: function (router) {
 		return {
 			section: 'Login',
@@ -40,6 +41,16 @@ module.exports = {
 	methods: {
     	checkCreds: function () {
 
+        
+        // make api call, gets user
+        
+        user = {
+          name: this.password,
+          loggedIn: true
+        }
+
+        this.$parent.user = user;
+        //this.loggedIn = true;
         // Mock user login..username => role: student | admin | referent | vpisna_sluzba
         this.$router.push('/'+this.username)
 
@@ -50,4 +61,5 @@ module.exports = {
 
   }
 }
+
 </script>
