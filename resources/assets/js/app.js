@@ -6,9 +6,11 @@
 
 require('./bootstrap');
 import VueRouter from 'vue-router'
+import VueResource from 'vue-resource'
 
 import routes from './routes'
 import AppView from './components/App.vue'
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -20,7 +22,10 @@ import AppView from './components/App.vue'
  * Mapping from urls to Vue Components is done in routes.js and we
  * just import it here
  */
-Vue.use(VueRouter);
+Vue.use(VueRouter)
+Vue.use(VueResource)
+
+Vue.component('datatable', require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
 
 
 const router = new VueRouter({

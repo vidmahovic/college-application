@@ -1,13 +1,13 @@
 <template>
   <div>
-        
+
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-static-top" role="navigation" style="height:30px">
         <div class="navbar-header">
             <a class="navbar-brand">Vpis</a>
         </div>
     </nav>
-    
+
     <div class="wrapper">
       <router-view keep-alive
                    transition

@@ -18,7 +18,7 @@
               </div>
               <button type="submit" class="btn btn-primary">Login</button>
             </form>
-            
+
           </div>
         </div>
       </div>
@@ -40,14 +40,14 @@ module.exports = {
 	methods: {
     	checkCreds: function () {
 
-        // Mock user login..username => role: student | admin | referent
+        // Mock user login..username => role: student | admin | referent | vpisna_sluzba
         this.$router.push('/'+this.username)
-    		
+
     },
     mounted() {
     	console.log("login mounted")
     }
-    
+
   }
 }
 </script>
