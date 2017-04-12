@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\FacultyProgram;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use \App\FacultyProgram;
 
 class FacultyProgramsSeeder extends Seeder
 {

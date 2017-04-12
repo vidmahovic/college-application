@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\City;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use \App\City;
 
 class CitiesTableSeeder extends Seeder
 {

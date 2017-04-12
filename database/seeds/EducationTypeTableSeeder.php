@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\EducationType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use \App\EducationType;
 
 class EducationTypeTableSeeder extends Seeder
 {

@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\District;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use \App\District;
 
 class DistrictsTableSeeder extends Seeder
 {

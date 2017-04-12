@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\GraduationType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use \App\GraduationType;
 
 class GraduationTypeTableSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class GraduationTypeTableSeeder extends Seeder
      */
     public function run()
     {
-        $excel = App::make('excel');
+        $excel = app('excel');
 
         $data = collect($excel->load('database/files/Koncal_sr_sola.xlsx', function($reader) {})->get());
 

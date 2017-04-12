@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\MiddleSchool;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use \App\MiddleSchool;
 
 class MiddleSchoolsTableSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class MiddleSchoolsTableSeeder extends Seeder
      */
     public function run()
     {
-        $excel = App::make('excel');
+        $excel = app('excel');
 
         $data = $excel->load('database/files/Sr_sola.xls', function($reader) {})->get();
         if(!empty($data) && $data->count()){

@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\Profession;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use \App\Profession;
 
 class ProfessionsTableSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class ProfessionsTableSeeder extends Seeder
      */
     public function run()
     {
-        $excel = App::make('excel');
+        $excel = app('excel');
 
         $data = collect($excel->load('database/files/Poklic.xlsx', function($reader) {})->get());
         if($data->isNotEmpty()) {

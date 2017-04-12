@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\University;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use \App\University;
 
 class UniversityTableSeeder extends Seeder
 {

@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\Country;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use \App\Country;
 
 class CountriesTableSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class CountriesTableSeeder extends Seeder
      */
     public function run()
     {
-        $excel = App::make('excel');
+        $excel = app('excel');
 
         $data = $excel->load('database/files/Drzava.xls', function($reader) {})->get();
         if(!empty($data) && $data->count()){

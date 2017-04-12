@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\Citizen;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
-use \App\Citizen;
 
 class CitizensTableSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class CitizensTableSeeder extends Seeder
      */
     public function run()
     {
-        $excel = App::make('excel');
+        $excel = app('excel');
 
         $data = collect($excel->load('database/files/Drzavljan.xlsx', function($reader) {})->get());
         if($data->isNotEmpty()){
