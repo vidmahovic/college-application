@@ -19,29 +19,22 @@ $api = app('api.router');
 
 $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-    $api->post('login', 'AuthController@login');
-    $api->post('password-reset', 'AuthController@password');
+    // Guest routes
+    $api->group(['middleware' => 'guest'], function($api) {
+        $api->post('login', 'AuthController@login');
+        $api->group(['prefix' => 'password'], function($api) {
+            $api->post('email', 'PasswordController@email');
+            $api->post('reset', 'PasswordController@reset');
+        });
+    });
 
+    $api->get('/programs','FacultyProgramController@index');
+    $api->get('/programs/{id}', 'FacultyProgramController@show');
+    $api->get('/application','ApplicationController@show');
+    $api->post('/application','ApplicationController@create');
+
+    // Routes for authenticated users (require "Authorization: Bearer [token]" header with a valid token)
     $api->group(['middleware' => 'api.auth'], function($api) {
-
-        $api->get('/programs','FacultyProgramController@index');
-        $api->get('/programs/{id}', 'FacultyProgramController@show');
-        $api->get('/application','ApplicationController@show');
-        $api->post('/application','ApplicationController@create');
-
+        // Add portected routes here.
     });
 });
-
-//$app->group(['prefix' => 'api', 'namespace' => 'Api'], function() use($app) {
-//    // Authentication routes
-//    $app->post('login', 'AuthController@login');
-//    $app->post('password-reset', 'AuthController@password');
-//
-//
-//    $app->get('/programs','FacultyProgramController@index');
-//    $app->get('/programs/{id}', 'FacultyProgramController@show');
-//
-//    $app->get('/application','ApplicationController@show');
-//    $app->post('/application','ApplicationController@create');
-//
-//});
