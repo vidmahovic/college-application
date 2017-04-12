@@ -18,17 +18,6 @@ class AuthController extends ApiController
 {
     use AuthenticatesUsers, ThrottlesLogins;
 
-    private $request;
-    /**
-     * @var \Tymon\JWTAuth\JWTAuth
-     */
-    private $jwt;
-
-    public function __construct(Request $request, JWTAuth $jwt)
-    {
-        $this->request = $request;
-        $this->jwt = $jwt;
-    }
 
     public function login()
     {
