@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Models\User;
 use CollegeApplication\Authentication\AuthenticatesUsers;
 use CollegeApplication\Authentication\ThrottlesLogins;
+
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\JWTAuth;
 
 /**
  * Class AuthController
@@ -18,6 +17,18 @@ class AuthController extends ApiController
 {
     use AuthenticatesUsers, ThrottlesLogins;
 
+<<<<<<< Updated upstream
+=======
+    /**
+     * @var \Illuminate\Http\Request
+     */
+    private $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+>>>>>>> Stashed changes
 
     public function login()
     {
@@ -71,9 +82,4 @@ class AuthController extends ApiController
         // etc.
         // TODO (Vid): implement registration logic.
     }
-
-    public function password() {
-
-    }
-
 }
