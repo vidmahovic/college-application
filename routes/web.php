@@ -19,15 +19,22 @@ $api = app('api.router');
 
 $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
+
     $api->post('login', 'AuthController@login');
-    $api->post('password-reset', 'AuthController@password');
+    $api->post('password/email', 'PasswordController@sendPasswordResetEmail');
+    $api->post('password/reset', 'PasswordController@resetPassword');
+
+    $api->get('/programs','FacultyProgramController@index');
+    $api->get('/programs/{id}', 'FacultyProgramController@show');
+    $api->get('/application','ApplicationController@show');
+    $api->post('/application','ApplicationController@create');
 
     $api->group(['middleware' => 'api.auth'], function($api) {
 
-        $api->get('/programs','FacultyProgramController@index');
-        $api->get('/programs/{id}', 'FacultyProgramController@show');
-        $api->get('/application','ApplicationController@show');
-        $api->post('/application','ApplicationController@create');
+//        $api->get('/programs','FacultyProgramController@index');
+//        $api->get('/programs/{id}', 'FacultyProgramController@show');
+//        $api->get('/application','ApplicationController@show');
+//        $api->post('/application','ApplicationController@create');
 
     });
 });

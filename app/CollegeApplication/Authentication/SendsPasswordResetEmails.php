@@ -1,21 +1,14 @@
 <?php
 
-namespace Illuminate\Foundation\Auth;
+namespace CollegeApplication\Authentication;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Laravel\Lumen\Routing\ProvidesConvenienceMethods;
 
 trait SendsPasswordResetEmails
 {
-    /**
-     * Display the form to request a password reset link.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showLinkRequestForm()
-    {
-        return view('emails.auth.password-reset');
-    }
+    use ProvidesConvenienceMethods;
 
     /**
      * Send a reset link to the given user.
@@ -34,6 +27,8 @@ trait SendsPasswordResetEmails
             $request->only('email')
         );
 
+        dd($response);
+
         return $response == Password::RESET_LINK_SENT
             ? $this->sendResetLinkResponse($response)
             : $this->sendResetLinkFailedResponse($request, $response);
@@ -47,7 +42,7 @@ trait SendsPasswordResetEmails
      */
     protected function sendResetLinkResponse($response)
     {
-        return response()->json(['status' => $response]);
+        return response()->json(['status' => $response], 200);
     }
 
     /**
@@ -59,16 +54,6 @@ trait SendsPasswordResetEmails
      */
     protected function sendResetLinkFailedResponse(Request $request, $response)
     {
-        return response()->json(['email' => $response]);
-    }
-
-    /**
-     * Get the broker to be used during password reset.
-     *
-     * @return \Illuminate\Contracts\Auth\PasswordBroker
-     */
-    public function broker()
-    {
-        return app('auth.password')->broker();
+        return response()->json(['error' => $response], 500);
     }
 }

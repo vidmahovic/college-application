@@ -1,16 +1,13 @@
 <?php
 
-namespace Illuminate\Foundation\Auth;
+namespace CollegeApplication\Authentication;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 
 trait ResetsPasswords
 {
-    use RedirectsUsers;
-
     /**
      * Display the password reset view for the given token.
      *
@@ -116,8 +113,10 @@ trait ResetsPasswords
      */
     protected function sendResetResponse($response)
     {
-        return redirect($this->redirectPath())
-            ->with('status', trans($response));
+        return response()->json(['status' => $response], 200);
+
+//        return redirect($this->redirectPath())
+//            ->with('status', trans($response));
     }
 
     /**
@@ -129,19 +128,10 @@ trait ResetsPasswords
      */
     protected function sendResetFailedResponse(Request $request, $response)
     {
-        return redirect()->back()
-            ->withInput($request->only('email'))
-            ->withErrors(['email' => trans($response)]);
-    }
-
-    /**
-     * Get the broker to be used during password reset.
-     *
-     * @return \Illuminate\Contracts\Auth\PasswordBroker
-     */
-    public function broker()
-    {
-        return app('auth.password')->broker();
+        return response()->json(['email' => $response], 400);
+//        return redirect()->back()
+//            ->withInput($request->only('email'))
+//            ->withErrors(['email' => trans($response)]);
     }
 
     /**

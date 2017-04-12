@@ -106,6 +106,15 @@ if (! function_exists('auth')) {
     }
 }
 
+if(!function_exists('bcrypt')) {
+
+    function bcrypt($value, $params = [])
+    {
+        return app('hash')->make($value, $params);
+    }
+
+}
+
 //if(! function_exists('config_path')) {
 //
 //    function config_path($path = '') {

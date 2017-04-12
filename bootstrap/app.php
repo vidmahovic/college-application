@@ -31,6 +31,10 @@ $app = new Laravel\Lumen\Application(
 
 $app->withEloquent();
 
+// Custom config files
+$app->configure('services');
+$app->configure('mail');
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -58,7 +62,7 @@ $app->singleton(
 //        return $app['auth'];
 //    }
 //);
-//
+
 //$app->singleton(
 //    Illuminate\Cache\CacheManager::class,
 //    function ($app) {
@@ -97,12 +101,15 @@ $app->routeMiddleware([
 */
 
 $app->register(App\Providers\AppServiceProvider::class);
+$app->register(\Illuminate\Auth\Passwords\PasswordResetServiceProvider::class);
+$app->register(\Illuminate\Mail\MailServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Vluzrmos\Tinker\TinkerServiceProvider::class);
 $app->register(Maatwebsite\Excel\ExcelServiceProvider::class);
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Dingo\Api\Provider\LumenServiceProvider::class);
+$app->register(Illuminate\Notifications\NotificationServiceProvider::class);
 
 app(Auth::class)->extend('jwt', function ($app) {
     return new JWT($app[JWTAuth::class]);

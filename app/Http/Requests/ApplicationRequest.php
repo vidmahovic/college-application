@@ -2,18 +2,17 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use \App\City;
-use \App\Country;
-use \App\Citizen;
-use \App\Faculty;
-use \App\EducationType;
-use \App\GraduationType;
-use \App\FacultyProgram;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\Citizen;
+use App\Models\Faculty;
+use App\Models\EducationType;
+use App\Models\GraduationType;
+use App\Models\FacultyProgram;
 
-class ApplicationRequest extends FormRequest {
+class ApplicationRequest extends Request {
 
     public function authorize(){
         return true;
@@ -21,19 +20,19 @@ class ApplicationRequest extends FormRequest {
 
     public function rules(){
 
-        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $request->input('country');
-        $isBornInSLovenia = District::where('name','TUJINA')->pluck('id') == $request->input('district_birth');
+        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $this->request->input('country');
+        $isBornInSLovenia = District::where('name','TUJINA')->pluck('id') == $this->request->input('district_birth');
 
         if(!(isFromSlovenia && isBornInSLovenia)){
             return false;
         }
 
-        $dob = $request->input('date_of_birth');
+        $dob = $this->request->input('date_of_birth');
         if(!checkdate(month, day, year)){ // TODO
             return false;
         }
 
-        $validEMSO = validateEMSO($request->input('emso'));
+        $validEMSO = validateEMSO($this->request->input('emso'));
 
         // TODO application interval
 
