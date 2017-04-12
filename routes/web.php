@@ -15,12 +15,33 @@ $app->get('/', function () use ($app) {
     return view('index');
 });
 
-$app->group(['prefix' => 'api'], function() use($app) {
+$api = app('api.router');
 
-    $app->get('/faculty_programs','FacultyProgramController@index');
-    $app->get('/faculty_programs/{id}', 'FacultyProgramController@show');
+$api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-    $app->get('/application','ApplicationController@show');
-    $app->post('/application','ApplicationController@create');
+    $api->post('login', 'AuthController@login');
+    $api->post('password-reset', 'AuthController@password');
 
+    $api->group(['middleware' => 'api.auth'], function($api) {
+
+        $api->get('/programs','FacultyProgramController@index');
+        $api->get('/programs/{id}', 'FacultyProgramController@show');
+        $api->get('/application','ApplicationController@show');
+        $api->post('/application','ApplicationController@create');
+
+    });
 });
+
+//$app->group(['prefix' => 'api', 'namespace' => 'Api'], function() use($app) {
+//    // Authentication routes
+//    $app->post('login', 'AuthController@login');
+//    $app->post('password-reset', 'AuthController@password');
+//
+//
+//    $app->get('/programs','FacultyProgramController@index');
+//    $app->get('/programs/{id}', 'FacultyProgramController@show');
+//
+//    $app->get('/application','ApplicationController@show');
+//    $app->post('/application','ApplicationController@create');
+//
+//});

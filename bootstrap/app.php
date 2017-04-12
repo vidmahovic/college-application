@@ -1,5 +1,9 @@
 <?php
 
+use Dingo\Api\Auth\Auth;
+use Dingo\Api\Auth\Provider\JWT;
+use Tymon\JWTAuth\JWTAuth;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
@@ -48,6 +52,20 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+//$app->singleton(
+//    Illuminate\Auth\AuthManager::class,
+//    function ($app) {
+//        return $app['auth'];
+//    }
+//);
+//
+//$app->singleton(
+//    Illuminate\Cache\CacheManager::class,
+//    function ($app) {
+//        return $app->make('cache');
+//    }
+//);
+
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -83,7 +101,20 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(Vluzrmos\Tinker\TinkerServiceProvider::class);
 $app->register(Maatwebsite\Excel\ExcelServiceProvider::class);
-//$app->register(Dingo\Api\Provider\LumenServiceProvider::class);
+$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(Dingo\Api\Provider\LumenServiceProvider::class);
+
+app(Auth::class)->extend('jwt', function ($app) {
+    return new JWT($app[JWTAuth::class]);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Redefine config files
+|--------------------------------------------------------------------------
+ */
+//config(['auth.providers.users.model' => 'App\Models\User']);
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes

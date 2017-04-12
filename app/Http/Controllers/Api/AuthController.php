@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+
+use App\Models\User;
 use CollegeApplication\Authentication\AuthenticatesUsers;
 use CollegeApplication\Authentication\ThrottlesLogins;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\JWTAuth;
 
 /**
  * Class AuthController
@@ -13,35 +16,64 @@ use Illuminate\Http\Request;
  */
 class AuthController extends ApiController
 {
-    use AuthenticatesUsers,ThrottlesLogins;
-
-    protected $login_attempts = 3;
+    use AuthenticatesUsers, ThrottlesLogins;
 
     private $request;
+    /**
+     * @var \Tymon\JWTAuth\JWTAuth
+     */
+    private $jwt;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, JWTAuth $jwt)
     {
         $this->request = $request;
+        $this->jwt = $jwt;
     }
 
     public function login()
     {
-        if ($this->hasTooManyLoginAttempts($this->request)) {
-            $this->fireLockoutEvent($this->request);
+        $this->validate($this->request, [
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
 
-            return $this->sendLockoutResponse($this->request);
+        try {
+
+            if (! $token = $this->jwt->attempt($this->request->only('email', 'password'))) {
+                return response()->json(['user_not_found'], 404);
+            }
+
+        } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+            return response()->json(['token_expired'], 500);
+
+        } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+            return response()->json(['token_invalid'], 500);
+
+        } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+            return response()->json(['token_absent' => $e->getMessage()], 500);
+
         }
 
-        if ($this->attemptLogin($this->request)) {
-            return $this->sendLoginResponse($this->request);
-        }
+        return response()->json(compact('token'));
+//        if ($this->hasTooManyLoginAttempts($this->request)) {
+//            $this->fireLockoutEvent($this->request);
+//
+//            return $this->sendLockoutResponse($this->request);
+//        }
+//
+//        if ($this->attemptLogin($this->request)) {
+//            return $this->sendLoginResponse($this->request);
+//        }
 
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
-        $this->incrementLoginAttempts($this->request);
-
-        return $this->sendFailedLoginResponse($this->request);
+//        $this->incrementLoginAttempts($this->request);
+//
+//        return $this->sendFailedLoginResponse($this->request);
     }
 
 

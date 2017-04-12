@@ -89,4 +89,12 @@ if(! function_exists('mix')) {
     }
 }
 
+//if(! function_exists('config_path')) {
+//
+//    function config_path($path = '') {
+//        return rtrim(app()->basePath('config/' . $path), '/');
+//    }
+//
+//}
+
 
