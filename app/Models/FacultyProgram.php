@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use CollegeApplication\Entities\FiltersEntities;
 use Illuminate\Database\Eloquent\Model;
 
 class FacultyProgram extends Model // PROGRAM
 {
+    use FiltersEntities;
+
     protected $table = 'faculty_programs';
 
     protected $fillable = ['id', 'name', 'faculty_id', 'allow_double_degree', 'is_regular', 'type', 'min_points'];
-    //protected $guarded = ['id'];
+
+    public static $filters = ['name', 'faculty_id', 'is_regular', 'type', 'allow_double_degree', 'min_points'];
 
     // TODO: število razpisanih
 
@@ -31,7 +35,7 @@ class FacultyProgram extends Model // PROGRAM
         return $this->hasMany(ApplicationsPrograms::class);
     }
 
-    public function countAll(){
+    public function countAll() {
        return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count');
     }
 

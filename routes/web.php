@@ -19,10 +19,9 @@ $api = app('api.router');
 
 $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-    // Guest routes
-        $api->post('login', 'AuthController@login');
-        $api->post('password/email', 'PasswordController@email');
-        $api->post('password/reset', 'PasswordController@reset');
+    $api->post('login', 'AuthController@login');
+    $api->post('password/email', 'PasswordController@email');
+    $api->post('password/reset', 'PasswordController@reset');
 
     $api->get('/programs','FacultyProgramController@index');
     $api->get('/programs/{id}', 'FacultyProgramController@show');
