@@ -41,7 +41,12 @@ module.exports = {
     	checkCreds: function () {
 
         // Mock user login..username => role: student | admin | referent | vpisna_sluzba
-        this.$router.push('/'+this.username)
+        //this.$router.push('/'+this.username)
+
+        this.$http.post('api/login', {username: this.username, password: this.password})
+          .then(function(res){
+            console.log(res);
+          });
 
     },
     mounted() {

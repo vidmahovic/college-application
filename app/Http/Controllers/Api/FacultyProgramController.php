@@ -30,7 +30,7 @@ class FacultyProgramController extends ApiController
         if(!count($request->all()))
             $facultyPrograms = FacultyProgram::with('faculty','countAll', 'countAccepted')->paginate();
         else
-            $facultyPrograms = FacultyProgram::with('faculty','countAll', 'countAccepted')->latest()->arrangeBy($filters)->paginate(2);
+            $facultyPrograms = FacultyProgram::with('faculty','countAll', 'countAccepted')->latest()->arrangeBy($filters)->paginate(25);
 
         /*
         $resource = new Collection($facultyPrograms, function(array $facultyProgram) {
