@@ -47,7 +47,7 @@ module.exports = {
         // make api call, gets user
 
         user = {
-          name: this.password,
+          name: this.username,
           loggedIn: true
         }
 

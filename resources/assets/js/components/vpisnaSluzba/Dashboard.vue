@@ -1,12 +1,33 @@
 <template>
   <div class="row">
-      <div class="col-md-10 col-md-offset-1">
+      <div class="col-md-10">
           <div class="panel panel-default">
               <div class="panel-body">
                 <h2 style="text-align: center;">Datatable</h2>
-                <datatable :columns="table_columns" :data="table_rows" :data-store="ajax_store" filterable paginate></datatable>
+                <datatable :columns="table_columns" :data="table_rows" filterable paginate></datatable>
               </div>
           </div>
+      </div>
+      <div class="col-md-2">
+        <div class="panel panel-body">
+          <h2>Filtri:</h2>
+          <h4>Način študija</h4>
+          <input type="radio" id="one" value="0" v-model="regular" v-on:click="regular1('0')">
+          <label for="one">Izredni programi</label>
+          <br>
+          <input type="radio" id="two" value="1" v-model="regular" v-on:click="regular1('1')">
+          <label for="two">Redni programi</label>
+          <br>
+          <h4>Vrsta programa</h4>
+          <input type="radio" id="one1" value="0" v-model="type" v-on:click="type1('0')">
+          <label for="one1">Univerzitetni</label>
+          <br>
+          <input type="radio" id="two2" value="1" v-model="type" v-on:click="type1('1')">
+          <label for="two2">Visokošolski</label>
+          <br>
+          <input type="radio" id="three3" value="2" v-model="type" v-on:click="type1('2')">
+          <label for="three3">Magistrski</label>
+        </div>
       </div>
   </div>
 </template>
@@ -19,6 +40,8 @@
     name: "VpisnaSluzbaDashboard",
     data: function(router){
       return {
+        regular: '',
+        type: '',
         table_columns: [
           {label: 'Fakulteta', field: 'faculty.name'},
           {label: 'Program', field: 'name'},
@@ -59,6 +82,24 @@
         ],
         table_rows: []
         //ajax_store: ajax_store
+      }
+    },
+    methods: {
+      regular1: function(param){
+        this.$http.get('/api/programs', {params: {is_regular: param, type: this.type}})
+          .then(function(res){
+            this.table_rows = res.data.data;
+          }, function(err){
+            console.log(err);
+          })
+      },
+      type1: function(param){
+        this.$http.get('/api/programs', {params: {type: param, is_regular: this.regular}})
+          .then(function(res){
+            this.table_rows = res.data.data;
+          }, function(err){
+            console.log(err);
+          })
       }
     },
     created: function(){
