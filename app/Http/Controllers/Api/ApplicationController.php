@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Faculty;
-use App\FacultyProgram;
-use App\Citizen;
-use App\City;
-use App\Application;
-use App\MiddleSchool;
-use App\Profession;
-use App\GraduationType;
-use App\EducationType;
-use App\Country;
+use App\Models\Faculty;
+use App\Models\FacultyProgram;
+use App\Models\Citizen;
+use App\Models\City;
+use App\Models\Application;
+use App\Models\GraduationType;
+use App\Models\EducationType;
+use App\Models\Country;
 
-class ApplicationController extends Controller
+class ApplicationController extends ApiController
 {
     /**
      * Create a new controller instance.

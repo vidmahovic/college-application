@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\FacultyProgram;
-use App\Faculty;
+use App\Models\FacultyProgram;
+use App\Models\Faculty;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use Illuminate\Http\Request;
 
-class FacultyProgramController extends Controller
+class FacultyProgramController extends ApiController
 {
     //$fractal = new Manager();
     public function __construct()
