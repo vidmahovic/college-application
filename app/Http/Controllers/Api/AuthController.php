@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 
 use CollegeApplication\Authentication\AuthenticatesUsers;
 use CollegeApplication\Authentication\ThrottlesLogins;
-
 use Illuminate\Http\Request;
 
 /**
@@ -17,18 +16,6 @@ class AuthController extends ApiController
 {
     use AuthenticatesUsers, ThrottlesLogins;
 
-<<<<<<< Updated upstream
-=======
-    /**
-     * @var \Illuminate\Http\Request
-     */
-    private $request;
-
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
->>>>>>> Stashed changes
 
     public function login()
     {

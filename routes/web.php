@@ -27,14 +27,14 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) 
     $api->post('password/reset', 'PasswordController@resetPassword');
 
     // Protected routes
-    $api->group(['middleware' => 'api.auth'], function($api) {
+    //$api->group(['middleware' => 'api.auth'], function($api) {
 
         $api->get('/programs','FacultyProgramController@index');
         $api->get('/programs/{id}', 'FacultyProgramController@show');
         $api->get('/application','ApplicationController@show');
         $api->post('/application','ApplicationController@create');
 
-    });
+    //});
 });
 
 //$app->group(['prefix' => 'api', 'namespace' => 'Api'], function() use($app) {
