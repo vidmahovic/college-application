@@ -111,6 +111,8 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 $app->register(Dingo\Api\Provider\LumenServiceProvider::class);
 $app->register(Illuminate\Notifications\NotificationServiceProvider::class);
 
+$app->alias('mailer', \Illuminate\Contracts\Mail\Mailer::class);
+
 app(Auth::class)->extend('jwt', function ($app) {
     return new JWT($app[JWTAuth::class]);
 });

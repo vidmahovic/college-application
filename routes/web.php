@@ -14,6 +14,7 @@
 $app->get('/', function () use ($app) {
     return view('index');
 });
+$app->get('password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@showResetForm']);
 
 $api = app('api.router');
 
