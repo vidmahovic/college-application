@@ -1,7 +1,7 @@
 <?php
 
 use \Illuminate\Support\HtmlString;
-
+use \Illuminate\Contracts\Auth\Factory as AuthFactory;
 
 if (!function_exists('resource')) {
     function resource($basePath, $controller = null) {
@@ -87,6 +87,32 @@ if(! function_exists('mix')) {
 
         return new HtmlString($manifestDirectory.$manifest[$path]);
     }
+}
+
+if (! function_exists('auth')) {
+    /**
+     * Get the available auth instance.
+     *
+     * @param  string|null  $guard
+     * @return \Illuminate\Contracts\Auth\Factory|\Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
+     */
+    function auth($guard = null)
+    {
+        if (is_null($guard)) {
+            return app(AuthFactory::class);
+        } else {
+            return app(AuthFactory::class)->guard($guard);
+        }
+    }
+}
+
+if(!function_exists('bcrypt')) {
+
+    function bcrypt($value, $params = [])
+    {
+        return app('hash')->make($value, $params);
+    }
+
 }
 
 //if(! function_exists('config_path')) {

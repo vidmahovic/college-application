@@ -14,22 +14,39 @@
 $app->get('/', function () use ($app) {
     return view('index');
 });
+// Password reset route (has to be without prefix due to Mailer requirements).
+$app->get('password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@showResetForm']);
 
 $api = app('api.router');
 
 $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
+    // Authentication routes
     $api->post('login', 'AuthController@login');
-    $api->post('password/email', 'PasswordController@email');
-    $api->post('password/reset', 'PasswordController@reset');
+    $api->post('password/email', 'PasswordController@sendPasswordResetEmail');
+    $api->post('password/reset', 'PasswordController@resetPassword');
 
-    $api->get('/programs','FacultyProgramController@index');
-    $api->get('/programs/{id}', 'FacultyProgramController@show');
-    $api->get('/application','ApplicationController@show');
-    $api->post('/application','ApplicationController@create');
-
-    // Routes for authenticated users (require "Authorization: Bearer [token]" header with a valid token)
+    // Protected routes
     $api->group(['middleware' => 'api.auth'], function($api) {
-        // Add portected routes here.
+
+        $api->get('/programs','FacultyProgramController@index');
+        $api->get('/programs/{id}', 'FacultyProgramController@show');
+        $api->get('/application','ApplicationController@show');
+        $api->post('/application','ApplicationController@create');
+
     });
 });
+
+//$app->group(['prefix' => 'api', 'namespace' => 'Api'], function() use($app) {
+//    // Authentication routes
+//    $app->post('login', 'AuthController@login');
+//    $app->post('password-reset', 'AuthController@password');
+//
+//
+//    $app->get('/programs','FacultyProgramController@index');
+//    $app->get('/programs/{id}', 'FacultyProgramController@show');
+//
+//    $app->get('/application','ApplicationController@show');
+//    $app->post('/application','ApplicationController@create');
+//
+//});
