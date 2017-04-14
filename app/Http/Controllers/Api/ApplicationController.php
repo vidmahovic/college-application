@@ -6,10 +6,12 @@ use App\Models\Faculty;
 use App\Models\FacultyProgram;
 use App\Models\Citizen;
 use App\Models\City;
+use App\Models\District;
 use App\Models\Application;
 use App\Models\GraduationType;
 use App\Models\EducationType;
 use App\Models\Country;
+use App\Models\MiddleSchool;
 
 class ApplicationController extends ApiController
 {
@@ -32,8 +34,18 @@ class ApplicationController extends ApiController
         $facultyPrograms = FacultyProgram::all();
         $education_types = EducationType::all();
         $graduation_types = GraduationType::all();
+        $middle_schooles = MiddleSchool::all();
 
-        return [$countries, $cities, $citizens, $faculties, $facultyPrograms,  $districts, $education_types, $graduation_types];
+        return response()->json(['countries'=> $countries,
+                                'cities'=> $cities,
+                                'citizens'=> $citizens,
+                                'faculties'=> $faculties, 
+                                'facultyPrograms'=> $facultyPrograms,
+                                'districts'=> $districts,
+                                'education_types'=> $education_types,
+                                'graduation_types'=> $graduation_types,
+                                'middle_schooles'=> $middle_schooles
+                                ], 200);
     }
 
     public function create(ApplicationRequest $request){
