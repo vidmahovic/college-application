@@ -28,36 +28,30 @@
 
 <script>
 module.exports = {
-	props: ['user'],
+  props: ['user'],
   name: 'Login',
- 	data: function (router) {
-		return {
-			section: 'Login',
-			loading: '',
-			username: '',
-			password: '',
-			response: '',
+  data: function (router) {
+    return {
+      section: 'Login',
+      loading: '',
+      username: '',
+      password: '',
+      response: '',
       showResponse: false
-		}
-	},
-	methods: {
-    	checkCreds: function () {
+    }
+  },
+  methods: {
+      checkCreds: function () {
 
-
-        // make api call, gets user
-
-        user = {
-          name: this.username,
-          loggedIn: true
-        }
-
-        this.$parent.user = user;
-        //this.loggedIn = true;
         // Mock user login..username => role: student | admin | referent | vpisna_sluzba
-        //this.$router.push('/'+this.username)
 
         this.$http.post('api/login', {email: this.username, password: this.password})
           .then(function(res){
+            let user = {
+              name: this.username,
+              loggedIn: true
+            };
+            this.$parent.user = user;
             this.$router.push('/vpisna_sluzba')
           }, function(err){
             this.showResponse = true;
@@ -71,7 +65,7 @@ module.exports = {
 
     },
     mounted() {
-    	console.log("login mounted")
+      console.log("login mounted")
     }
 
   }

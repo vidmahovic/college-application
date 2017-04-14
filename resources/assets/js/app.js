@@ -22,11 +22,15 @@ import AppView from './components/App.vue'
  * Mapping from urls to Vue Components is done in routes.js and we
  * just import it here
  */
+import vSelect from 'vue-select'
+
+import Datepicker from 'vuejs-datepicker'
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
-Vue.component('datatable', require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
-
+Vue.component('v-select', vSelect)
+Vue.component('datatable',require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
+Vue.component('datepicker', Datepicker)
 
 const router = new VueRouter({
 	base: __dirname,
