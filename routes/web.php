@@ -14,6 +14,11 @@
 $app->get('/', function () use ($app) {
     return view('index');
 });
+
+$app->get('api', function() {
+    return app('files')->get(public_path('/swagger-ui/index.html'));
+});
+
 // Password reset route (has to be without prefix due to Mailer requirements).
 $app->get('password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@showResetForm']);
 
