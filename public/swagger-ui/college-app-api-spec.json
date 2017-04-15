@@ -418,7 +418,10 @@
                         "in": "body",
                         "description": "Request filters",
                         "schema": {
-                            "$ref": "#/definitions/Filter"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Filter"
+                            }
                         }
                     }
                 ],
@@ -526,7 +529,10 @@
                         "in": "body",
                         "description": "Request filters",
                         "schema": {
-                            "$ref": "#/definitions/Filter"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Filter"
+                            }
                         }
                     }
                 ],
