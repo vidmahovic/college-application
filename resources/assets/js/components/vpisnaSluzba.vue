@@ -1,7 +1,6 @@
 <template>
   <div>
-    <!-- Define side navigation for Referent -->
-    <div class="navbar-default sidebar" role="navigation">
+    <!-- <div class="navbar-default sidebar" role="navigation">
       <div class="sidebar-nav navbar-collapse">
           <ul class="nav in" id="side-menu">
               <li>
@@ -18,7 +17,7 @@
               </li>
           </ul>
       </div>
-    </div>
+    </div> -->
     <div class="container">
         <router-view></router-view>
     </div>
