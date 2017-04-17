@@ -73,10 +73,9 @@
         this.user = {
           loggedIn: false
         };
-        //this.$store.commit('SET_USER', null);
-        //this.$store.commit('SET_TOKEN', null);
-
+       
         if (window.localStorage) {
+          console.log("logout clear localStorage");
           window.localStorage.setItem('user', null);
           window.localStorage.setItem('token', null);
         }
@@ -85,7 +84,22 @@
       }
     },
     mounted() {
-    	this.$router.push('login')
+    	
+      let token = window.localStorage.getItem('token');
+      console.log("MOUNTED ", token)
+      // console.log(window.localStorage.getItem('user'));
+      if( token == 'null') {
+        console.log("token is null")
+        this.$router.push('login') 
+      }else {
+        // get user info 
+        // MOCK
+        let user = {
+              name: "developer",
+              loggedIn: true
+            };
+        this.user = user;
+       }
     }
 
   }

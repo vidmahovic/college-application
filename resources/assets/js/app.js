@@ -32,6 +32,17 @@ Vue.component('v-select', vSelect)
 Vue.component('datatable',require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
 Vue.component('datepicker', Datepicker)
 
+
+
+Vue.http.interceptors.push(function(request, next) {
+
+	console.log("http interceptors")
+	//request.headers['Authorization'] = 'Bearer: ' + localStorage.getItem('token')
+  	request.headers.set('Authorization', 'Bearer:' + localStorage.getItem('token'));
+  	console.log(request);
+  	next();
+});
+
 const router = new VueRouter({
 	base: __dirname,
 	routes: routes
