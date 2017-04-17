@@ -14,7 +14,7 @@
                         <span class="glyphicon glyphicon-chevron-down"></span>
                     </a>
                     <ul class="dropdown-menu" style="padding:0px">
-                        
+
                         <!--<li class="divider"></li>-->
                         <li>
                             <div class="navbar-login navbar-login-session">
@@ -69,7 +69,7 @@
         })
       },
       logout: function () {
-        
+
         this.user = {
           loggedIn: false
         };
@@ -85,7 +85,7 @@
       }
     },
     mounted() {
-    	this.$router.push('login')
+    	//this.$router.push('login')
     }
 
   }

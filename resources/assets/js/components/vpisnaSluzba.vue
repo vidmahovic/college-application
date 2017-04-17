@@ -1,27 +1,7 @@
 <template>
-  <div>
-    <!-- <div class="navbar-default sidebar" role="navigation">
-      <div class="sidebar-nav navbar-collapse">
-          <ul class="nav in" id="side-menu">
-              <li>
-                  <router-link to="/">"Logout"</router-link>
-              </li>
-              <li>
-                  <router-link to="/student">Student</router-link>
-              </li>
-              <li>
-                  <router-link to="/admin">admin</router-link>
-              </li>
-              <li>
-                  <router-link to="/referent">referent</router-link>
-              </li>
-          </ul>
-      </div>
-    </div> -->
-    <div class="container">
-        <router-view></router-view>
-    </div>
-  </div>
+
+  <router-view></router-view>
+
 </template>
 
 <script>
