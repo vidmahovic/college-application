@@ -29,6 +29,10 @@
         {
             "name": "users",
             "description": "API endpoints that manipulate with users"
+        },
+        {
+            "name": "program",
+            "description": "API endpoints that manipulate with faculty programs"
         }
     ],
     "paths": {
@@ -640,6 +644,66 @@
                     },
                     "404": {
                         "description": "Resource not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/programs": {
+            "get": {
+                "summary": "Get faculty programs",
+                "description": "Endpoint vrne vse fakultetne programe ali tiste, ki ustrezajo filtrom, ki jih uporabnik navede v telesu zahtevka. Uporabnik lahko rezultate tudi uredi po določenem atributu v določenem vrstnem redu, število rezultatov pa lahko omeji. Če v bazi ni nobenega programa, aplikacija vrne prazen seznam. Če uporabnik ni avtenticiran, aplikacija vrne Unauthorized HTTP Response.        \n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "by",
+                        "in": "query",
+                        "description": "Sort records by certain attribute",
+                        "type": "string"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Set sorting order (asc / desc). Default = asc",
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit retrieval of the records",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "filters",
+                        "in": "body",
+                        "description": "Request filters",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Filter"
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "program"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Faculty programs in the database",
+                        "schema": {
+                            "$ref": "#/definitions/FacultyProgram"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
