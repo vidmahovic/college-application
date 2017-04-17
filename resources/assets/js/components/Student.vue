@@ -5,16 +5,7 @@
       <div class="sidebar-nav navbar-collapse">
           <ul class="nav in" id="side-menu">
               <li>
-                  <router-link to="/">"Logout"</router-link>
-              </li>
-              <li>
-                  <router-link to="/admin">Admin</router-link>
-              </li>
-              <li>
-                  <router-link to="/referent">Referent</router-link>
-              </li>
-              <li>
-                  <router-link to="/vpisna_sluzba">Vpisna služba</router-link>
+                  <router-link to="/student">Namizje</router-link>
               </li>
           </ul>
       </div>

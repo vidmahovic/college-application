@@ -48,12 +48,7 @@
     },
     methods: {
       goto_application: function(event, application) {
-        // `this` inside methods points to the Vue instance
-        console.log(this.section)
-        console.log(application)
-        console.log(event)
-
-        this.$router.push('/application')
+        this.$router.push('application')
       }
     },
     mounted() {
