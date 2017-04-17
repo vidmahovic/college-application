@@ -14,6 +14,7 @@ import StudentApplication from './components/student/Application.vue'
 
 import VpisnaSluzbaView from './components/vpisnaSluzba.vue'
 import VpisnaSluzbaDashboard from './components/vpisnaSluzba/Dashboard.vue'
+import VpisnaSluzbaProgrami from './components/vpisnaSluzba/Programi/Programi.vue'
 
 const routes = [
 	{
@@ -66,7 +67,13 @@ const routes = [
 				component: VpisnaSluzbaDashboard,
 				name: 'VpisnaSluzbaDashboard',
 				meta: {description: 'VpisnaSluzbaDashboard'}
-      		}
+      },
+			{
+				path: '/vpisna_sluzba/programi',
+				component: VpisnaSluzbaProgrami,
+				name: 'VpisnaSluzbaProgrami',
+				meta: {description: 'VpisnaSluzbaProgrami'}
+			}
 		]
 	},
 	{
