@@ -52,6 +52,12 @@ module.exports = {
               loggedIn: true
             };
             this.$parent.user = user;
+            
+            console.log(res);
+
+            window.localStorage.setItem('user', user);
+            window.localStorage.setItem('token', res.body.jwt_token);
+
             this.$router.push('/vpisna_sluzba')
           }, function(err){
             this.showResponse = true;
