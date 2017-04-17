@@ -31,16 +31,22 @@ class FacultyProgram extends Model // PROGRAM
         return $this->belongsTo(Faculty::class);
     }
 
-    public function applicationsPrograms(){
-        return $this->hasMany(ApplicationsPrograms::class);
+    public function applications()
+    {
+        return $this->belongsToMany(
+            Application::class,
+            'applications_programs',
+            'faculty_program_id',
+            'application_id');
     }
 
     public function countAll() {
        return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count');
     }
 
-    public function countAccepted(){
-       return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count')->where('status', '=', 1);
+    public function countAccepted()
+    {
+        return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count')->where('status', '=', 1);
     }
 
     public function scopeArrangeBy($query, $filters){
@@ -54,5 +60,10 @@ class FacultyProgram extends Model // PROGRAM
             $query->where('is_regular', intval($filters['is_regular']));
         }
         return $query->orderBy('id', 'asc')->orderBy('type', 'asc')->orderBy('is_regular', 'asc');
+    }
+
+    public function getCountAcceptedAttribute()
+    {
+        return $this->applications()->filed()->count();
     }
 }
