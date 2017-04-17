@@ -19,6 +19,8 @@ class FacultyProgramTransformer extends Fractal\TransformerAbstract
             'min_points' => $program->min_points,
             'type' => $program->type,
             'allow_double_degree' => $program->allow_double_degree,
+            'max_accepted' => $program->max_accepted,
+            'count_accepted' => $program->count_accepted
         ];
     }
 }
