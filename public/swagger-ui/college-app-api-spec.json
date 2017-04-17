@@ -879,6 +879,95 @@
                 }
             }
         },
+        "FacultyProgram": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "FacultyProgram ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of the program"
+                },
+                "is_regular": {
+                    "type": "boolean",
+                    "description": "Flag that identifies if a program is regular"
+                },
+                "min_points": {
+                    "type": "integer",
+                    "description": "Minimum amount of points required to enroll to the program"
+                },
+                "typ": {
+                    "type": "integer",
+                    "description": "Flag describing the type of the program (0 = uni, 1 = bvs, 2 = mag)"
+                },
+                "allow_double_degree": {
+                    "type": "boolean",
+                    "description": "Flag describing if a program allows double degree study"
+                },
+                "max_accepted": {
+                    "type": "integer",
+                    "description": "Maximum number of students that can enroll to the program"
+                },
+                "count_accepted": {
+                    "type": "integer",
+                    "description": "Number of students that filed the application for this program"
+                },
+                "faculty": {
+                    "$ref": "#/definitions/Faculty"
+                }
+            }
+        },
+        "Faculty": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Faculty ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of the faculty"
+                },
+                "acronym": {
+                    "type": "string",
+                    "description": "Faculty's acronym"
+                },
+                "university": {
+                    "$ref": "#/definitions/University"
+                },
+                "district": {
+                    "$ref": "#/definitions/District"
+                }
+            }
+        },
+        "University": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "University ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "University name"
+                }
+            }
+        },
+        "District": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "District ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "District name"
+                }
+            }
+        },
         "Error": {
             "type": "object",
             "properties": {
