@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Http\Request;
 use Dingo\Api\Routing\Helpers;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -23,23 +24,49 @@ class ApiController extends Controller
 
     protected function setFilters(Model $model)
     {
-        if(property_exists($model, 'filters')) {
+        if($this->wantsFiltering() && property_exists($model, 'filters')) {
 
-            $available_filters = $model::$filters;
+            $filters = array_only($this->request->get('filters'), $model::$filters);
 
-            foreach($this->request->query() as $filter => $val) {
-                if(strlen($val) > 0 && in_array($filter, $available_filters)) {
-                    $model = $model->filter($filter, $this->parseFilterVals($val));
+            foreach($filters as $filter => $vals) {
+
+                if(is_string($vals) && strlen($vals) === 0) {
+                    continue;
+                } else {
+                    $model = $model->filter($filter, $vals);
                 }
+
             }
         }
 
         return $model;
     }
 
-    private function parseFilterVals(string $filter_val) {
-        $vals = (explode(',', $filter_val));
-        return count($vals) > 1 ? $vals : $vals[0];
+    protected function setSorting($model)
+    {
+        if($this->wantsSorting()) {
+            $model = $model->orderBy($this->request->get('by'), $this->request->get('order') ?? 'asc');
+        }
+        return $model;
+    }
+
+    protected function setLimit($model) {
+        if($this->wantsLimit()) {
+            $model = $model->take((int) $this->request->get('limit'));
+        }
+        return $model;
+    }
+
+    protected function wantsSorting() {
+        return $this->request->has('by');
+    }
+
+    protected function wantsFiltering() {
+        return $this->request->has('filters');
+    }
+
+    protected function wantsLimit() {
+        return $this->request->has('limit') && (int) $this->request->get('limit') > 0;
     }
 
 }

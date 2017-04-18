@@ -821,23 +821,77 @@
                     "type": "integer",
                     "description": "Application ID"
                 },
-                "user": {
-                    "$ref": "#/definitions/User"
+                "applicant": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
                 },
                 "interval": {
-                    "$ref": "#/definitions/Interval"
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Interval"
+                        }
+                    }
                 },
                 "middle_school": {
-                    "$ref": "#/definitions/MiddleSchool"
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/MiddleSchool"
+                        }
+                    }
                 },
-                "education_type": {
-                    "$ref": "#/definitions/EducationType"
+                "education": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/EducationType"
+                        }
+                    }
+                },
+                "graduation": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/GraduationType"
+                        }
+                    }
                 },
                 "profession": {
-                    "$ref": "#/definitions/Profession"
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Profession"
+                        }
+                    }
                 },
                 "nationality": {
-                    "$ref": "#/definitions/Nationality"
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Nationality"
+                        }
+                    }
+                },
+                "citizen": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Citizen"
+                        }
+                    }
+                },
+                "country": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Country"
+                        }
+                    }
                 },
                 "middle_name": {
                     "type": "string",
@@ -949,6 +1003,19 @@
                 }
             }
         },
+        "Citizen": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Citizen ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Citizen name"
+                }
+            }
+        },
         "Profession": {
             "type": "object",
             "properties": {
@@ -988,6 +1055,19 @@
                 }
             }
         },
+        "GraduationType": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Graduation type ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Graduation type name"
+                }
+            }
+        },
         "Nationality": {
             "type": "object",
             "properties": {
@@ -1002,6 +1082,23 @@
                 "descriptio": {
                     "type": "string",
                     "description": "Nationality description"
+                }
+            }
+        },
+        "Country": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Country ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Country name"
+                },
+                "eu": {
+                    "type": "boolean",
+                    "description": "Flag showing if country is from EU"
                 }
             }
         },
@@ -1041,7 +1138,12 @@
                     "description": "Number of students that filed the application for this program"
                 },
                 "faculty": {
-                    "$ref": "#/definitions/Faculty"
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Faculty"
+                        }
+                    }
                 }
             }
         },
@@ -1061,10 +1163,20 @@
                     "description": "Faculty's acronym"
                 },
                 "university": {
-                    "$ref": "#/definitions/University"
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/University"
+                        }
+                    }
                 },
                 "district": {
-                    "$ref": "#/definitions/District"
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/District"
+                        }
+                    }
                 }
             }
         },

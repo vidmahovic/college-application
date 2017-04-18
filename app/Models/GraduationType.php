@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class GraduationType extends Model // ZAKLJUČEK ŠOLE
+class GraduationType extends Model
 {
     protected $table = 'graduation_types';
 
     protected $fillable = ['id', 'name'];
 
-    protected $casts = [
-        'id' => 'integer',
-        'name' => 'string'
-    ];
+//    protected $casts = [
+//        'id' => 'integer',
+//        'name' => 'string'
+//    ];
 
     public function applications()
     {

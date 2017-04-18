@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Policies;
+
+use App\Models\FacultyProgram;
+use App\User;
+
+/**
+ * Class FacultyProgramPolicy
+ *
+ * @package \App\Policies
+ */
+class FacultyProgramPolicy
+{
+
+    public function before(User $user, $ability)
+    {
+        return $user->isAdmin();
+    }
+
+    public function view(User $user, FacultyProgram $program)
+    {
+        return true;
+    }
+
+    public function get(User $user)
+    {
+        return false;
+    }
+
+    public function paginate(User $user)
+    {
+        return $this->get($user);
+    }
+
+    public function update(User $user)
+    {
+        // TODO (Vid): only staff, connected to specific faculty can update it's program
+        return $user->isStaff();
+    }
+
+    public function delete(User $user) {
+        return $user->isStaff();
+    }
+}

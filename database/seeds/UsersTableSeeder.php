@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Role;
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -20,7 +21,8 @@ class UsersTableSeeder extends Seeder
         User::create([
             'email' => 'demo@demo.com',
             'username' => 'demo',
-            'password' => app('hash')->make('demo123')
+            'password' => app('hash')->make('demo123'),
+            'role_id' => Role::where('name', 'admin')->first()->id
         ]);
     }
 

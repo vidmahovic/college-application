@@ -2,24 +2,26 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ApplicationInterval extends Model // OBDOBJE PRIJAVE
+class ApplicationInterval extends Model
 {
-    protected $table = 'applications_interval';
+    use SoftDeletes;
 
-    protected $fillable = ['starts_at', 'ends_at', 'deleted_at'];
+    protected $table = 'application_intervals';
+
+    protected $fillable = ['starts_at', 'ends_at'];
 
     protected $guarded = ['id'];
-
-    protected $casts = [
-        'starts_at' => 'date',
-        'ends_at' => 'date',
-        'deleted_at' => 'date'
-    ];
 
     public function applications()
     {
         return $this->hasMany(Application::class);
+    }
+
+    public function scopeCurrent($scope) {
+        return $scope->where('starts_at', '<=', Carbon::now())->where('ends_at', '>=', Carbon::now());
     }
 }
