@@ -156,3 +156,16 @@
   margin-left: 150px;
   margin-right: auto;
 }
+
+.header-menu.dropdown-menu li a {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.header-menu.dropdown-menu li a:hover {
+  cursor: pointer;
+}
+
+.glyphicon-padding {
+  padding-top: 2px;
+}

@@ -13,24 +13,63 @@
                         <strong>{{ user.name }}</strong>
                         <span class="glyphicon glyphicon-chevron-down"></span>
                     </a>
-                    <ul class="dropdown-menu" style="padding:0px">
-
-                        <!--<li class="divider"></li>-->
-                        <li>
-                            <div class="navbar-login navbar-login-session">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <p>
-                                            <a  v-on:click="logout" class="btn btn-danger btn-block">Izpis <span class="glyphicon glyphicon-log-in pull-right"></span></a>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
+                    <ul class="dropdown-menu header-menu" style="padding:0px">
+                        <li><a data-toggle="modal" data-target="#myModal">Spremeni geslo</a></li>
+                        <li><a v-on:click="logout">Izpis <span class="glyphicon glyphicon-log-in pull-right glyphicon-padding"></span></a></li>
                     </ul>
                 </li>
             </div>
     </nav>
+
+
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog" ref="vuemodal">
+      <div class="modal-dialog modal-sm">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 class="modal-title">Sprememba gesla</h3>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="staro">Vpišite staro geslo: </label>
+                  <input type="password" class="form-control" name="staro" id="staro" v-model="staroGeslo" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="novo1">Vpišite novo geslo: </label>
+                  <input type="password" class="form-control" name="novo1" id="novo1" v-model="novoGeslo" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="novo2">Ponovno vpišite novo geslo: </label>
+                  <input type="password" class="form-control" name="novo2" id="novo2" v-model="novoGesloP" />
+                </div>
+              </div>
+            </div>
+            <div v-show="showMsg" class="alert" v-bind:class="{ 'alert-success': !gesloErr, 'alert-danger': gesloErr}" role="alert">{{ gesloMsg }}</div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Prekliči</button>
+            <button type="button" class="btn btn-primary" v-on:click="spremeniGeslo">Shrani novo geslo</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     <div class="wrapper">
       <router-view keep-alive
@@ -54,7 +93,13 @@
         caller: this.$http,
         user: {
           loggedIn: false
-        }
+        },
+        staroGeslo: '',
+        novoGeslo: '',
+        novoGesloP: '',
+        gesloMsg: '',
+        showMsg: false,
+        gesloErr: false
       }
     },
     methods: {
@@ -81,9 +126,40 @@
         }
 
         this.$router.push('/login');
+      },
+
+      spremeniGeslo: function() {
+        if(this.novoGeslo == this.novoGesloP){
+          this.$http.post("/api/user/password", {old_password: this.staroGeslo, new_password: this.novoGeslo})
+            .then(function(res){
+              this.showMsg = true;
+              this.gesloErr = false;
+              this.gesloMsg = "Geslo uspešno zamenjano!";
+            }, function(err){
+                this.showMsg = true;
+                this.gesloErr = true;
+                this.gesloMsg = "Staro geslo ni pravilno!";
+            });
+        }
+        else {
+          this.showMsg = true;
+          this.gesloErr = true;
+          this.gesloMsg = "Novi gesli se ne ujemata!";
+        }
+      },
+
+      doSomethingOnHidden: function(){
+        this.showMsg = false;
+        this.gesloErr = false;
+        this.gesloMsg = '';
+        this.staroGeslo = '';
+        this.novoGeslo = '';
+        this.novoGesloP = '';
       }
     },
     mounted() {
+
+      $(this.$refs.vuemodal).on("hidden.bs.modal", this.doSomethingOnHidden)
 
       let token = window.localStorage.getItem('token');
       console.log("MOUNTED ", token)
