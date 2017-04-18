@@ -28,21 +28,21 @@ class UsersTableSeeder extends Seeder
             'email' => 'student1@student.com',
             'username' => 'student1',
             'password' => app('hash')->make('student1'),
-            'role_id' => 3
+            'role_id' => 4
         ]);
 
         User::create([
             'email' => 'student2@student.com',
             'username' => 'student2',
             'password' => app('hash')->make('student2'),
-            'role_id' => 3
+            'role_id' => 4
         ]);
 
         User::create([
             'email' => 'student3@student.com',
             'username' => 'student3',
             'password' => app('hash')->make('student3'),
-            'role_id' => 3
+            'role_id' => 4
         ]);
 
 
@@ -67,6 +67,13 @@ class UsersTableSeeder extends Seeder
             'username' => 'referent_ff',
             'password' => app('hash')->make('referentff'),
             'role_id' => 2
+        ]);
+
+        User::create([
+            'email' => 'vpisna@sluzba.com',
+            'username' => 'vpisna_sluzba',
+            'password' => bcrypt('vpisna123'),
+            'role_id' => 3
         ]);
     }
 

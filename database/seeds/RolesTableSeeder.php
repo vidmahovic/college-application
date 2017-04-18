@@ -16,7 +16,8 @@ class RolesTableSeeder extends \Illuminate\Database\Seeder
     public function run()
     {
         Role::create(['name' => 'admin']);
-        Role::create(['name' => 'staff']);
+        Role::create(['name' => 'referent']);
+        Role::create(['name' => 'enrollment service']);
         Role::create(['name' => 'student']);
     }
 }
