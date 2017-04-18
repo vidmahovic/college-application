@@ -39,8 +39,20 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $dates = ['deleted_at', 'last_login', 'activated_at'];
 
     public function role() {
-        return $this->hasOne(Role::class);
+        return $this->belongsTo(Role::class);
     }
+
+    public function isStaff() {
+        return $this->role->name === 'staff';
+    }
+    public function isAdmin() {
+        return $this->role->name === 'admin';
+    }
+    public function isStudent() {
+        return $this->role->name === 'student';
+    }
+
+
 
     public function getJWTIdentifier()
     {
