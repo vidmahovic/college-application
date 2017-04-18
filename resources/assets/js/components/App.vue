@@ -6,11 +6,11 @@
         <div class="navbar-header">
             <a class="navbar-brand">Vpis</a>
         </div>
-        <div v-if="user.loggedIn" class="nav navbar-nav navbar-right" style="margin-right:20px">
+        <div v-if="user !== null" class="nav navbar-nav navbar-right" style="margin-right:20px">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-user"></span> 
-                        <strong>{{ user.name }}</strong>
+                        <strong>{{ user.name || user.email }}</strong>
                         <span class="glyphicon glyphicon-chevron-down"></span>
                     </a>
                     <ul class="dropdown-menu header-menu" style="padding:0px">
@@ -91,15 +91,14 @@
         callingAPI: false,
         serverURI: 'http://10.110.1.10:8080',
         caller: this.$http,
-        user: {
-          loggedIn: false
-        },
         staroGeslo: '',
         novoGeslo: '',
         novoGesloP: '',
         gesloMsg: '',
         showMsg: false,
-        gesloErr: false
+        gesloErr: false,
+        loggedIn: false,
+        user: null
       }
     },
     methods: {
@@ -115,12 +114,9 @@
       },
       logout: function () {
 
-        this.user = {
-          loggedIn: false
-        };
-
+        this.user = null;
+        
         if (window.localStorage) {
-          console.log("logout clear localStorage");
           window.localStorage.setItem('user', null);
           window.localStorage.setItem('token', null);
         }
@@ -162,19 +158,18 @@
       $(this.$refs.vuemodal).on("hidden.bs.modal", this.doSomethingOnHidden)
 
       let token = window.localStorage.getItem('token');
-      console.log("MOUNTED ", token)
+      console.log(JSON.stringify(window.localStorage.getItem('user')))
       // console.log(window.localStorage.getItem('user'));
-      if( token == 'null') {
-        console.log("token is null");
+      if( token == null) {
+        console.log("token is null", );
         this.$router.push('/login');
       }else {
         // get user info
         // MOCK
-        let user = {
-              name: "developer",
-              loggedIn: true
-            };
+        let user = JSON.parse(window.localStorage.getItem('user'));
+        
         this.user = user;
+        console.log("App vue ", user)
        }
     }
 
