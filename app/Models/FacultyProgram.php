@@ -13,7 +13,9 @@ class FacultyProgram extends Model // PROGRAM
 
     protected $fillable = ['id', 'name', 'faculty_id', 'allow_double_degree', 'is_regular', 'type', 'min_points'];
 
-    public static $filters = ['name', 'faculty_id', 'is_regular', 'type', 'allow_double_degree', 'min_points'];
+    public static $filters = [
+        'id', 'name', 'faculty_id', 'is_regular', 'type', 'allow_double_degree', 'min_points', 'created_at', 'max_accepted'
+    ];
 
     // TODO: število razpisanih
 

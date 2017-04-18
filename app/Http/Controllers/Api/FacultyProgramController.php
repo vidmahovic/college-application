@@ -20,7 +20,8 @@ class FacultyProgramController extends ApiController
         $programs = $this->setFilters(new FacultyProgram);
         $programs = $this->setSorting($programs);
         $programs = $this->setLimit($programs);
-        return $this->response->collection($programs->get(), new FacultyProgramTransformer)->addMeta('count', $programs->count());
+
+        return $this->response->collection($programs = $programs->get(), new FacultyProgramTransformer)->addMeta('count', $programs->count());
     }
 
     public function show($id){

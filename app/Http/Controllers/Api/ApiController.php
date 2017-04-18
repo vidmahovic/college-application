@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Http\Request;
 use Dingo\Api\Routing\Helpers;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -41,28 +42,20 @@ class ApiController extends Controller
         return $model;
     }
 
-    protected function setSorting(Model $model)
+    protected function setSorting($model)
     {
         if($this->wantsSorting()) {
-            $model = $model->sortBy($this->request->get('by'), $this->request->get('order') ?? 'asc');
+            $model = $model->orderBy($this->request->get('by'), $this->request->get('order') ?? 'asc');
         }
         return $model;
     }
 
-    protected function setLimit(Model $model) {
+    protected function setLimit($model) {
         if($this->wantsLimit()) {
-            $model = $model->take($this->request->get('limit'));
+            $model = $model->take((int) $this->request->get('limit'));
         }
         return $model;
     }
-
-//    private function parseFilterVals($filter_vals) {
-//        if(is_array($filter_vals)) {
-//            return
-//        }
-//        $vals = (explode(',', $filter_val));
-//        return count($vals) > 1 ? $vals : $vals[0];
-//    }
 
     protected function wantsSorting() {
         return $this->request->has('by');
@@ -73,7 +66,7 @@ class ApiController extends Controller
     }
 
     protected function wantsLimit() {
-        return $this->request->has('limit') && strlen($this->request->get('limiit')) > 0;
+        return $this->request->has('limit') && (int) $this->request->get('limit') > 0;
     }
 
 }

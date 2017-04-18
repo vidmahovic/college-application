@@ -10,6 +10,9 @@ use League\Fractal;
  */
 class FacultyProgramTransformer extends Fractal\TransformerAbstract
 {
+
+    protected $defaultIncludes = ['faculty'];
+
     public function transform(FacultyProgram $program) {
         return [
             'id' => $program->id,
@@ -22,5 +25,10 @@ class FacultyProgramTransformer extends Fractal\TransformerAbstract
             'max_accepted' => $program->max_accepted,
             'count_accepted' => $program->count_accepted,
         ];
+    }
+
+    public function includeFaculty(FacultyProgram $program)
+    {
+        return $this->item($program->faculty, new FacultyTransformer);
     }
 }

@@ -34,12 +34,14 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) 
     // Protected routes
     $api->group(['middleware' => 'api.auth'], function($api) {
 
-        $api->get('/programs/paginate', 'FacultyProgramController@paginate');
-        $api->get('/programs','FacultyProgramController@index');
-        $api->get('/programs/{id}', 'FacultyProgramController@show');
-        $api->get('/application','ApplicationController@show');
-        $api->post('/application','ApplicationController@create');
+        $api->get('programs/paginate', 'FacultyProgramController@paginate');
+        $api->get('programs','FacultyProgramController@index');
+        //$api->get('programs/{id}', 'FacultyProgramController@show');
 
+        //$api->get('applications/active', 'ApplicationController@active');
+        //$api->get('applications/{id}','ApplicationController@show');
+        $api->post('applications','ApplicationController@create');
+        //$api->delete('applications/{id}', 'ApplicationController@destroy');
     });
 });
 

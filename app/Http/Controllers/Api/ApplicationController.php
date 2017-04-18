@@ -12,6 +12,7 @@ use App\Models\GraduationType;
 use App\Models\EducationType;
 use App\Models\Country;
 use App\Models\MiddleSchool;
+use App\Transformers\ApplicationTransformer;
 
 class ApplicationController extends ApiController
 {
@@ -45,7 +46,7 @@ class ApplicationController extends ApiController
         ]);
     }
 
-    public function create(ApplicationRequest $request){
+    public function create(ApplicationRequest $request) {
         $application = Application::create(request(
             ['emso', 'date_of_birth', 'user_id', 'profession_id', 'middle_school_id', 'education_type_id', 
             'application_interval_id','country_id', 'citizen_id', 'applications_cities_id'
@@ -54,4 +55,36 @@ class ApplicationController extends ApiController
         
         return response()->setStatusCode(201, 'The application is created successfully!');
     }
+
+    public function sifranti()
+    {
+        // TODO(Vid): vrni vse sifrante
+    }
+
+    public function active()
+    {
+        $user = $this->request->user();
+        if($user->cannot('view-active', Application::class)) {
+            return $this->response->errorUnauthorized();
+        }
+
+        $application = $user->applications()->active()->latest()->first();
+
+        if($application == null) {
+            $application = Application::create([
+                'status' => 'created',
+                'user_id' => $user->id,
+                'education_type_id' => EducationType::first()->id,
+                'application_interval_id' => $application->interval()->current()->first()->id,
+                'nationality_type_id' => '',
+                'profession_id' => '',
+                'middle_school_id' => '',
+                'citizen_id' => '',
+                'application_city_id' => ''
+            ]);
+        }
+
+        return $this->response->item(Application::with('citizen')->first(), new ApplicationTransformer);
+    }
+
 }

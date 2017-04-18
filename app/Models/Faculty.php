@@ -19,7 +19,7 @@ class Faculty extends Model // VISOKOSOLSKI ZAVOD
         'id_university' => 'integer'
     ];
 
-    public function facultyPrograms(){
+    public function programs(){
         return $this->hasMany(FacultyProgram::class);
     }
 

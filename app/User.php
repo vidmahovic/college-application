@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Application;
 use App\Models\Role;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -40,6 +41,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function role() {
         return $this->belongsTo(Role::class);
+    }
+
+    public function getFirstNameAttribute()
+    {
+        if($this->attributes['name'] === null) {
+            return '';
+        }
+        return explode($this->attributes['name'], ' ')[0];
+    }
+
+
+    public function applications() {
+        return $this->hasMany(Application::class);
     }
 
     public function isStaff() {
