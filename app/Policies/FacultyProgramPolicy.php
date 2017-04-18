@@ -36,10 +36,10 @@ class FacultyProgramPolicy
     public function update(User $user)
     {
         // TODO (Vid): only staff, connected to specific faculty can update it's program
-        return $user->isStaff();
+        return $user->isReferent();
     }
 
     public function delete(User $user) {
-        return $user->isStaff();
+        return $user->isReferent();
     }
 }

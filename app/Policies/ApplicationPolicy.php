@@ -19,7 +19,7 @@ class ApplicationPolicy
 
     public function get(User $user)
     {
-        return $user->isStaff();
+        return $user->isReferent();
     }
 
     public function paginate(User $user)
@@ -29,7 +29,7 @@ class ApplicationPolicy
 
     public function view(User $user, Application $application)
     {
-        return $user->isStaff() || $application->user_id === $user->id;
+        return $user->isReferent() || $application->user_id === $user->id;
     }
 
     public function viewActive(User $user)
@@ -39,16 +39,16 @@ class ApplicationPolicy
 
     public function update(User $user, Application $application)
     {
-        return $user->isStaff() || $application->user_id === $user->id;
+        return $user->isReferent() || $application->user_id === $user->id;
     }
 
     public function archive(User $user, Application $application)
     {
-        return $user->isStaff() || $application->user_id === $user->id;
+        return $user->isReferent() || $application->user_id === $user->id;
     }
 
     public function delete(User $user)
     {
-        return $user->isStaff();
+        return $user->isReferent();
     }
 }

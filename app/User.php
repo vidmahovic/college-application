@@ -56,7 +56,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany(Application::class);
     }
 
-    public function isStaff() {
+    public function isReferent() {
         return $this->role->name === 'referent';
     }
     public function isAdmin() {
