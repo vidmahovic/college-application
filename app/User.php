@@ -57,13 +57,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     public function isStaff() {
-        return $this->role->name === 'staff';
+        return $this->role->name === 'referent';
     }
     public function isAdmin() {
         return $this->role->name === 'admin';
     }
     public function isStudent() {
         return $this->role->name === 'student';
+    }
+    public function isEnrollmentService() {
+        return $this->role->name === 'enrollment service';
     }
 
 
