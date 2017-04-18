@@ -25,7 +25,7 @@ class FacultyProgramPolicy
 
     public function get(User $user)
     {
-        return false;
+        return true;
     }
 
     public function paginate(User $user)
