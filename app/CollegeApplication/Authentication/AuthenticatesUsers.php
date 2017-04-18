@@ -64,11 +64,12 @@ trait AuthenticatesUsers
         return $request->only([$this->username(), 'password']);
     }
 
-    protected function saveToken(Request $request, string $token) : void
+    protected function saveToken(Request $request, string $token) : User
     {
         $user = User::where($this->username(), $request->only($this->username()))->firstOrFail();
         $user->api_token = $token;
         $user->save();
+        return $user;
     }
 
 

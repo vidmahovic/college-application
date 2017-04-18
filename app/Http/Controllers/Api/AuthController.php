@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Transformers\UserTransformer;
+use Carbon\Carbon;
 use CollegeApplication\Authentication\AuthenticatesUsers;
 use CollegeApplication\Authentication\ThrottlesLogins;
 use Illuminate\Http\Request;
@@ -41,16 +43,16 @@ class AuthController extends ApiController
             if ($jwt_token = $this->attemptLogin($this->request)) {
 
                 $this->clearLoginAttempts($this->request);
-                $this->saveToken($this->request, $jwt_token);
-
-                return response()->json(compact('jwt_token'));
+                $user = $this->saveToken($this->request, $jwt_token);
+                $user->update(['last_login' => Carbon::now()]);
+                return $this->response->item($user, new UserTransformer)->addMeta('api_token', $jwt_token);
 
             }
 
             $response = $this->response->errorNotFound('User not found');
 
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            $reponse = $this->response->errorUnauthorized('Tokan has expired');
+            $response = $this->response->errorUnauthorized('Tokan has expired');
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
             $response = $this->response->errorUnauthorized('Token is invalid');
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
