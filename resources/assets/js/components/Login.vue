@@ -47,18 +47,20 @@ module.exports = {
 
         this.$http.post('api/login', {email: this.username, password: this.password})
           .then(function(res){
-            let user = {
-              name: this.username,
-              loggedIn: true
-            };
+            // let user = {
+            //   name: this.username,
+            //   loggedIn: true
+            // };
+            let user = res.body.data
             this.$parent.user = user;
             
             console.log(res);
 
-            window.localStorage.setItem('user', user);
-            window.localStorage.setItem('token', res.body.jwt_token);
+            window.localStorage.setItem('user', JSON.stringify(user));
+            window.localStorage.setItem('token', res.body.meta.api_token);
 
-            this.$router.push('/vpisna_sluzba')
+            this.$router.push('/'+user.role);
+
           }, function(err){
             this.showResponse = true;
             if(err.status == 423){

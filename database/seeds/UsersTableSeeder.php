@@ -58,7 +58,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'email' => 'referent@fri.com',
             'username' => 'referent_fri',
-            'password' => app('hash')->make('referentff'),
+            'password' => app('hash')->make('referentfri'),
             'role_id' => 2
         ]);
 
