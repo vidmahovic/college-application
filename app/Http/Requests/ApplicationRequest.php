@@ -20,33 +20,47 @@ class ApplicationRequest extends Request {
 
     public function rules(){
 
-        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $this->request->input('country');
-        $isBornInSLovenia = District::where('name','TUJINA')->pluck('id') == $this->request->input('district_birth');
+        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $this->request->input('country_id');
+        $isBornInSLovenia = District::where('name','TUJINA')->pluck('id') == $this->request->input('district_birth_id');
 
-        if(!(isFromSlovenia && isBornInSLovenia)){
+        if(!($isFromSlovenia && $isBornInSLovenia)){
             return false;
         }
 
-        $dob = $this->request->input('date_of_birth');
-        if(!checkdate(month, day, year)){ // TODO
+        $dob = $request->input('date_of_birth');
+        if(!checkdate(date("m",strtotime($dob), date("d",strtotime($dob), date("Y",strtotime($dob))){
             return false;
         }
 
-        $validEMSO = validateEMSO($this->request->input('emso'));
+        $gender = 'M'; // TODO: get gender from user
 
-        // TODO application interval
+        if($emso != null && !$isFromSlovenia){
+            if(!validateEMSO($request->input('emso'), $isFromSlovenia, $gender)){
+                return false;
+            }
+        }
+        else { // generate emso - tujci
+
+        }
+      
+        $interval = ApplicationInterval::latest()->first();
+        $start_date = $interval->start_at->format('Y-m-d');
+        $end_date = $interval->ends_at->format('Y-m-d');
+       
+        $curr_date = date('Y-m-d'));
+        if(!($curr_date >= $start_date && $curr_date <= $end_date)){
+            return false;
+        }
 
         return [
-            'city' => 'required', Rule::in(City::all()->pluck('id')),
-            'country' => 'required', Rule::in(Country::all()->pluck('id')),
-            'citizen' => 'required', Rule::in(Citizen::all()->pluck('id')),
-            'district_birth' => 'required', Rule::in(District::all()->pluck('id')),
-            'faculty' => 'required', Rule::in(Faculty::all()->pluck('id')),
-            'education_type' => 'required', Rule::in(EducationType::all()->pluck('id')),
-            'graduation_type' => 'required', Rule::in(GraduationType::all()->pluck('id')),
-            'faculty_program_1' => Rule::in(FacultyProgram::all()->pluck('id')),
-            'faculty_program_2' => Rule::in(FacultyProgram::all()->pluck('id')),
-            'faculty_program_3' => Rule::in(FacultyProgram::all()->pluck('id'))
+            'applications_cities_id' => 'required', Rule::in(City::all()->pluck('id')),
+            'country_id' => 'required', Rule::in(Country::all()->pluck('id')),
+            'citizen_id' => 'required', Rule::in(Citizen::all()->pluck('id')),
+            'district_birth_id' => 'required', Rule::in(District::all()->pluck('id')),
+            'education_type_id' => 'required', Rule::in(EducationType::all()->pluck('id')),
+            'graduation_type_id' => 'required', Rule::in(GraduationType::all()->pluck('id')),
+            'profession_id' => 'required', Rule::in(Profession::all()->pluck('id')),
+            'middle_school_id' => 'required', Rule::in(MiddleSchool::all()->pluck('id')),
         ];
     }
 
@@ -65,7 +79,20 @@ class ApplicationRequest extends Request {
             return false;
         }
 
-        // TODO register, zaporedna stevilka: 50 552
+        // slovenija - register = 50
+        // tujci != 50
+        if(!($isFromSlovenia && intval(substr($emso,7,9) == 50)){
+            return false;
+        }
+
+        // zaporedna številka; moski imajo med 000-499, zenske 500-999
+        $gnumber = intval(substr($emso,10,13));
+        if(!($gender = 'M' && $gnumber <= 499)){
+            return false;
+        }
+        if(!($gender = 'F' && $gnumber >= 500 && $gnumber <= 999)){
+            return false;
+        }
 
         $factors = [];
         $factors[0] = $emso[0] * 7;
@@ -87,5 +114,7 @@ class ApplicationRequest extends Request {
         if($control != $emso[12]){
             return false;
         }
+
+        return true;
     }
 }

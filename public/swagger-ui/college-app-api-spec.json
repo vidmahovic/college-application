@@ -350,42 +350,6 @@
                         }
                     }
                 }
-            },
-            "post": {
-                "summary": "Save newly created or updated student's application",
-                "description": "Shrani štiudentovo aktivno prijavnico. Če prijavnica poprej ni obstajala, aplikacija ustvari novo prijavnico. V nasprotnem primeru aplikacija posodobi obstoječo aktivno prijavnico. Če uporabnika nima vloge študenta, aplikacija vrne Unauthorized HTTP Response (401).\n",
-                "parameters": [
-                    {
-                        "name": "api_key",
-                        "in": "header",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "application",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/Application"
-                        }
-                    }
-                ],
-                "tags": [
-                    "application"
-                ],
-                "responses": {
-                    "203": {
-                        "description": "Student's application was created or updated",
-                        "schema": {
-                            "$ref": "#/definitions/Application"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized access",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                }
             }
         },
         "/applications": {
@@ -418,15 +382,10 @@
                         "type": "integer"
                     },
                     {
-                        "name": "filters",
-                        "in": "body",
-                        "description": "Request filters",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
-                            }
-                        }
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[gender]=male)",
+                        "type": "string"
                     }
                 ],
                 "tags": [
@@ -436,7 +395,18 @@
                     "200": {
                         "description": "Applications in the database",
                         "schema": {
-                            "$ref": "#/definitions/Application"
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Application"
+                                    }
+                                },
+                                "meta": {
+                                    "$ref": "#/definitions/SimpleMeta"
+                                }
+                            }
                         }
                     },
                     "401": {
@@ -529,15 +499,10 @@
                         "type": "integer"
                     },
                     {
-                        "name": "filters",
-                        "in": "body",
-                        "description": "Request filters",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
-                            }
-                        }
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[gender]=male)",
+                        "type": "string"
                     }
                 ],
                 "tags": [
@@ -547,7 +512,18 @@
                     "200": {
                         "description": "Paginated applications in the database",
                         "schema": {
-                            "$ref": "#/definitions/Application"
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Application"
+                                    }
+                                },
+                                "meta": {
+                                    "$ref": "#/definitions/PaginatedMeta"
+                                }
+                            }
                         }
                     },
                     "401": {
@@ -681,15 +657,10 @@
                         "type": "integer"
                     },
                     {
-                        "name": "filters",
-                        "in": "body",
-                        "description": "Request filters",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
-                            }
-                        }
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[type]=1)",
+                        "type": "string"
                     }
                 ],
                 "tags": [
@@ -699,7 +670,98 @@
                     "200": {
                         "description": "Faculty programs in the database",
                         "schema": {
-                            "$ref": "#/definitions/FacultyProgram"
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/FacultyProgram"
+                                    }
+                                },
+                                "meta": {
+                                    "$ref": "#/definitions/SimpleMeta"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/programs/paginate": {
+            "get": {
+                "summary": "Get paginated results for faculty programs, optionally filtered and sorted by attrbiutes and limited by number of records.",
+                "description": "Endpoint vrne paginirane fakultetne programe, ki ustrezajo filtrom, ki jih uporabnik navede v telesu zahtevka. Če je telo prazno, aplikacija vrne vse fakultetne programe. Uporabnik lahko rezultate tudi uredi po določenem atributu v določenem vrstnem redu, število rezultatov pa lahko omeji. Če v bazi ni nobene prijavnice, aplikacija vrne prazen seznam. Če uporabnik ni avtenticiran, aplikacija vrne Unauthorized HTTP Response.\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "description": "Specify how many records Paginator should return per-request",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Specify which page should the Paginator return",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "by",
+                        "in": "query",
+                        "description": "Sort records by certain attribute",
+                        "type": "string"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Set sorting order (asc / desc). Default = asc",
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit retrieval of the records",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[type]=1)",
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "program"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated faculty programs in the database",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/FacultyProgram"
+                                    }
+                                },
+                                "meta": {
+                                    "$ref": "#/definitions/PaginatedMeta"
+                                }
+                            }
                         }
                     },
                     "401": {
@@ -1058,20 +1120,55 @@
                 }
             }
         },
-        "Filter": {
+        "SimpleMeta": {
             "type": "object",
             "properties": {
-                "attribute": {
-                    "type": "string",
-                    "description": "attribute to filter by"
-                },
-                "value": {
-                    "type": "string",
-                    "description": "attribute value"
-                },
-                "relation": {
-                    "type": "string",
-                    "description": "can be gt, eq, lt, ge, le. Default = eq"
+                "count": {
+                    "type": "integer",
+                    "description": "Number of retrieved records"
+                }
+            }
+        },
+        "PaginatedMeta": {
+            "type": "object",
+            "properties": {
+                "pagination": {
+                    "type": "object",
+                    "properties": {
+                        "total": {
+                            "type": "integer",
+                            "description": "Number of all records that match the query"
+                        },
+                        "count": {
+                            "type": "integer",
+                            "description": "Number of retrieved records"
+                        },
+                        "per_page": {
+                            "type": "integer",
+                            "description": "Records per-page"
+                        },
+                        "current_page": {
+                            "type": "integer",
+                            "description": "Current paginator page"
+                        },
+                        "total_pages": {
+                            "type": "integer",
+                            "description": "Total paginator pages"
+                        },
+                        "links": {
+                            "type": "object",
+                            "properties": {
+                                "next": {
+                                    "type": "string",
+                                    "description": "URL for next page (if next page exists), disappears on last page"
+                                },
+                                "previous": {
+                                    "type": "string",
+                                    "description": "URL for previous page (if previous page exists), disappears of first page"
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

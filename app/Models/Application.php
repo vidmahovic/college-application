@@ -10,7 +10,7 @@ class Application extends Model // PRIJAVA
 
     protected $fillable = ['emso', 'date_of_birth', 'user_id', 'profession_id', 'middle_school_id', 
         'education_type_id', 'application_interval_id','country_id', 'citizen_id', 'applications_cities_id'];
-    protected $guarded = ['id']; // Fillable je nasprotje od guarded, tako da če imaš manj atributov za zavarovat, samo dodaj te atribute v guarded.
+    protected $guarded = ['id'];
 
     protected $casts = [
         'emso' => 'integer',
