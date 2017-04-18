@@ -15,6 +15,8 @@ class Role extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;
 
+    public $timestamps = false;
+
     protected $cascadeDeletes = ['users'];
 
     protected $dates = ['deleted_at'];

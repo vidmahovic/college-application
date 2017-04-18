@@ -1,4 +1,5 @@
 <?php
+use App\Models\Role;
 
 /**
  * Class RolesTableSeeder
@@ -14,6 +15,8 @@ class RolesTableSeeder extends \Illuminate\Database\Seeder
      */
     public function run()
     {
-
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'staff']);
+        Role::create(['name' => 'student']);
     }
 }
