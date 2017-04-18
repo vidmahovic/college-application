@@ -350,42 +350,6 @@
                         }
                     }
                 }
-            },
-            "post": {
-                "summary": "Save newly created or updated student's application",
-                "description": "Shrani štiudentovo aktivno prijavnico. Če prijavnica poprej ni obstajala, aplikacija ustvari novo prijavnico. V nasprotnem primeru aplikacija posodobi obstoječo aktivno prijavnico. Če uporabnika nima vloge študenta, aplikacija vrne Unauthorized HTTP Response (401).\n",
-                "parameters": [
-                    {
-                        "name": "api_key",
-                        "in": "header",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "application",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/Application"
-                        }
-                    }
-                ],
-                "tags": [
-                    "application"
-                ],
-                "responses": {
-                    "203": {
-                        "description": "Student's application was created or updated",
-                        "schema": {
-                            "$ref": "#/definitions/Application"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized access",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                }
             }
         },
         "/applications": {
@@ -418,15 +382,10 @@
                         "type": "integer"
                     },
                     {
-                        "name": "filters",
-                        "in": "body",
-                        "description": "Request filters",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
-                            }
-                        }
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[gender]=male)",
+                        "type": "string"
                     }
                 ],
                 "tags": [
@@ -540,15 +499,10 @@
                         "type": "integer"
                     },
                     {
-                        "name": "filters",
-                        "in": "body",
-                        "description": "Request filters",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
-                            }
-                        }
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[gender]=male)",
+                        "type": "string"
                     }
                 ],
                 "tags": [
@@ -703,15 +657,10 @@
                         "type": "integer"
                     },
                     {
-                        "name": "filters",
-                        "in": "body",
-                        "description": "Request filters",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
-                            }
-                        }
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[type]=1)",
+                        "type": "string"
                     }
                 ],
                 "tags": [
@@ -788,15 +737,10 @@
                         "type": "integer"
                     },
                     {
-                        "name": "filters",
-                        "in": "body",
-                        "description": "Request filters",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
-                            }
-                        }
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[type]=1)",
+                        "type": "string"
                     }
                 ],
                 "tags": [
@@ -1173,23 +1117,6 @@
                 "message": {
                     "type": "string",
                     "description": "Default HTTP response based on the status code"
-                }
-            }
-        },
-        "Filter": {
-            "type": "object",
-            "properties": {
-                "attribute": {
-                    "type": "string",
-                    "description": "attribute to filter by"
-                },
-                "value": {
-                    "type": "string",
-                    "description": "attribute value"
-                },
-                "relation": {
-                    "type": "string",
-                    "description": "can be gt, eq, lt, ge, le. Default = eq"
                 }
             }
         },
