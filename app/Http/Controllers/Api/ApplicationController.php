@@ -20,12 +20,8 @@ class ApplicationController extends ApiController
      *
      * @return void
      */
-    public function __construct()
-    {
-        //$this->middleware('auth');
-    }
 
-    public function show(){
+    public function show() {
         $countries = Country::all();
         $cities = City::all();
         $citizens = Citizen::all();
@@ -36,16 +32,17 @@ class ApplicationController extends ApiController
         $graduation_types = GraduationType::all();
         $middle_schooles = MiddleSchool::all();
 
-        return response()->json(['countries'=> $countries,
-                                'cities'=> $cities,
-                                'citizens'=> $citizens,
-                                'faculties'=> $faculties, 
-                                'facultyPrograms'=> $facultyPrograms,
-                                'districts'=> $districts,
-                                'education_types'=> $education_types,
-                                'graduation_types'=> $graduation_types,
-                                'middle_schooles'=> $middle_schooles
-                                ], 200);
+        return $this->response->array([
+            'countries'=> $countries,
+            'cities'=> $cities,
+            'citizens'=> $citizens,
+            'faculties'=> $faculties,
+            'facultyPrograms'=> $facultyPrograms,
+            'districts'=> $districts,
+            'education_types'=> $education_types,
+            'graduation_types'=> $graduation_types,
+            'middle_schooles'=> $middle_schooles
+        ]);
     }
 
     public function create(ApplicationRequest $request){
