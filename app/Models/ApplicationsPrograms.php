@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class ApplicationsPrograms extends Model // PIVOT MED VPISNIM LISTOM IN PROGRAMOM
 {
 
-    protected $fillable = ['id', 'application_id', 'faculty_program_id', 'status', 'choice_number'];
-    //protected $guarded = ['id'];
+    protected $fillable = ['application_id', 'faculty_program_id', 'status', 'choice_number'];
+    protected $guarded = ['id'];
 
     protected $casts = [
         'id' => 'integer',
