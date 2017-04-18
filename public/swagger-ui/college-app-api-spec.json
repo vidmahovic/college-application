@@ -68,7 +68,21 @@
                     "200": {
                         "description": "User object in JSON",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                },
+                                "meta": {
+                                    "type": "object",
+                                    "properties": {
+                                        "api_token": {
+                                            "type": "string",
+                                            "description": "API token for authenticated user"
+                                        }
+                                    }
+                                }
+                            }
                         }
                     },
                     "401": {
@@ -221,7 +235,12 @@
                     "200": {
                         "description": "Returns authenticated user",
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
                         }
                     },
                     "401": {
@@ -247,7 +266,12 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/User"
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
                         }
                     }
                 ],
@@ -340,7 +364,12 @@
                     "200": {
                         "description": "Student's last active application or an empty application",
                         "schema": {
-                            "$ref": "#/definitions/Application"
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Application"
+                                }
+                            }
                         }
                     },
                     "403": {
@@ -560,7 +589,12 @@
                     "200": {
                         "description": "Application that has the specified ID",
                         "schema": {
-                            "$ref": "#/definitions/Application"
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Application"
+                                }
+                            }
                         }
                     },
                     "401": {
@@ -609,7 +643,12 @@
                     "202": {
                         "description": "Returns updated Application",
                         "schema": {
-                            "$ref": "#/definitions/Application"
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Application"
+                                }
+                            }
                         }
                     },
                     "401": {
