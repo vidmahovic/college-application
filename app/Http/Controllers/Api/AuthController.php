@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 use CollegeApplication\Authentication\AuthenticatesUsers;
 use CollegeApplication\Authentication\ThrottlesLogins;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 /**
  * Class AuthController
@@ -20,7 +21,11 @@ class AuthController extends ApiController
     public function login()
     {
         // First, we need to validate Request params
-        $this->validateLoginParams($this->request);
+        try {
+            $this->validateLoginParams($this->request);
+        } catch(ValidationException $e) {
+            return $this->response->errorBadRequest('Validation has failed');
+        }
 
         // Then, we need to check if we need to send
         // a lockout response to the User
@@ -42,14 +47,14 @@ class AuthController extends ApiController
 
             }
 
-            $response = response()->json(['user_not_found'], 404);
+            $response = $this->response->errorNotFound('User not found');
 
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            $response = response()->json(['token_expired'], 500);
+            $reponse = $this->response->errorUnauthorized('Tokan has expired');
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-            $response = response()->json(['token_invalid'], 500);
+            $response = $this->response->errorUnauthorized('Token is invalid');
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-            $response = response()->json(['token_absent' => $e->getMessage()], 500);
+            $response = $this->response->errorBadRequest('Token not provided');
         }
 
         // If the login attempt was unsuccessful we will increment the number of attempts
