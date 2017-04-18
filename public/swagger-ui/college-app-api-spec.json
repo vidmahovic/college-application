@@ -350,42 +350,6 @@
                         }
                     }
                 }
-            },
-            "post": {
-                "summary": "Save newly created or updated student's application",
-                "description": "Shrani štiudentovo aktivno prijavnico. Če prijavnica poprej ni obstajala, aplikacija ustvari novo prijavnico. V nasprotnem primeru aplikacija posodobi obstoječo aktivno prijavnico. Če uporabnika nima vloge študenta, aplikacija vrne Unauthorized HTTP Response (401).\n",
-                "parameters": [
-                    {
-                        "name": "api_key",
-                        "in": "header",
-                        "required": true,
-                        "type": "string"
-                    },
-                    {
-                        "name": "application",
-                        "in": "body",
-                        "schema": {
-                            "$ref": "#/definitions/Application"
-                        }
-                    }
-                ],
-                "tags": [
-                    "application"
-                ],
-                "responses": {
-                    "203": {
-                        "description": "Student's application was created or updated",
-                        "schema": {
-                            "$ref": "#/definitions/Application"
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized access",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                }
             }
         },
         "/applications": {
@@ -422,9 +386,14 @@
                         "in": "body",
                         "description": "Request filters",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
+                            "type": "object",
+                            "properties": {
+                                "filters": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Filter"
+                                    }
+                                }
                             }
                         }
                     }
@@ -544,9 +513,14 @@
                         "in": "body",
                         "description": "Request filters",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
+                            "type": "object",
+                            "properties": {
+                                "filters": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Filter"
+                                    }
+                                }
                             }
                         }
                     }
@@ -707,9 +681,14 @@
                         "in": "body",
                         "description": "Request filters",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
+                            "type": "object",
+                            "properties": {
+                                "filters": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Filter"
+                                    }
+                                }
                             }
                         }
                     }
@@ -792,9 +771,14 @@
                         "in": "body",
                         "description": "Request filters",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Filter"
+                            "type": "object",
+                            "properties": {
+                                "filters": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Filter"
+                                    }
+                                }
                             }
                         }
                     }
