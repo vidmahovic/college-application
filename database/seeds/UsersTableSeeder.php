@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Role;
 use App\User;
 use Illuminate\Database\Seeder;
 
@@ -22,7 +21,52 @@ class UsersTableSeeder extends Seeder
             'email' => 'demo@demo.com',
             'username' => 'demo',
             'password' => app('hash')->make('demo123'),
-            'role_id' => Role::where('name', 'admin')->first()->id
+            'role_id' => 0
+        ]);
+
+        User::create([
+            'email' => 'student1@student.mail.com',
+            'username' => 'student1',
+            'password' => app('hash')->make('student1'),
+            'role_id' => 0
+        ]);
+
+        User::create([
+            'email' => 'student2@student.mail.com',
+            'username' => 'student2',
+            'password' => app('hash')->make('student2'),
+            'role_id' => 0
+        ]);
+
+        User::create([
+            'email' => 'student3@student.mail.com',
+            'username' => 'student3',
+            'password' => app('hash')->make('student3'),
+            'role_id' => 0
+        ]);
+
+
+
+        User::create([
+            'email' => 'admin@admin.mail.com',
+            'username' => 'admin',
+            'password' => app('hash')->make('admin'),
+            'role_id' => 2
+        ]);
+        
+
+        User::create([
+            'email' => 'referent@fri.com',
+            'username' => 'referent_fri',
+            'password' => app('hash')->make('referentff'),
+            'role_id' => 1
+        ]);
+
+        User::create([
+            'email' => 'referent@ff.com',
+            'username' => 'referent_ff',
+            'password' => app('hash')->make('referentff'),
+            'role_id' => 1
         ]);
     }
 
