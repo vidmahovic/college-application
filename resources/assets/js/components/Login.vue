@@ -52,11 +52,12 @@ module.exports = {
               loggedIn: true
             };
             this.$parent.user = user;
-            
+
             console.log(res);
+            debugger;
 
             window.localStorage.setItem('user', user);
-            window.localStorage.setItem('token', res.body.jwt_token);
+            window.localStorage.setItem('token', res.body.meta.api_token);
 
             this.$router.push('/vpisna_sluzba')
           }, function(err){
