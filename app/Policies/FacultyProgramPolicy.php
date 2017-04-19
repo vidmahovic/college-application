@@ -35,7 +35,7 @@ class FacultyProgramPolicy
 
     public function update(User $user)
     {
-        // TODO (Vid): only staff, connected to specific faculty can update it's program
+        // TODO (Vid): only referent, connected to specific faculty can update it's program
         return $user->isReferent();
     }
 

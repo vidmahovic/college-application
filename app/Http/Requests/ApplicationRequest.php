@@ -20,48 +20,48 @@ class ApplicationRequest extends Request {
 
     public function rules(){
 
-        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $this->request->input('country_id');
-        $isBornInSLovenia = District::where('name','TUJINA')->pluck('id') == $this->request->input('district_birth_id');
-
-        if(!($isFromSlovenia && $isBornInSLovenia)){
-            return false;
-        }
-
-        $dob = $request->input('date_of_birth');
-        if(!checkdate(date("m",strtotime($dob), date("d",strtotime($dob), date("Y",strtotime($dob))){
-            return false;
-        }
-
-        $gender = 'M'; // TODO: get gender from user
-
-        if($emso != null && !$isFromSlovenia){
-            if(!validateEMSO($request->input('emso'), $isFromSlovenia, $gender)){
-                return false;
-            }
-        }
-        else { // generate emso - tujci
-
-        }
-      
-        $interval = ApplicationInterval::latest()->first();
-        $start_date = $interval->start_at->format('Y-m-d');
-        $end_date = $interval->ends_at->format('Y-m-d');
-       
-        $curr_date = date('Y-m-d'));
-        if(!($curr_date >= $start_date && $curr_date <= $end_date)){
-            return false;
-        }
-
-        return [
-            'applications_cities_id' => 'required', Rule::in(City::all()->pluck('id')),
-            'country_id' => 'required', Rule::in(Country::all()->pluck('id')),
-            'citizen_id' => 'required', Rule::in(Citizen::all()->pluck('id')),
-            'district_birth_id' => 'required', Rule::in(District::all()->pluck('id')),
-            'education_type_id' => 'required', Rule::in(EducationType::all()->pluck('id')),
-            'graduation_type_id' => 'required', Rule::in(GraduationType::all()->pluck('id')),
-            'profession_id' => 'required', Rule::in(Profession::all()->pluck('id')),
-            'middle_school_id' => 'required', Rule::in(MiddleSchool::all()->pluck('id')),
-        ];
+//        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $this->request->input('country_id');
+//        $isBornInSLovenia = District::where('name','TUJINA')->pluck('id') == $this->request->input('district_birth_id');
+//
+//        if(!($isFromSlovenia && $isBornInSLovenia)){
+//            return false;
+//        }
+//
+//        $dob = $request->input('date_of_birth');
+//        if(!checkdate(date("m",strtotime($dob), date("d",strtotime($dob), date("Y",strtotime($dob))){
+//            return false;
+//        }
+//
+//        $gender = 'M'; // TODO: get gender from user
+//
+//        if($emso != null && !$isFromSlovenia){
+//            if(!validateEMSO($request->input('emso'), $isFromSlovenia, $gender)){
+//                return false;
+//            }
+//        }
+//        else { // generate emso - tujci
+//
+//        }
+//
+//        $interval = ApplicationInterval::latest()->first();
+//        $start_date = $interval->start_at->format('Y-m-d');
+//        $end_date = $interval->ends_at->format('Y-m-d');
+//
+//        $curr_date = date('Y-m-d'));
+//        if(!($curr_date >= $start_date && $curr_date <= $end_date)){
+//            return false;
+//        }
+//
+//        return [
+//            'applications_cities_id' => 'required', Rule::in(City::all()->pluck('id')),
+//            'country_id' => 'required', Rule::in(Country::all()->pluck('id')),
+//            'citizen_id' => 'required', Rule::in(Citizen::all()->pluck('id')),
+//            'district_birth_id' => 'required', Rule::in(District::all()->pluck('id')),
+//            'education_type_id' => 'required', Rule::in(EducationType::all()->pluck('id')),
+//            'graduation_type_id' => 'required', Rule::in(GraduationType::all()->pluck('id')),
+//            'profession_id' => 'required', Rule::in(Profession::all()->pluck('id')),
+//            'middle_school_id' => 'required', Rule::in(MiddleSchool::all()->pluck('id')),
+//        ];
     }
 
     public function validateEMSO($emso){
@@ -81,9 +81,9 @@ class ApplicationRequest extends Request {
 
         // slovenija - register = 50
         // tujci != 50
-        if(!($isFromSlovenia && intval(substr($emso,7,9) == 50)){
-            return false;
-        }
+//        if(!($isFromSlovenia && intval(substr($emso,7,9) == 50)){
+//            return false;
+//        }
 
         // zaporedna številka; moski imajo med 000-499, zenske 500-999
         $gnumber = intval(substr($emso,10,13));

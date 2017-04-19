@@ -17,8 +17,6 @@ class FacultyProgram extends Model // PROGRAM
         'id', 'name', 'faculty_id', 'is_regular', 'type', 'allow_double_degree', 'min_points', 'created_at', 'max_accepted'
     ];
 
-    // TODO: število razpisanih
-
     protected $casts = [
         'id' => 'string',
         'name' => 'string',

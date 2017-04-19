@@ -14,7 +14,7 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
 {
 
     protected $defaultIncludes = [
-        'citizen', 'interval', 'middle_school', 'nationality', 'education', 'profession', 'applicant', 'graduation'
+        'applicant', 'citizen', 'interval', 'middle_school', 'nationality', 'education', 'profession', 'graduation'
     ];
 
     public function transform(Application $application)
