@@ -36,7 +36,11 @@ Vue.component('datepicker', Datepicker)
 
 Vue.http.interceptors.push(function(request, next) {
 
-	request.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+	console.log("http interceptors")
+	//request.headers['Authorization'] = 'Bearer: ' + localStorage.getItem('token')
+  	request.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+  	console.log(request);
+		
   	next();
 });
 
