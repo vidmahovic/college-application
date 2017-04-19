@@ -13,9 +13,9 @@ use App\Models\EducationType;
 use App\Models\Country;
 use App\Models\MiddleSchool;
 use App\Transformers\ApplicationTransformer;
+use Dingo\Api\Exception\ResourceException;
 
-class ApplicationController extends ApiController
-{
+class ApplicationController extends ApiController {
     /**
      * Create a new controller instance.
      *
@@ -58,33 +58,40 @@ class ApplicationController extends ApiController
 
     public function sifranti()
     {
-        // TODO(Vid): vrni vse sifrante
+        //
     }
 
     public function active()
     {
         $user = $this->request->user();
-        if($user->cannot('view-active', Application::class)) {
+
+        if ($user->cannot('view-active', Application::class)) {
             return $this->response->errorUnauthorized();
         }
 
         $application = $user->applications()->active()->latest()->first();
 
         if($application == null) {
-            $application = Application::create([
-                'status' => 'created',
-                'user_id' => $user->id,
-                'education_type_id' => EducationType::first()->id,
-                'application_interval_id' => $application->interval()->current()->first()->id,
-                'nationality_type_id' => '',
-                'profession_id' => '',
-                'middle_school_id' => '',
-                'citizen_id' => '',
-                'application_city_id' => ''
-            ]);
+            $application = Application::createTemplate($user->id);
         }
 
-        return $this->response->item(Application::with('citizen')->first(), new ApplicationTransformer);
+        return $this->response->item($application, new ApplicationTransformer);
     }
 
+
+    public function archive($id)
+    {
+        $application = Application::find($id);
+
+        if($application == null) {
+            throw new ResourceException('Resource not found');
+        }
+
+        if($this->request->user()->cannot('archive', $application)) {
+            return $this->response->errorUnauthorized();
+        }
+
+        $application->delete();
+        return $this->response->noContent('Resource archived');
+    }
 }

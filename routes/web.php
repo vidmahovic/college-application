@@ -38,10 +38,10 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) 
         $api->get('programs','FacultyProgramController@index');
         //$api->get('programs/{id}', 'FacultyProgramController@show');
 
-        //$api->get('applications/active', 'ApplicationController@active');
+        $api->get('applications/active', 'ApplicationController@active');
         //$api->get('applications/{id}','ApplicationController@show');
         $api->post('applications','ApplicationController@create');
-        //$api->delete('applications/{id}', 'ApplicationController@destroy');
+        $api->delete('applications/{application}', 'ApplicationController@archive');
     });
 });
 

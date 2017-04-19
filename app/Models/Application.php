@@ -4,29 +4,11 @@ namespace App\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Application extends Model // PRIJAVA
+class Application extends Model
 {
-//    protected $table = 'applications';
-//
-//    protected $fillable = ['emso', 'date_of_birth', 'user_id', 'profession_id', 'middle_school_id',
-//        'education_type_id', 'application_interval_id','country_id', 'citizen_id', 'applications_cities_id'];
-//    protected $guarded = ['id', ]; // Fillable je nasprotje od guarded, tako da če imaš manj atributov za zavarovat, samo dodaj te atribute v guarded.
-
-//    protected $casts = [
-//        'emso' => 'integer',
-//        'date_of_birth' => 'date',
-//        'user_id' => 'integer',
-//        'profession_id' => 'integer',
-//        'education_type_id' => 'integer',
-//        'middle_school_id' => 'integer',
-//        'application_interval_id' => 'integer',
-//        'country_id' => 'integer',
-//        'citizen_id' => 'integer',
-//        'applications_cities_id' => 'integer'
-//    ];
-
-
+    use SoftDeletes;
 
     public function middleSchool() {
         return $this->belongsTo(MiddleSchool::class, 'middle_school_id');
@@ -80,6 +62,23 @@ class Application extends Model // PRIJAVA
     }
 
     public function scopeActive($scope) {
-        return $this->whereIn('status', [0, 1]);
+        return $this->whereIn('status', ['created', 'saved']);
+    }
+
+    public static function createTemplate($user_id) {
+        $application = new static;
+        $application->status = 'created';
+        $application->user_id = $user_id;
+        $application->education_type_id = EducationType::orderBy('name')->first()->id;
+        $application->graduation_type_id = GraduationType::orderBy('name')->first()->id;
+        $application->application_interval_id = ApplicationInterval::current()->first()->id;
+        $application->nationality_type_id = NationalityType::orderBy('type')->first()->id;
+        $application->profession_id = Profession::orderBy('name')->first()->id;
+        $application->middle_school_id = MiddleSchool::orderBy('name')->first()->id;
+        $application->citizen_id = Citizen::orderBy('name')->first()->id;
+
+        $application->save();
+
+        return $application;
     }
 }
