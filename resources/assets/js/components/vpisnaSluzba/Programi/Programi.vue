@@ -5,7 +5,7 @@
         <div class="panel panel-body">
           <h2>Filtri:</h2>
           <h4>Iskanje programa:</h4>
-          <input class="form-control" type="text" v-model="params.name" />
+          <input class="form-control" type="text" v-model="params.name" v-on:blur="name()" />
           <br>
           <h4>Način študija</h4>
           <input type="radio" id="one" value="0" v-model="params.regular" v-on:click="regular1('0')">
@@ -23,6 +23,8 @@
           <br>
           <input type="radio" id="three3" value="2" v-model="params.type" v-on:click="type1('2')">
           <label for="three3">Magistrski</label>
+          <br>
+          <button v-on:click="poenostavi" style="margin-top: 10px;" class="btn btn-link btn-xs">Poenostavi iskanje</button>
         </div>
       </div>
         <div class="col-md-10">
@@ -268,6 +270,14 @@ function programPdf(data){
         };
       },
 
+      name: function(){
+        this.params = {
+          regular: this.params.regular,
+          type: this.params.type,
+          name: this.params.name.toUpperCase()
+        };
+      },
+
       savePdf: function(){
         this.$http.get("/api/programs", {params: {filters: this.params}})
           .then(function(res){
@@ -275,8 +285,14 @@ function programPdf(data){
           }, function(err){
               console.log(err);
           });
+      },
 
-
+      poenostavi: function(){
+        this.params = {
+          type: '',
+          regular: '',
+          name: ''
+        };
       }
     }
   }
