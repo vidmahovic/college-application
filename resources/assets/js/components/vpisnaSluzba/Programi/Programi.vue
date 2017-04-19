@@ -4,6 +4,9 @@
       <div class="col-md-2">
         <div class="panel panel-body">
           <h2>Filtri:</h2>
+          <h4>Iskanje programa:</h4>
+          <input class="form-control" type="text" v-model="params.name" />
+          <br>
           <h4>Način študija</h4>
           <input type="radio" id="one" value="0" v-model="params.regular" v-on:click="regular1('0')">
           <label for="one">Izredni programi</label>
@@ -109,7 +112,6 @@ function programPdf(data){
     var tmpY1 = y;
 
     for(var j = 0; j < tmp.length; j++){
-      if(i == 36) debugger;
       if(j+1 < tmp.length && tmp[j].length > 0 && tmp[j+1].length > 0 && (tmp[j+1].length < 3 || (tmp[j].length + tmp[j+1].length + 1) < 14)){
         tmp[j] = tmp[j].replace("Č", "C");
         tmp[j+1] = tmp[j+1].replace("Č", "C");
@@ -204,7 +206,8 @@ function programPdf(data){
       return {
         params: {
           regular: '',
-          type: ''
+          type: '',
+          name: ''
         },
         table_columns: [
           {label: 'Fakulteta', field: 'faculty.data.name'},
@@ -253,20 +256,21 @@ function programPdf(data){
       regular1: function(param){
         this.params = {
           regular: param,
-          type: this.params.type
+          type: this.params.type,
+          name: this.params.name.toUpperCase()
         };
       },
       type1: function(param){
         this.params = {
           regular: this.params.regular,
-          type: param
+          type: param,
+          name: this.params.name.toUpperCase()
         };
       },
 
       savePdf: function(){
         this.$http.get("/api/programs", {params: {filters: this.params}})
           .then(function(res){
-            debugger;
               programPdf(res.data);
           }, function(err){
               console.log(err);

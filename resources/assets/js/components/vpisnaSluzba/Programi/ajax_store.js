@@ -17,6 +17,7 @@ export default {
 		params: {
 			type: '',
 			is_regular: '',
+			name: '',
 			page: 1
 		},
 		apiUrl: '/api/programs/paginate'
@@ -146,8 +147,10 @@ export default {
 			this.table = table;
 		},
 		setData(data){
+			debugger;
 			this.params.type = data.type;
 			this.params.is_regular = data.regular;
+			this.params.name = data.name;
 			this.getRows(this.apiUrl);
 		},
 		setFilterable(value){

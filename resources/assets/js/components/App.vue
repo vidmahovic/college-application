@@ -115,7 +115,7 @@
       logout: function () {
 
         this.user = null;
-        
+
         if (window.localStorage) {
           window.localStorage.setItem('user', null);
           window.localStorage.setItem('token', null);
@@ -167,7 +167,7 @@
         // get user info
         // MOCK
         let user = JSON.parse(window.localStorage.getItem('user'));
-        
+
         this.user = user;
         console.log("App vue ", user)
        }

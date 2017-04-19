@@ -55,7 +55,6 @@ module.exports = {
             this.$parent.user = user;
 
             console.log(res);
-            debugger;
 
             window.localStorage.setItem('user', JSON.stringify(user));
             window.localStorage.setItem('token', res.body.meta.api_token);
