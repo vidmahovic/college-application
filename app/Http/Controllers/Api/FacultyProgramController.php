@@ -31,7 +31,7 @@ class FacultyProgramController extends ApiController
             throw new ResourceException('Resource not found');
 
         if($this->request->user()->cannot('view', $program))
-            throw new AuthorizationException('Unauthorized access');
+            return $this->response->errorUnauthorized('Unauthorized access.');
 
         return $this->response->item($program, new FacultyProgramTransformer);
     }
@@ -39,7 +39,7 @@ class FacultyProgramController extends ApiController
     public function paginate()
     {
         if($this->request->user()->cannot('paginate', FacultyProgram::class)) {
-            throw new AuthorizationException('Unauthorized access');
+            return $this->response->errorUnauthorized('Unauthorized access.');
         }
 
         $programs = $this->setFilters(new FacultyProgram);

@@ -15,9 +15,7 @@ class FacultyProgramPolicy
 
     public function before(User $user, $ability)
     {
-        if($user->isAdmin())
-            return true;
-        //return $user->isAdmin();
+        if($user->isAdmin()) return true;
     }
 
     public function view(User $user, FacultyProgram $program)
