@@ -69,6 +69,17 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->role->name === 'enrollment service';
     }
 
+    public function saveToken(string $token)
+    {
+        $this->api_token = $token;
+        $this->save();
+    }
+
+
+    public function activated(): bool
+    {
+        return $this->activated_at != null;
+    }
 
 
     public function getJWTIdentifier()

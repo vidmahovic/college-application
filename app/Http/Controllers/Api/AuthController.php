@@ -37,14 +37,22 @@ class AuthController extends ApiController
             return $this->sendLockoutResponse($this->request);
         }
 
+
         try {
             // We can now try to authenticate the User against
             // his credentials...
             if ($jwt_token = $this->attemptLogin($this->request)) {
 
+                $user = $this->getUserFromRequest($this->request);
+
+                // If a user did not activate his account, he cannot login to the app.
+                if(! $user->activated())
+                    return $this->response->errorUnauthorized('User is not activated');
+
                 $this->clearLoginAttempts($this->request);
-                $user = $this->saveToken($this->request, $jwt_token);
+                $user->saveToken($jwt_token);
                 $user->update(['last_login' => Carbon::now()]);
+
                 return $this->response->item($user, new UserTransformer)->addMeta('api_token', $jwt_token);
 
             }
