@@ -20,34 +20,36 @@ $app->get('api', function() {
 });
 
 // Password reset route (has to be without prefix due to Mailer requirements).
-$app->get('password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@showResetForm']);
+$app->group(['middleware' => 'api.throttle'], function($app) {
+    $app->get('password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@showResetForm']);
 
-$api = app('api.router');
+    $api = app('api.router');
 
-$api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
+    $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-    // Authentication routes
-    $api->post('login', 'AuthController@login');
-    $api->post('password/email', 'PasswordController@sendPasswordResetEmail');
-    $api->post('password/reset', 'PasswordController@resetPassword');
+        // Authentication routes
+        $api->post('login', 'AuthController@login');
+        $api->post('password/email', 'PasswordController@sendPasswordResetEmail');
+        $api->post('password/reset', 'PasswordController@resetPassword');
 
-    // Protected routes
-    $api->group(['middleware' => 'api.auth'], function($api) {
+        // Protected routes
+        $api->group(['middleware' => 'api.auth'], function($api) {
 
-        // USER
-        $api->get('user', 'UserController@user');
-        $api->store('user/password', 'UserController@password');
+            // USER
+            $api->get('user', 'UserController@user');
+            $api->post('user/password', 'UserController@password');
 
-        // PROGRAM
-        $api->get('programs/paginate', 'FacultyProgramController@paginate');
-        $api->get('programs','FacultyProgramController@index');
-        //$api->get('programs/{id}', 'FacultyProgramController@show');
+            // PROGRAM
+            $api->get('programs/paginate', 'FacultyProgramController@paginate');
+            $api->get('programs','FacultyProgramController@index');
+            //$api->get('programs/{id}', 'FacultyProgramController@show');
 
-        // APPLICATION
-        $api->get('applications/active', 'ApplicationController@active');
-        //$api->get('applications/{id}','ApplicationController@show');
-        $api->post('applications','ApplicationController@create');
-        $api->delete('applications/{application}', 'ApplicationController@archive');
+            // APPLICATION
+            $api->get('applications/active', 'ApplicationController@active');
+            //$api->get('applications/{id}','ApplicationController@show');
+            $api->post('applications','ApplicationController@create');
+            $api->delete('applications/{application}', 'ApplicationController@archive');
+        });
     });
 });
 
