@@ -34,10 +34,16 @@ $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) 
     // Protected routes
     $api->group(['middleware' => 'api.auth'], function($api) {
 
+        // USER
+        $api->get('user', 'UserController@user');
+        $api->store('user/password', 'UserController@password');
+
+        // PROGRAM
         $api->get('programs/paginate', 'FacultyProgramController@paginate');
         $api->get('programs','FacultyProgramController@index');
         //$api->get('programs/{id}', 'FacultyProgramController@show');
 
+        // APPLICATION
         $api->get('applications/active', 'ApplicationController@active');
         //$api->get('applications/{id}','ApplicationController@show');
         $api->post('applications','ApplicationController@create');
