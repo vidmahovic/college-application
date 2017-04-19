@@ -15,7 +15,7 @@ class FacultyProgramPolicy
 
     public function before(User $user, $ability)
     {
-        return $user->isAdmin();
+        if($user->isAdmin()) return true;
     }
 
     public function view(User $user, FacultyProgram $program)
@@ -30,7 +30,7 @@ class FacultyProgramPolicy
 
     public function paginate(User $user)
     {
-        return $this->get($user);
+        return true;
     }
 
     public function update(User $user)

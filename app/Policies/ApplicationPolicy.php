@@ -12,6 +12,11 @@ use App\User;
  */
 class ApplicationPolicy
 {
+    public function before(User $user)
+    {
+        if($user->isAdmin()) return true;
+    }
+
     public function get(User $user)
     {
         return $user->isReferent();
