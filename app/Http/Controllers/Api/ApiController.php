@@ -22,6 +22,10 @@ class ApiController extends Controller
         $this->request = $request;
     }
 
+    public function validateRequest(array $rules) {
+        return app('validator')->make($this->request->all(), $rules);
+    }
+
     protected function setFilters(Model $model)
     {
         if($this->wantsFiltering() && property_exists($model, 'filters')) {
@@ -68,5 +72,4 @@ class ApiController extends Controller
     protected function wantsLimit() {
         return $this->request->has('limit') && (int) $this->request->get('limit') > 0;
     }
-
 }

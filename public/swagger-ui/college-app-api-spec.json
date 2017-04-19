@@ -330,8 +330,8 @@
                     "user"
                 ],
                 "responses": {
-                    "201": {
-                        "description": "A new password is created",
+                    "204": {
+                        "description": "Password stored",
                         "schema": {
                             "$ref": "#/definitions/Success"
                         }

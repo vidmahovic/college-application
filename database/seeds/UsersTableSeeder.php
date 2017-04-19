@@ -20,28 +20,28 @@ class UsersTableSeeder extends Seeder
         User::create([
             'email' => 'demo@demo.com',
             'username' => 'demo123',
-            'password' => app('hash')->make('demo1234'),
+            'password' => bcrypt('demo1234'),
             'role_id' => 1
         ]);
 
         User::create([
             'email' => 'student1@student.com',
             'username' => 'student1',
-            'password' => app('hash')->make('student1'),
+            'password' => bcrypt('student1'),
             'role_id' => 4
         ]);
 
         User::create([
             'email' => 'student2@student.com',
             'username' => 'student2',
-            'password' => app('hash')->make('student2'),
+            'password' => bcrypt('student2'),
             'role_id' => 4
         ]);
 
         User::create([
             'email' => 'student3@student.com',
             'username' => 'student3',
-            'password' => app('hash')->make('student3'),
+            'password' => bcrypt('student3'),
             'role_id' => 4
         ]);
 
@@ -50,7 +50,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'email' => 'admin@admin.mail.com',
             'username' => 'admin123',
-            'password' => app('hash')->make('admin123'),
+            'password' => bcrypt('admin123'),
             'role_id' => 1
         ]);
         
@@ -58,14 +58,14 @@ class UsersTableSeeder extends Seeder
         User::create([
             'email' => 'referent@fri.com',
             'username' => 'referent_fri',
-            'password' => app('hash')->make('referentfri1'),
+            'password' => bcrypt('referentfri1'),
             'role_id' => 2
         ]);
 
         User::create([
             'email' => 'referent@ff.com',
             'username' => 'referent_ff',
-            'password' => app('hash')->make('referentff1'),
+            'password' => bcrypt('referentff1'),
             'role_id' => 2
         ]);
 
