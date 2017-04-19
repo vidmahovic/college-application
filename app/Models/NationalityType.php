@@ -11,5 +11,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class NationalityType extends Model
 {
+    public $timestamps = false;
 
 }

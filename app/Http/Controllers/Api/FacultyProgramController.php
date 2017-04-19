@@ -46,7 +46,10 @@ class FacultyProgramController extends ApiController
         $programs = $this->setSorting($programs);
         $programs = $this->setLimit($programs);
 
-        return $this->response->paginator($programs->paginate(30), new FacultyProgramTransformer);
+        return $this->response->paginator(
+            $programs->paginate($this->request->get('perPage') ?? 30),
+            new FacultyProgramTransformer
+        );
     }
 
 }
