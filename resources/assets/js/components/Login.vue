@@ -53,13 +53,17 @@ module.exports = {
             // };
             let user = res.body.data
             this.$parent.user = user;
-            
+
             console.log(res);
+            debugger;
 
             window.localStorage.setItem('user', JSON.stringify(user));
             window.localStorage.setItem('token', res.body.meta.api_token);
 
             this.$router.push('/'+user.role);
+
+            // window.localStorage.setItem('user', user);
+            // window.localStorage.setItem('token', res.body.meta.api_token);
 
           }, function(err){
             this.showResponse = true;

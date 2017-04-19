@@ -21,7 +21,6 @@
 
     <!-- Scripts -->
     <script src="{{ mix('/js/app.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.debug.js"></script>
 </body>
 </html>
-
-
