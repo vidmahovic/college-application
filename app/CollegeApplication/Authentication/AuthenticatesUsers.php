@@ -24,14 +24,18 @@ trait AuthenticatesUsers
     {
         $this->validate($request, [
             $this->username() => 'required',
-            'password' => 'required|min:6' // TODO (Vid): validate password adhering to specifications.
+            'password' => [
+                'required',
+                'regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
+                'min:8'
+            ]
         ]);
     }
 
     protected function validateRegisterParams(Request $request)
     {
         $this->validate($request, [
-           // TODO (Vid): Set registration rules.
+           // TODO (Vid): Set registration rules
         ]);
     }
 

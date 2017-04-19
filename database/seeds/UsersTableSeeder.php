@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'email' => 'demo@demo.com',
             'username' => 'demo123',
-            'password' => app('hash')->make('demo123'),
+            'password' => app('hash')->make('demo1234'),
             'role_id' => 1
         ]);
 
@@ -50,7 +50,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'email' => 'admin@admin.mail.com',
             'username' => 'admin123',
-            'password' => app('hash')->make('admin'),
+            'password' => app('hash')->make('admin123'),
             'role_id' => 1
         ]);
         
@@ -58,21 +58,21 @@ class UsersTableSeeder extends Seeder
         User::create([
             'email' => 'referent@fri.com',
             'username' => 'referent_fri',
-            'password' => app('hash')->make('referentfri'),
+            'password' => app('hash')->make('referentfri1'),
             'role_id' => 2
         ]);
 
         User::create([
             'email' => 'referent@ff.com',
             'username' => 'referent_ff',
-            'password' => app('hash')->make('referentff'),
+            'password' => app('hash')->make('referentff1'),
             'role_id' => 2
         ]);
 
         User::create([
             'email' => 'vpisna@sluzba.com',
             'username' => 'vpisna_sluzba',
-            'password' => bcrypt('vpisna123'),
+            'password' => bcrypt('vpisna12'),
             'role_id' => 3
         ]);
     }
