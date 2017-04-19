@@ -15,6 +15,9 @@ class ChangeStatusValsInApplicationsTable extends Migration
     {
         Schema::table('applications', function(Blueprint $table) {
             $table->dropColumn('status');
+        });
+
+        Schema::table('applications', function(Blueprint $table) {
             $table->enum('status', ['created', 'saved', 'filed'])->default('created');
         });
     }
@@ -28,6 +31,9 @@ class ChangeStatusValsInApplicationsTable extends Migration
     {
         Schema::table('applications', function(Blueprint $table) {
             $table->dropColumn('status');
+        });
+
+        Schema::table('applications', function(Blueprint $table) {
             $table->enum('status', ['created', 'ready', 'edited', 'filed'])->default('created');
         });
     }
