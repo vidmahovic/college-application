@@ -36,8 +36,8 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
         $api->group(['middleware' => 'api.auth'], function($api) {
 
             // USER
-            $api->get('user', 'UserController@user');
             $api->post('user/password', 'UserController@password');
+            $api->get('user', 'UserController@user');
 
             // PROGRAM
             $api->get('programs/paginate', 'FacultyProgramController@paginate');
