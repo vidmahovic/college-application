@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\FacultyProgram;
-use App\Models\Faculty;
 use App\Transformers\FacultyProgramTransformer;
-use League\Fractal\Resource\Collection;
-use Illuminate\Http\Request;
+use Dingo\Api\Exception\ResourceException;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class FacultyProgramController extends ApiController
 {
@@ -14,7 +13,7 @@ class FacultyProgramController extends ApiController
     public function index()
     {
         if($this->request->user()->cannot('get', FacultyProgram::class)) {
-            return $this->response->errorUnauthorized();
+            throw new AuthorizationException('Unauthorized access');
         }
 
         $programs = $this->setFilters(new FacultyProgram);
@@ -24,15 +23,23 @@ class FacultyProgramController extends ApiController
         return $this->response->collection($programs = $programs->get(), new FacultyProgramTransformer)->addMeta('count', $programs->count());
     }
 
-    public function show($id){
-        $facultyProgram = FacultyProgram::with('faculty','countAll', 'countAccepted')->findOrFail($id);
-        return $facultyProgram;
+    public function show($id)
+    {
+        $program = FacultyProgram::find($id);
+
+        if($program == null)
+            throw new ResourceException('Resource not found');
+
+        if($this->request->user()->cannot('view', $program))
+            throw new AuthorizationException('Unauthorized access');
+
+        return $this->response->item($program, new FacultyProgramTransformer);
     }
 
     public function paginate()
     {
         if($this->request->user()->cannot('paginate', FacultyProgram::class)) {
-            return $this->response->errorUnauthorized();
+            throw new AuthorizationException('Unauthorized access');
         }
 
         $programs = $this->setFilters(new FacultyProgram);
