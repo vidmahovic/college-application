@@ -40,30 +40,35 @@ class FacultyProgram extends Model // PROGRAM
             'application_id');
     }
 
-    public function countAll() {
-       return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count');
-    }
+//    public function countAll() {
+//       return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count');
+//    }
+//
+//    public function countAccepted()
+//    {
+//        return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count')->where('status', '=', 1);
+//    }
 
-    public function countAccepted()
+//    public function scopeArrangeBy($query, $filters){
+//        if(intval($filters['fid']) > 0){
+//            $query->where('faculty_id', intval($filters['fid']));
+//        }
+//        if(intval($filters['type']) >= 0 && intval($filters['type']) <= 2 && $filters['type'] != null){
+//            $query->where('type', $filters['type']);
+//        }
+//        else if((intval($filters['is_regular']) == 0 || intval($filters['is_regular']) == 1) && $filters['is_regular'] != null){
+//            $query->where('is_regular', intval($filters['is_regular']));
+//        }
+//        return $query->orderBy('id', 'asc')->orderBy('type', 'asc')->orderBy('is_regular', 'asc');
+//    }
+
+    public function getCountEnrolledAttribute()
     {
-        return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count')->where('status', '=', 1);
-    }
-
-    public function scopeArrangeBy($query, $filters){
-        if(intval($filters['fid']) > 0){
-            $query->where('faculty_id', intval($filters['fid']));
-        }
-        if(intval($filters['type']) >= 0 && intval($filters['type']) <= 2 && $filters['type'] != null){
-            $query->where('type', $filters['type']);
-        }
-        else if((intval($filters['is_regular']) == 0 || intval($filters['is_regular']) == 1) && $filters['is_regular'] != null){
-            $query->where('is_regular', intval($filters['is_regular']));
-        }
-        return $query->orderBy('id', 'asc')->orderBy('type', 'asc')->orderBy('is_regular', 'asc');
+        return $this->applications()->filed()->count();
     }
 
     public function getCountAcceptedAttribute()
     {
-        return $this->applications()->filed()->count();
+        return 0;
     }
 }

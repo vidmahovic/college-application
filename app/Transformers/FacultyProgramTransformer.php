@@ -23,6 +23,7 @@ class FacultyProgramTransformer extends Fractal\TransformerAbstract
             'type' => $program->type,
             'allow_double_degree' => $program->allow_double_degree,
             'max_accepted' => $program->max_accepted,
+            'count_enrolled' => $program->count_enrolled,
             'count_accepted' => $program->count_accepted,
         ];
     }
