@@ -39,7 +39,7 @@
         "/login": {
             "post": {
                 "summary": "Login a user",
-                "description": "Enpoint, ki omogoča avtentikacijo uporabnika. Če se uporabnik prijavlja s pravilnim uporabniškim imenom in geslom, prijava uspe in aplikcaija vrne objekt User. Če se uporabnik poskusi prijaviti s svojim uporabniškim imenom in geslom, aplikacija vrne Unauthorized HTTP response (401). Če se uporabnik skuša na napačen način prijaviti več kot 3x, aplikacija vrne Locked HTTP response (423).\n",
+                "description": "Enpoint, ki omogoča avtentikacijo uporabnika. Če se uporabnik prijavlja s pravilnim uporabniškim imenom in geslom, prijava uspe in aplikcaija vrne objekt User. Če se uporabnik poskusi prijaviti z nepravilnim uporabniškim imenom in/ali geslom, aplikacija vrne Bad Request HTTP response (400). Če se uporabnik skuša na napačen način prijaviti več kot 3x, aplikacija vrne Locked HTTP response (423). Če uporabnik ni aktiviran, aplikacija vrne 401 HTTP Response\n",
                 "parameters": [
                     {
                         "in": "body",
@@ -85,8 +85,14 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Failed validation",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
                     "401": {
-                        "description": "Unauthorized response",
+                        "description": "User is not activated",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -280,7 +286,7 @@
                 ],
                 "responses": {
                     "202": {
-                        "description": "Returnes updated user",
+                        "description": "Returns updated user",
                         "schema": {
                             "$ref": "#/definitions/User"
                         }
@@ -649,6 +655,42 @@
                                     "$ref": "#/definitions/Application"
                                 }
                             }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Archive application by it's ID",
+                "description": "Endpoint arhivira prijavnico, ki ji ustreza podan ID. Če uporabnik nima pravic za arhiviranje prijavnice, strežnik odgovori z Unauthorized HTTP Response (401). Če prijavnica s tem ID-jem ne obstaja, strežnik vrne Not found HTTP Response (404). Sicer, strežnik arhivira prijavnico in vrne No Content HTTP Response (204).\n",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "Application ID",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Application was archived successfully",
+                        "schema": {
+                            "$ref": "#/definitions/Success"
                         }
                     },
                     "401": {
