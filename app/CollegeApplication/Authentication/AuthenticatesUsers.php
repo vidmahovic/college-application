@@ -26,7 +26,7 @@ trait AuthenticatesUsers
             $this->username() => 'required',
             'password' => [
                 'required',
-                'regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
+                'regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
                 'min:8'
             ]
         ]);

@@ -19,7 +19,7 @@ class PasswordRequestValidator extends FormRequest
             'old_password' => 'required',
             'new_password' => [
                 'required',
-                'regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$',
+                'regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
                 'min:8'
             ]
         ];
