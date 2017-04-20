@@ -31,6 +31,7 @@ class UsersTableSeeder extends Seeder
             'username' => 'student1',
             'password' => bcrypt('student1'),
             'activated_at' => Carbon::now(),
+            'name' => 'Marko Novak',
             'role_id' => 4
         ]);
 
@@ -39,6 +40,7 @@ class UsersTableSeeder extends Seeder
             'username' => 'student2',
             'password' => bcrypt('student2'),
             'activated_at' => Carbon::now(),
+            'name' => 'Janez Kranjski',
             'role_id' => 4
         ]);
 
@@ -46,6 +48,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'student3@student.com',
             'username' => 'student3',
             'password' => bcrypt('student3'),
+            'name' => 'Borut Veselko',
             'role_id' => 4
         ]);
 
