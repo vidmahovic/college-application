@@ -57,22 +57,25 @@ class AuthController extends ApiController
 
             }
 
-            $response = $this->response->errorNotFound('User not found');
+            $this->incrementLoginAttempts($this->request);
+            return $this->response->errorNotFound('User not found');
 
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            $response = $this->response->errorUnauthorized('Tokan has expired');
+            $this->incrementLoginAttempts($this->request);
+            return $this->response->errorUnauthorized('Tokan has expired');
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-            $response = $this->response->errorUnauthorized('Token is invalid');
+            $this->incrementLoginAttempts($this->request);
+            return $this->response->errorUnauthorized('Token is invalid');
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-            $response = $this->response->errorBadRequest('Token not provided');
+            $this->incrementLoginAttempts($this->request);
+            return $this->response->errorBadRequest('Token not provided');
         }
 
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($this->request);
-
-        return $response;
+        return $this->response->error('Something went wrong');
 
     }
 
