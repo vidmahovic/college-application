@@ -37,7 +37,10 @@ class ApiController extends Controller
                 if(is_string($vals) && strlen($vals) === 0) {
                     continue;
                 } else {
-                    $model = $model->filter($filter, $vals);
+                    if($filter == 'name')
+                        $model = $model->filter($filter, '%'.$vals.'%', 'like');
+                    else
+                        $model = $model->filter($filter, $vals);
                 }
 
             }

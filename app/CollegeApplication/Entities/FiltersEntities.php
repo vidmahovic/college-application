@@ -11,7 +11,7 @@ trait FiltersEntities
         if(is_array($value)) {
             return $query->whereIn($filter, $value);
         }
-        return $query->where($filter, 'like', '%'.$value.'%');
+        return $query->where($filter, $relation, $value);
     }
 
 //    public function __get($name)
