@@ -89,7 +89,7 @@ return [
             'provider' => 'users',
             'email' => 'emails.auth.password-reset',
             'table' => 'password_resets',
-            'expire' => env('APP_ENV') == 'production' ? 60 : 1000
+            'expire' => 60,
         ]
     ],
 

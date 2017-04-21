@@ -49,6 +49,7 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             //$api->get('applications/{id}','ApplicationController@show');
             $api->post('applications','ApplicationController@create');
             $api->delete('applications/{application}', 'ApplicationController@archive');
+            $api->put('applications/{id}', 'ApplicationController@update');
         });
     });
 });
