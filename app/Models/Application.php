@@ -10,6 +10,8 @@ class Application extends Model
 {
     use SoftDeletes;
 
+    static $filters = [];
+
     public function middleSchool() {
         return $this->belongsTo(MiddleSchool::class, 'middle_school_id');
     }
@@ -65,20 +67,28 @@ class Application extends Model
         return $this->whereIn('status', ['created', 'saved']);
     }
 
-    public static function createTemplate($user_id) {
-        $application = new static;
-        $application->status = 'created';
-        $application->user_id = $user_id;
-        $application->education_type_id = EducationType::orderBy('name')->first()->id;
-        $application->graduation_type_id = GraduationType::orderBy('name')->first()->id;
-        $application->application_interval_id = ApplicationInterval::current()->first()->id;
-        $application->nationality_type_id = NationalityType::orderBy('type')->first()->id;
-        $application->profession_id = Profession::orderBy('name')->first()->id;
-        $application->middle_school_id = MiddleSchool::orderBy('name')->first()->id;
-        $application->citizen_id = Citizen::orderBy('name')->first()->id;
+    public static function createTemplate(User $applicant) {
+        $app = new \StdClass;
 
-        $application->save();
+        $app->applicant = $applicant;
+        $app->date_of_birth = null;
+        // TODO: Add other attributes to stdClass and return the object. 
 
-        return $application;
+        return $app;
+
+//        $application = new static;
+//        $application->status = 'created';
+//        $application->user_id = $user_id;
+//        $application->education_type_id = EducationType::orderBy('name')->first()->id;
+//        $application->graduation_type_id = GraduationType::orderBy('name')->first()->id;
+//        $application->application_interval_id = ApplicationInterval::current()->first()->id;
+//        $application->nationality_type_id = NationalityType::orderBy('type')->first()->id;
+//        $application->profession_id = Profession::orderBy('name')->first()->id;
+//        $application->middle_school_id = MiddleSchool::orderBy('name')->first()->id;
+//        $application->citizen_id = Citizen::orderBy('name')->first()->id;
+//
+//        $application->save();
+//
+//        return $application;
     }
 }
