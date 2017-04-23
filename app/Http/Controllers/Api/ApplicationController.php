@@ -84,6 +84,7 @@ class ApplicationController extends ApiController {
         }
 
         $application->delete();
-        return $this->response->noContent('Resource archived');
+
+        return $this->response->noContent();
     }
 }

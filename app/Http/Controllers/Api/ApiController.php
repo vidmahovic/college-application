@@ -26,28 +26,6 @@ class ApiController extends Controller
         return app('validator')->make($this->request->all(), $rules);
     }
 
-    protected function setFilters(Model $model)
-    {
-        if($this->wantsFiltering() && property_exists($model, 'filters')) {
-
-            $filters = array_only($this->request->get('filters'), $model::$filters);
-
-            foreach($filters as $filter => $vals) {
-
-                if(is_string($vals) && strlen($vals) === 0) {
-                    continue;
-                } else {
-                    if($filter == 'name')
-                        $model = $model->filter($filter, '%'.$vals.'%', 'like');
-                    else
-                        $model = $model->filter($filter, $vals);
-                }
-
-            }
-        }
-
-        return $model;
-    }
 
     protected function setSorting($model)
     {
@@ -68,11 +46,8 @@ class ApiController extends Controller
         return $this->request->has('by');
     }
 
-    protected function wantsFiltering() {
-        return $this->request->has('filters');
-    }
-
     protected function wantsLimit() {
         return $this->request->has('limit') && (int) $this->request->get('limit') > 0;
     }
+
 }

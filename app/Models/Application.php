@@ -72,7 +72,7 @@ class Application extends Model
 
         $app->applicant = $applicant;
         $app->date_of_birth = null;
-        // TODO: Add other attributes to stdClass and return the object. 
+        // TODO: Add other attributes to stdClass and return the object.
 
         return $app;
 

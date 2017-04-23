@@ -2,20 +2,14 @@
 
 namespace App\Models;
 
-use CollegeApplication\Entities\FiltersEntities;
 use Illuminate\Database\Eloquent\Model;
 
 class FacultyProgram extends Model // PROGRAM
 {
-    use FiltersEntities;
 
     protected $table = 'faculty_programs';
 
-    protected $fillable = ['id', 'name', 'faculty_id', 'allow_double_degree', 'is_regular', 'type', 'min_points'];
-
-    public static $filters = [
-        'id', 'name', 'faculty_id', 'is_regular', 'type', 'allow_double_degree', 'min_points', 'created_at', 'max_accepted'
-    ];
+    protected $fillable = ['id', 'name', 'faculty_id', 'allow_double_degree', 'is_regular', 'type', 'min_points', 'faculty.name'];
 
     protected $casts = [
         'id' => 'string',
