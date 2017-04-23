@@ -19,6 +19,7 @@ class UniversityTableSeeder extends Seeder
         if($data->isNotEmpty()) {
             $data->each(function($datum) {
                 University::create([
+                    "id" => $datum['id_univerza'],
                     "name" => $datum['ime_univerza']
                 ]);
             });

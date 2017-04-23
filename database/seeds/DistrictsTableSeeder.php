@@ -19,6 +19,7 @@ class DistrictsTableSeeder extends Seeder
         if($data->isNotEmpty()) {
             $data->each(function($datum) {
                 District::create([
+                    "id" => $datum["id_obcina"],
                     "name" => (string)$datum['ime_obcina']
                 ]);
             });

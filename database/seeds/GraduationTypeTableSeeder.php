@@ -20,6 +20,7 @@ class GraduationTypeTableSeeder extends Seeder
         if($data->isNotEmpty()) {
             $data->each(function($datum) {
                 GraduationType::create([
+                    'id' => $datum['id_koncal_sr_sola'],
                     'name' => $datum['ime_okrajsano']
                 ]);
             });

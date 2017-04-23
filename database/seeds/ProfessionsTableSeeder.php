@@ -19,6 +19,7 @@ class ProfessionsTableSeeder extends Seeder
         if($data->isNotEmpty()) {
             $data->each(function($datum) {
                 Profession::create([
+                    "id" => $datum['id_poklic'],
                     "name" => $datum['ime_poklic']
                 ]);
             });

@@ -18,6 +18,7 @@ class FacultyProgramsSeeder extends Seeder
         $data = $excel->load('database/files/Program.xls', function($reader) {})->get();
         if(!empty($data) && $data->count()){
             foreach ($data as $d) {
+
                 $doubleDegree = 0; // enopredmetni
                 $is_regular = 1; // redni
 

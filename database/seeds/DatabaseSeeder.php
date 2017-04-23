@@ -25,7 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call('GraduationTypeTableSeeder');
         $this->call('ProfessionsTableSeeder');
         $this->call('CountriesTableSeeder');
-        $this->call('ProfessionsTableSeeder');
         $this->call('MiddleSchoolsTableSeeder');
         $this->call('EducationTypeTableSeeder');
     }

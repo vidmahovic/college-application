@@ -19,6 +19,7 @@ class CitizensTableSeeder extends Seeder
         if($data->isNotEmpty()){
             $data->each(function($datum) {
                 Citizen::create([
+                    "id" => $datum["id_drzavljan"],
                     "name" => $datum['text_za_izpis']
                 ]);
             });
