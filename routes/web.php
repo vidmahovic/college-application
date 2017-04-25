@@ -27,6 +27,8 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
+        $api->get('test','FacultyProgramController@test'); // test
+
         // Authentication routes
         $api->post('login', 'AuthController@login');
         $api->post('password/email', 'PasswordController@sendPasswordResetEmail');

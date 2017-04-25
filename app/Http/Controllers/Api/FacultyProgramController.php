@@ -65,4 +65,10 @@ class FacultyProgramController extends ApiController
         );
     }
 
+    public function test()
+    {
+        $programs = FacultyProgram::all();
+        return $programs;
+    }
+
 }
