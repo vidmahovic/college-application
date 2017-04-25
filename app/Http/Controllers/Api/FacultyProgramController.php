@@ -64,11 +64,4 @@ class FacultyProgramController extends ApiController
             new FacultyProgramTransformer
         );
     }
-
-    public function test()
-    {
-        $programs = FacultyProgram::all();
-        return $programs;
-    }
-
 }

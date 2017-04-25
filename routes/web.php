@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\FacultyProgram;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -27,7 +29,7 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-        $api->get('test','FacultyProgramController@test'); // test
+         $api->get('test', function() { return FacultyProgram::all(); }); // test
 
         // Authentication routes
         $api->post('login', 'AuthController@login');
