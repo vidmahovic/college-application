@@ -18,10 +18,10 @@ abstract class Search
             foreach ($request->get('filters') as $filter_name => $filter_val) {
 
                 $filter_class = ucfirst(camel_case($filter_name));
-                $decorator = $this->getFiltersNamespace() . $filter_class;
+                $filter = $this->getFiltersNamespace() . $filter_class;
 
-                if (class_exists($decorator))
-                    $query = $decorator::apply($query, $filter_val);
+                if (class_exists($filter))
+                    $query = $filter::apply($query, $filter_val);
 
             }
 
