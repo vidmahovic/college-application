@@ -14,16 +14,64 @@ use App\Models\Country;
 use App\Models\MiddleSchool;
 use App\Transformers\ApplicationTransformer;
 use Dingo\Api\Exception\ResourceException;
+use App\Validators\ApplicationValidator as Validator;
 
 class ApplicationController extends ApiController {
 
-    public function create() {
+    protected $validator;
+
+    public __construct(Validator $validator){
+        $this->validator = $validator;
+    }
+
+    public function create() { // shrani, vendar ne odda prijave
+
+        if(! $this->validator->validate($request->all())){            
+            $errors = $this->validator->errors()->toArray(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
+            return $this->response->error($errors, 400); 
+        }
 
         $application = Application::create(request(
             ['emso', 'date_of_birth', 'user_id', 'profession_id', 'middle_school_id', 'education_type_id', 
             'application_interval_id','country_id', 'citizen_id', 'applications_cities_id'
             ]
         ));
+
+        $aid = $application->id;
+
+        // create pivot tables -> min 1 wish, max 3 wishes
+        // 1 wish required
+
+        $wish1 = in_array($request->input('faculty_id_1'), Faculty::all()->pluck('id'));
+        $wish2 = in_array($request->input('faculty_id_2'), Faculty::all()->pluck('id'));
+        $wish3 = in_array($request->input('faculty_id_3'), Faculty::all()->pluck('id'));
+
+        if($wish1 != null){
+            $ap1 = ApplicationsPrograms::create([
+                'application_id' => $aid,
+                'faculty_program_id' => $request->input('faculty_id_1'),
+                'status' => false,
+                'choice_number' => 1]);
+        }
+        else {
+            return $this->response->error("You must specify atleast one wish!", 400); 
+        }
+
+        if($wish2 != null){
+            $ap1 = ApplicationsPrograms::create([
+                'application_id' => $aid,
+                'faculty_program_id' => $request->input('faculty_id_2'),
+                'status' => false,
+                'choice_number' => 2]);
+        }
+
+        if($wish2 != null){
+            $ap1 = ApplicationsPrograms::create([
+                'application_id' => $aid,
+                'faculty_program_id' => $request->input('faculty_id_13'),
+                'status' => false,
+                'choice_number' => 13]);
+        }
 
         return $this->response->created('Application created');
     }
