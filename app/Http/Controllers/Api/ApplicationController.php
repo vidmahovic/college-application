@@ -14,13 +14,13 @@ use App\Models\Country;
 use App\Models\MiddleSchool;
 use App\Transformers\ApplicationTransformer;
 use Dingo\Api\Exception\ResourceException;
-use App\Validators\ApplicationValidator as Validator;
+use App\Validators\ApplicationValidator;
 
 class ApplicationController extends ApiController {
 
     protected $validator;
 
-    public __construct(Validator $validator){
+    public function __construct(ApplicationValidator $validator){
         $this->validator = $validator;
     }
 
@@ -39,17 +39,31 @@ class ApplicationController extends ApiController {
 
         $aid = $application->id;
 
-        // create pivot tables -> min 1 wish, max 3 wishes
+        // create pivot tables cities
+
+        $permanent_address = ApplicationCity::create([
+                'application_id' => $aid,
+                'city_id' => $request->input('permanent_applications_cities_id'),
+                'address' => $request->input('permanent_address'),
+                'address_type' => 'permanent']);
+
+        $mailing_address = ApplicationCity::create([
+                'application_id' => $aid,
+                'city_id' => $request->input('mailing_applications_cities_id'),
+                'address' => $request->input('mailing_address'),
+                'address_type' => 'mailing']);
+
+        // create pivot tables programs -> min 1 wish, max 3 wishes
         // 1 wish required
 
-        $wish1 = in_array($request->input('faculty_id_1'), Faculty::all()->pluck('id'));
-        $wish2 = in_array($request->input('faculty_id_2'), Faculty::all()->pluck('id'));
-        $wish3 = in_array($request->input('faculty_id_3'), Faculty::all()->pluck('id'));
+        $wish1 = in_array($request->input('faculty_p_1'), Faculty::all()->pluck('id'));
+        $wish2 = in_array($request->input('faculty_p_2'), Faculty::all()->pluck('id'));
+        $wish3 = in_array($request->input('faculty_p_3'), Faculty::all()->pluck('id'));
 
         if($wish1 != null){
             $ap1 = ApplicationsPrograms::create([
                 'application_id' => $aid,
-                'faculty_program_id' => $request->input('faculty_id_1'),
+                'faculty_program_id' => $request->input('faculty_p_1'),
                 'status' => false,
                 'choice_number' => 1]);
         }
@@ -60,7 +74,7 @@ class ApplicationController extends ApiController {
         if($wish2 != null){
             $ap1 = ApplicationsPrograms::create([
                 'application_id' => $aid,
-                'faculty_program_id' => $request->input('faculty_id_2'),
+                'faculty_program_id' => $request->input('faculty_p_2'),
                 'status' => false,
                 'choice_number' => 2]);
         }
@@ -68,9 +82,9 @@ class ApplicationController extends ApiController {
         if($wish2 != null){
             $ap1 = ApplicationsPrograms::create([
                 'application_id' => $aid,
-                'faculty_program_id' => $request->input('faculty_id_13'),
+                'faculty_program_id' => $request->input('faculty_p_3'),
                 'status' => false,
-                'choice_number' => 13]);
+                'choice_number' => 3]);
         }
 
         return $this->response->created('Application created');

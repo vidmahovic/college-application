@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Validators;
-use Validator as V;
 
 class ApplicationValidator extends Validator{
     protected $errors;
@@ -21,7 +20,7 @@ class ApplicationValidator extends Validator{
             'address.*.country_id' => '',
         ];
         
-        $validator = V::make($input, $rules);
+        $validator = ApplicationValidator::make($input, $rules);
         if($validator->fails()){
             $this->errors = $validator->messages();
             return false;
@@ -33,20 +32,20 @@ class ApplicationValidator extends Validator{
             $validator->errors()->add('country_id', 'Please specify a valid country!');
         }
 
-        if(! in_array($input['citizen_id'], Citizen::all()->pluck('id'))){
+        if(! in_array($input['citizen_id'], Citizen::all()->pluck('id'))){ // nationality_type_id
             $validator->errors()->add('citizen_id', 'Please specify your nationality!');
         }
 
-        if(! in_array($input['applications_cities_id'], City::all()->pluck('id'))){
-            $validator->errors()->add('applications_cities_id', 'Please specify a valid city!');
+        if(! in_array($input['permanent_applications_cities_id'], City::all()->pluck('id'))){
+            $validator->errors()->add('permanent_applications_cities_id', 'Please specify a valid city!');
+        }
+
+        if(! in_array($input['mailing_applications_cities_id'], City::all()->pluck('id'))){
+            $validator->errors()->add('mailing_applications_cities_id', 'Please specify a valid city!');
         }
 
         if(! in_array($input['district_id'], District::all()->pluck('id'))){
             $validator->errors()->add('district_id', 'Please specify a valid place of birth!');
-        }
-
-        if(! in_array($input['faculty_id')], Faculty::all()->pluck('id'))){
-            $validator->errors()->add('faculty_id', 'Please specify a valid faculty!');
         }
 
         if(! in_array($input['profession_id'], Profession::all()->pluck('id'))){

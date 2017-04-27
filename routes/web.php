@@ -29,8 +29,8 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-         //$api->get('test', function() { return FacultyProgram::all(); }); // test
-        $api->post('test', ApplicationController@create);
+        $api->get('test', function() { return FacultyProgram::all(); }); // test
+        $api->post('test', 'ApplicationController@create');
 
         // Authentication routes
         $api->post('login', 'AuthController@login');
