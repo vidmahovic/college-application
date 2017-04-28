@@ -24,9 +24,9 @@ class ApplicationController extends ApiController {
         $this->validator = $validator;
     }
 
-    public function create() { // shrani, vendar ne odda prijave
+    public function create(Request $request) { // shrani, vendar ne odda prijave
 
-        if(! $this->validator->validate($request->all())){            
+        if(! $this->validator->validate($request->all())){
             $errors = $this->validator->errors()->toArray(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
             return $this->response->error($errors, 400); 
         }
@@ -56,9 +56,10 @@ class ApplicationController extends ApiController {
         // create pivot tables programs -> min 1 wish, max 3 wishes
         // 1 wish required
 
-        $wish1 = in_array($request->input('faculty_p_1'), Faculty::all()->pluck('id'));
-        $wish2 = in_array($request->input('faculty_p_2'), Faculty::all()->pluck('id'));
-        $wish3 = in_array($request->input('faculty_p_3'), Faculty::all()->pluck('id'));
+        $faculties = Faculty::all()->pluck('id');
+        $wish1 = in_array($request->input('faculty_p_1'), $faculties);
+        $wish2 = in_array($request->input('faculty_p_2'), $faculties);
+        $wish3 = in_array($request->input('faculty_p_3'), $faculties);
 
         if($wish1 != null){
             $ap1 = ApplicationsPrograms::create([
