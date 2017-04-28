@@ -24,10 +24,6 @@ class Application extends Model
         return $this->belongsTo(Profession::class);
     }
 
-    public function nationality() {
-        return $this->belongsTo(NationalityType::class, 'nationality_type_id');
-    }
-
     public function interval(){
         return $this->belongsTo(ApplicationInterval::class, 'application_interval_id');
     }

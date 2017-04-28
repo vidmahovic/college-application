@@ -2,31 +2,38 @@
 
 namespace App\Validators;
 
+use App\Models\Country;
+use App\Models\District;
+use App\Models\ApplicationInterval;
+use Illuminate\Validation\Validator;
+
 class ApplicationValidator extends Validator{
     protected $errors;
 
     public function validate($input){
 
         $rules = [
+            'user_id' => 'required|exists:users,id',
+            'emso' => 'required|min:12|max:13',
             'gender' => 'required|in:male,female',
             'date_of_birth' => 'required|date|before:' . (string) Carbon::now()->subYears(14),
             'phone' => ['required', 'regex:/^\+(?:[0-9]●?){6,14}[0-9]$/'],
-            'permanent_address' => 'required|alphanum',
-            'mailing_address' => 'required|alphanum',
-            'permanent_applications_cities_id' => 'required|exists:cities,id',
-            'mailing_applications_cities_id' => 'required|exists:cities,id',
+
             'country_id' => 'required|exists:countries,id',
             'citizen_id' => 'required|exists:citizens,id',
             'district_id' => 'required|exists:districts,id',
             'middle_school_id' => 'required|exists:middle_schools,id',
             'profession_id' => 'required|exists:professions,id',
             'education_type_id' => 'required|exists:education_types,id',
-            'graduation_type_id' => 'required|exists:graduation_types,id'
+            'graduation_type_id' => 'required|exists:graduation_types,id',
+
+            'permanent_address' => 'required|alphanum',
+            'mailing_address' => 'required|alphanum',
+            'permanent_applications_cities_id' => 'required|exists:cities,id',
+            'mailing_applications_cities_id' => 'required|exists:cities,id'
         ];
 
         $validator = ApplicationValidator::make($input, $rules);
-
-        // application requirements validation
 
         $gender = $input['emso'];
         $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $input['country_id'];

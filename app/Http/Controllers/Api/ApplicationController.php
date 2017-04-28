@@ -8,6 +8,9 @@ use App\Models\Citizen;
 use App\Models\City;
 use App\Models\District;
 use App\Models\Application;
+use App\Models\ApplicationCity;
+use App\Models\ApplicationInterval;
+use App\Models\ApplicationsPrograms;
 use App\Models\GraduationType;
 use App\Models\EducationType;
 use App\Models\Country;
@@ -15,6 +18,7 @@ use App\Models\MiddleSchool;
 use App\Transformers\ApplicationTransformer;
 use Dingo\Api\Exception\ResourceException;
 use App\Validators\ApplicationValidator;
+use Illuminate\Http\Request;
 
 class ApplicationController extends ApiController {
 
@@ -32,10 +36,14 @@ class ApplicationController extends ApiController {
         }
 
         $application = Application::create(request(
-            ['emso', 'date_of_birth', 'user_id', 'profession_id', 'middle_school_id', 'education_type_id', 
-            'application_interval_id','country_id', 'citizen_id', 'applications_cities_id'
+            ['user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
+                'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
             ]
         ));
+
+        // status -> default -> created
+        $application->application_interval_id = ApplicationInterval::latest()->first();
+        $application->save();
 
         $aid = $application->id;
 
@@ -56,7 +64,9 @@ class ApplicationController extends ApiController {
         // create pivot tables programs -> min 1 wish, max 3 wishes
         // 1 wish required
 
-        $faculties = Faculty::all()->pluck('id');
+        // TODO
+
+        $faculties = Faculty::all()->pluck('id')->toArray();
         $wish1 = in_array($request->input('faculty_p_1'), $faculties);
         $wish2 = in_array($request->input('faculty_p_2'), $faculties);
         $wish3 = in_array($request->input('faculty_p_3'), $faculties);
@@ -80,7 +90,7 @@ class ApplicationController extends ApiController {
                 'choice_number' => 2]);
         }
 
-        if($wish2 != null){
+        if($wish3 != null){
             $ap1 = ApplicationsPrograms::create([
                 'application_id' => $aid,
                 'faculty_program_id' => $request->input('faculty_p_3'),
