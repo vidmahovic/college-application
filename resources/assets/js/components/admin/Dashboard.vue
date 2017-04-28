@@ -6,6 +6,7 @@
               <div class="panel-heading">Admin dashboard</div>
 
               <div class="panel-body">
+                <router-link to="/admin/registracija">Registracija zaposlenega</router-link>
                   Dashboard component2!!!
               </div>
 

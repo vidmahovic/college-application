@@ -21,7 +21,7 @@
       </div>
 
     </div>
-    <div class="container" style="width:90%">
+    <div class="container">
         <router-view></router-view>
     </div>
   </div>

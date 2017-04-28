@@ -4,6 +4,7 @@ import NotFoundView from './components/404.vue'
 
 import AdminView from './components/Admin.vue'
 import AdminDashboard from './components/admin/Dashboard.vue'
+import AdminRegistracija from './components/admin/Registracija.vue'
 
 import ReferentView from './components/Referent.vue'
 import ReferentDashboard from './components/referent/Dashboard.vue'
@@ -39,7 +40,13 @@ const routes = [
 				component: AdminDashboard,
 				name: 'AdminDashboard',
 				meta: {description: 'AdminDashboard'}
-      		}
+      },
+			{
+				path: '/admin/registracija',
+				component: AdminRegistracija,
+				name: 'AdminRegistracija',
+				meta: {desciption: 'AdminRegistracija'}
+			}
 		]
 	},
 	{
