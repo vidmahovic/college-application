@@ -64,39 +64,21 @@ class ApplicationController extends ApiController {
         // create pivot tables programs -> min 1 wish, max 3 wishes
         // 1 wish required
 
-        // TODO
-
         $faculties = Faculty::all()->pluck('id')->toArray();
-        $wish1 = in_array($request->input('faculty_p_1'), $faculties);
-        $wish2 = in_array($request->input('faculty_p_2'), $faculties);
-        $wish3 = in_array($request->input('faculty_p_3'), $faculties);
+        $wishes = ($request->input('wishes'))->toJson;
 
-        if($wish1 != null){
+        /*
+             [{ faculty_id, is_double_degre, programs_id: [p1_id,p2_id]}, {...}]
+        */
+
+        // TODO
+        /*
             $ap1 = ApplicationsPrograms::create([
                 'application_id' => $aid,
                 'faculty_program_id' => $request->input('faculty_p_1'),
                 'status' => false,
                 'choice_number' => 1]);
-        }
-        else {
-            return $this->response->error("You must specify atleast one wish!", 400); 
-        }
-
-        if($wish2 != null){
-            $ap1 = ApplicationsPrograms::create([
-                'application_id' => $aid,
-                'faculty_program_id' => $request->input('faculty_p_2'),
-                'status' => false,
-                'choice_number' => 2]);
-        }
-
-        if($wish3 != null){
-            $ap1 = ApplicationsPrograms::create([
-                'application_id' => $aid,
-                'faculty_program_id' => $request->input('faculty_p_3'),
-                'status' => false,
-                'choice_number' => 3]);
-        }
+        */
 
         return $this->response->created('Application created');
     }

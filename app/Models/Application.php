@@ -67,24 +67,26 @@ class Application extends Model
         $app = new \StdClass;
 
         $app->applicant = $applicant;
+        $app->emso = null;
+        $app->gender = null;
         $app->date_of_birth = null;
-        // TODO: Add other attributes to stdClass and return the object.
+        $app->phone = null;
+
+        $app->country_id = null;
+        $app->citizen_id = null;
+        $app->district_id = null;
+        $app->middle_school_id = null;
+        $app->profession_id = null;
+        $app->education_type_id = null;
+        $app->graduation_type_id = null;
+
+        $app->permanent_address = null;
+        $app->mailing_address = null;
+        $app->permanent_applications_cities_id = null;
+        $app->mailing_applications_cities_id = null;
+
+        $app->wishes = null;
 
         return $app;
-
-//        $application = new static;
-//        $application->status = 'created';
-//        $application->user_id = $user_id;
-//        $application->education_type_id = EducationType::orderBy('name')->first()->id;
-//        $application->graduation_type_id = GraduationType::orderBy('name')->first()->id;
-//        $application->application_interval_id = ApplicationInterval::current()->first()->id;
-//        $application->nationality_type_id = NationalityType::orderBy('type')->first()->id;
-//        $application->profession_id = Profession::orderBy('name')->first()->id;
-//        $application->middle_school_id = MiddleSchool::orderBy('name')->first()->id;
-//        $application->citizen_id = Citizen::orderBy('name')->first()->id;
-//
-//        $application->save();
-//
-//        return $application;
     }
 }
