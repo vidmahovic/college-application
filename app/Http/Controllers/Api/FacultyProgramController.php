@@ -35,6 +35,39 @@ class FacultyProgramController extends ApiController
         return $this->response->collection($programs, new FacultyProgramTransformer)->addMeta('count', $programs->count());
     }
 
+    public function create(Request $request){
+        if(! $this->validator->validate($request->all())){
+            $errors = $this->validator->errors()->toArray();
+            return $this->response->error($errors, 400);
+        }
+
+        $faculty_program = FacultyProgram::create($request->all());
+
+        return $this->response->created('Faculty program created');
+    }
+
+    public function update($id, Request $request){
+
+        $max_accepted = $request->input('max_accepted');
+        $max_accepted_foreign = $request->input('max_accepted_foreign');
+
+        if(intval($max_accepted) < 1 && intval($max_accepted_foreign) < 1){
+            return $this->response->error("Enter a valid number for max accepted!", 400);
+        }
+
+        $faculty_program = FacultyProgram::findOrFail($id);
+
+        $faculty_program->max_accepted = $max_accepted;
+        $faculty_program->max_accepted_foreign = $max_accepted_foreign;
+        $faculty_program->save();
+
+        return $this->response->created('Faculty program updated');
+    }
+
+    public function destroy($id){
+        FacultyProgram::destroy($id);
+    }
+
     public function show($id)
     {
         $program = FacultyProgram::find($id);

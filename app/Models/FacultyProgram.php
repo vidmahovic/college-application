@@ -9,7 +9,7 @@ class FacultyProgram extends Model // PROGRAM
 
     protected $table = 'faculty_programs';
 
-    protected $fillable = ['id', 'name', 'faculty_id', 'allow_double_degree', 'is_regular', 'type', 'min_points', 'faculty.name'];
+    protected $fillable = ['id', 'name', 'faculty_id', 'allow_double_degree', 'is_regular', 'type', 'min_points', 'max_accepted', 'max_accepted_foreign', 'faculty.name'];
 
     protected $casts = [
         'id' => 'string',
@@ -18,7 +18,9 @@ class FacultyProgram extends Model // PROGRAM
         'faculty_id' => 'integer',
         'allow_double_degree' => 'boolean', //0,1 - enopredmetni, dvopredmetni
         'is_regular' => 'boolean', // 0,1 - izredni, redni
-        'min_points' => 'integer'
+        'min_points' => 'integer',
+        'max_accepted' => 'integer',
+        'max_accepted_foreign' => 'integer'
     ];
 
     public function faculty(){
@@ -59,6 +61,16 @@ class FacultyProgram extends Model // PROGRAM
     public function getCountEnrolledAttribute()
     {
         return $this->applications()->filed()->count();
+    }
+
+    public function getCountEnrolledForeignAttribute()
+    {
+        return 0;
+    }
+
+    public function getCountAcceptedForeignAttribute()
+    {
+        return 0;
     }
 
     public function getCountAcceptedAttribute()
