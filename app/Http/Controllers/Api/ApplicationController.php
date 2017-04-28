@@ -28,8 +28,8 @@ class ApplicationController extends ApiController {
         $this->validator = $validator;
     }
 
-    public function create(Request $request) { // shrani, vendar ne odda prijave
-
+    public function create(Request $request) // shrani, vendar ne odda prijave
+    {
         if(! $this->validator->validate($request->all())){
             $errors = $this->validator->errors()->toArray(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
             return $this->response->error($errors, 400); 
@@ -62,23 +62,36 @@ class ApplicationController extends ApiController {
                 'address_type' => 'mailing']);
 
         // create pivot tables programs -> min 1 wish, max 3 wishes
-        // 1 wish required
 
         $faculties = Faculty::all()->pluck('id')->toArray();
         $wishes = ($request->input('wishes'))->toJson;
 
-        /*
-             [{ faculty_id, is_double_degre, programs_id: [p1_id,p2_id]}, {...}]
-        */
+        // [{faculty_id, is_double_degree, programs_id: [p1_id,p2_id]}, {faculty_id, is_double_degree, programs_id: [p1_id]}]
 
-        // TODO
-        /*
-            $ap1 = ApplicationsPrograms::create([
-                'application_id' => $aid,
-                'faculty_program_id' => $request->input('faculty_p_1'),
-                'status' => false,
-                'choice_number' => 1]);
-        */
+        if(! $wishes){
+            return $this->response->error("You must insert atleast one wish!", 400);
+        }
+        else{
+            for($i = 1; $i <= 3; $i++){
+                $wish = $wishes[$i];
+                if($wish["is_double_degree"] == false && in_array($wish["programs_id"],$faculties)){
+                    $ap = ApplicationsPrograms::create([
+                        'application_id' => $aid,
+                        'faculty_program_id' => $wish["programs_id"],
+                        'status' => false,
+                        'choice_number' => $i]);
+                }
+                else if($wish["is_double_degree"] == true && in_array($wish["programs_id"][0],$faculties) && in_array($wish["programs_id"][1],$faculties)){
+                    for($j = 0; $j <= 1; $j++){
+                        $ap = ApplicationsPrograms::create([
+                            'application_id' => $aid,
+                            'faculty_program_id' => $wish["programs_id"][$j],
+                            'status' => false,
+                            'choice_number' => $i]);
+                    }
+                }
+            }
+        }
 
         return $this->response->created('Application created');
     }
@@ -141,5 +154,22 @@ class ApplicationController extends ApiController {
         $application->delete();
 
         return $this->response->noContent();
+    }
+
+    public function update($id)
+    {
+        $user = $this->request->user();
+
+        if ($user->cannot('view-active', Application::class)) {
+            return $this->response->errorUnauthorized();
+        }
+
+        $application = Application::findOrFail($id);
+
+        if($application == null) {
+            return $this->response->errorNotFound();
+        }
+
+        // TODO: update
     }
 }

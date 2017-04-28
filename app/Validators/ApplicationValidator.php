@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\District;
 use App\Models\ApplicationInterval;
 use Illuminate\Validation\Validator;
+use Carbon\Carbon;
 
 class ApplicationValidator extends Validator{
     protected $errors;
@@ -94,10 +95,10 @@ class ApplicationValidator extends Validator{
         }
          // zaporedna številka; moski imajo med 000-499, zenske 500-999
         $gnumber = intval(substr($emso,10,13));
-        if(!($gender = 'male' && $gnumber <= 499)){
+        if(!($gender == 'male' && $gnumber <= 499)){
             return false;
         }
-        if(!($gender = 'female' && $gnumber >= 500 && $gnumber <= 999)){
+        if(!($gender == 'female' && $gnumber >= 500 && $gnumber <= 999)){
             return false;
         }
         $factors = [];
