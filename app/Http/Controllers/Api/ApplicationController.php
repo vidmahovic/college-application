@@ -18,24 +18,25 @@ use App\Models\MiddleSchool;
 use App\Transformers\ApplicationTransformer;
 use Dingo\Api\Exception\ResourceException;
 use App\Validators\ApplicationValidator;
-use Illuminate\Http\Request;
+use Dingo\Api\Http\Request;
 
 class ApplicationController extends ApiController {
 
     protected $validator;
 
-    public function __construct(ApplicationValidator $validator){
+    public function __construct(Request $request, ApplicationValidator $validator){
         $this->validator = $validator;
+        parent::__construct($request);
     }
 
-    public function create(Request $request) // shrani, vendar ne odda prijave
+    public function create() // shrani, vendar ne odda prijave
     {
-        if(! $this->validator->validate($request->all())){
+        if(! $this->validator->validate($this->request->all())){
             $errors = $this->validator->errors()->toArray(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
             return $this->response->error($errors, 400); 
         }
 
-        $application = Application::create(request(
+        $application = Application::create($this->request(
             ['user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
                 'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
             ]
@@ -51,20 +52,20 @@ class ApplicationController extends ApiController {
 
         $permanent_address = ApplicationCity::create([
                 'application_id' => $aid,
-                'city_id' => $request->input('permanent_applications_cities_id'),
-                'address' => $request->input('permanent_address'),
+                'city_id' => $this->request->all()->input('permanent_applications_cities_id'),
+                'address' => $this->request->all()->input('permanent_address'),
                 'address_type' => 'permanent']);
 
         $mailing_address = ApplicationCity::create([
                 'application_id' => $aid,
-                'city_id' => $request->input('mailing_applications_cities_id'),
-                'address' => $request->input('mailing_address'),
+                'city_id' => $this->request->all()->input('mailing_applications_cities_id'),
+                'address' => $this->request->all()->input('mailing_address'),
                 'address_type' => 'mailing']);
 
         // create pivot tables programs -> min 1 wish, max 3 wishes
 
         $faculties = Faculty::all()->pluck('id')->toArray();
-        $wishes = ($request->input('wishes'))->toJson;
+        $wishes = ($this->request->all()->input('wishes'))->toJson;
 
         // [{faculty_id, is_double_degree, programs_id: [p1_id,p2_id]}, {faculty_id, is_double_degree, programs_id: [p1_id]}]
 
