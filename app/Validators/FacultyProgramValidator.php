@@ -2,6 +2,8 @@
 
 namespace App\Validators;
 
+use Illuminate\Validation\Validator;
+
 class FacultyProgramValidator extends Validator{
     protected $errors;
 
@@ -10,9 +12,10 @@ class FacultyProgramValidator extends Validator{
         $rules = [
             'id' => 'required|alphanum|unique:faculty_programs,id',
             'name' => 'required',
-            'faculty_id' => 'required|integer',
+            'type' => 'required|min:0|max:2',
+            'faculty_id' => 'required|exists:faculty_programs,id',
             'allow_double_degree' => 'required|boolean',
-            'type' => 'required|exists:faculty_programs,id',
+            'is_regular' => 'required|boolean',
             'min_points' => 'required|integer|min:0|max:100',
             'max_accepted' => 'required|integer',
             'max_accepted_foreign' => 'required|integer'

@@ -8,15 +8,18 @@ use CollegeApplication\Search\FacultyProgramSearch\FacultyProgramSearch;
 use Dingo\Api\Exception\ResourceException;
 use Dingo\Api\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Validators\ApplicationValidator;
 
 class FacultyProgramController extends ApiController
 {
 
     private $search;
+    protected $validator;
 
-    public function __construct(\Dingo\Api\Http\Request $request, FacultyProgramSearch $search)
+    public function __construct(\Dingo\Api\Http\Request $request, FacultyProgramSearch $search, ApplicationValidator $validator)
     {
         $this->search = $search;
+        $this->validator = $validator;
         parent::__construct($request);
     }
 
@@ -35,21 +38,21 @@ class FacultyProgramController extends ApiController
         return $this->response->collection($programs, new FacultyProgramTransformer)->addMeta('count', $programs->count());
     }
 
-    public function create(Request $request){
-        if(! $this->validator->validate($request->all())){
+    public function create(){
+        if(! $this->validator->validate($this->request->all())){
             $errors = $this->validator->errors()->toArray();
             return $this->response->error($errors, 400);
         }
 
-        $faculty_program = FacultyProgram::create($request->all());
+        $faculty_program = FacultyProgram::create($this->request->all());
 
         return $this->response->created('Faculty program created');
     }
 
-    public function update($id, Request $request){
+    public function update($id){
 
-        $max_accepted = $request->input('max_accepted');
-        $max_accepted_foreign = $request->input('max_accepted_foreign');
+        $max_accepted = $this->request->input('max_accepted');
+        $max_accepted_foreign = $this->request->input('max_accepted_foreign');
 
         if(intval($max_accepted) < 1 && intval($max_accepted_foreign) < 1){
             return $this->response->error("Enter a valid number for max accepted!", 400);
