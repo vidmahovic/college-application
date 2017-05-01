@@ -15,7 +15,7 @@ class FacultyProgramValidator{
             'id' => 'required|alphanum|unique:faculty_programs,id',
             'name' => 'required',
             'type' => 'required|min:0|max:2',
-            'faculty_id' => 'required|exists:faculty_programs,id',
+            'faculty_id' => 'required|exists:faculties,id',
             'allow_double_degree' => 'required|boolean',
             'is_regular' => 'required|boolean',
             'min_points' => 'required|integer|min:0|max:100',

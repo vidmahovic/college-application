@@ -29,7 +29,8 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-        $api->get('all', function() { return FacultyProgram::all(); }); // test
+        // tests, without auth
+        $api->get('all', function() { return FacultyProgram::all(); });
         $api->get('find', function() { return FacultyProgram::find("ZE10"); });
         $api->post('test', 'FacultyProgramController@create');
 
