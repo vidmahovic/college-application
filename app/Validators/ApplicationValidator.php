@@ -11,6 +11,9 @@ class ApplicationValidator{
 
     protected $errors;
     protected $input;
+    protected $gender;
+    protected $isFromSlovenia;
+    protected $isBornInSlovenia;
 
     public function validate($input){
 
@@ -21,7 +24,7 @@ class ApplicationValidator{
             'emso' => 'required|min:12|max:13',
             'gender' => 'required|in:male,female',
             'date_of_birth' => 'required|date|before:' . (string) Carbon::now()->subYears(14),
-            'phone' => ['required', 'regex:/^\+(?:[0-9]●?){6,14}[0-9]$/'],
+            'phone' => ['required', 'regex:/^[0-9]{9}$/'],
 
             'country_id' => 'required|exists:countries,id',
             'citizen_id' => 'required|exists:citizens,id',
@@ -31,8 +34,8 @@ class ApplicationValidator{
             'education_type_id' => 'required|exists:education_types,id',
             'graduation_type_id' => 'required|exists:graduation_types,id',
 
-            'permanent_address' => 'required|alphanum',
-            'mailing_address' => 'required|alphanum',
+            'permanent_address' => 'required|string',
+            'mailing_address' => 'required|string',
             'permanent_applications_cities_id' => 'required|exists:cities,id',
             'mailing_applications_cities_id' => 'required|exists:cities,id'
         ];
@@ -47,23 +50,23 @@ class ApplicationValidator{
             'date' =>'This field must be of date format.',
             'before' =>'This field must be of date format and date before future.',
             'regex' =>'This field must be a valid phone number.',
-            'alphanum' =>'This field must be an alphanumeric value.'
+            'string' =>'This field must be string value.'
         ];
 
         $validator = app('validator')->make($input, $rules, $messages);
 
-        $gender = $this->input['emso'];
-        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $this->input['country_id'];
-        $isBornInSlovenia = District::where('name','TUJINA')->pluck('id') != $this->input['district_id'];
+        $this->gender = $this->input['emso'];
+        $this->isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $this->input['country_id'];
+        $this->isBornInSlovenia = District::where('name', 'TUJINA')->pluck('id') == $this->input['district_id'];
 
-        $validator->after(function($validator, $gender, $isFromSlovenia, $isBornInSlovenia)
+        $validator->after(function($validator)
         {
-            if(!($isFromSlovenia && $isBornInSlovenia)){
+            if(!($this->isFromSlovenia && !$this->isBornInSlovenia)){
                 $validator->errors()->add('country_id', 'Please specify your nationality!');
             }
 
-            if($isFromSlovenia){
-                if(!validateEMSO($this->input['emso'], $isFromSlovenia, $gender)){
+            if($this->isFromSlovenia){
+                if(!validateEMSO($this->input['emso'], $this->isFromSlovenia, $this->gender)){
                     $validator->errors()->add('emso', 'Please enter a valid EMSO!');
                 }
             }
@@ -74,11 +77,11 @@ class ApplicationValidator{
                 $this->input['emso'] = $generated;
             }
 
-            $interval = ApplicationInterval::latest()->first();
-            $start_date = $interval->start_at->format('Y-m-d');
-            $end_date = $interval->ends_at->format('Y-m-d');
+            $interval = ApplicationInterval::all()->first();
+            $start_date = strtotime($interval->starts_at);
+            $end_date = strtotime($interval->ends_at);
 
-            $curr_date = date('Y-m-d');
+            $curr_date = strtotime( date('Y-m-d'));
             if(!($curr_date >= $start_date && $curr_date <= $end_date)){
                 $validator->errors()->add('user_id', 'Application interval has passed!');
             }

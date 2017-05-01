@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\FacultyProgram;
+use App\Models\Application;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,9 +29,8 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-        $api->get('all', function() { return FacultyProgram::all(); }); // test
-        $api->get('find', function() { return FacultyProgram::find("ZE10"); });
-        $api->post('test', 'ApplicationController@create');
+        $api->get('test_all', function() { return Application::all(); }); // test
+        $api->post('test_create', 'ApplicationController@create');
 
         // Authentication routes
         $api->post('login', 'AuthController@login');
