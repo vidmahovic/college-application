@@ -32,8 +32,8 @@ class ApplicationController extends ApiController {
     public function create() // shrani, vendar ne odda prijave
     {
         if(! $this->validator->validate($this->request->all())){
-            $errors = $this->validator->errors()->toArray(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
-            return $this->response->error($errors, 400); 
+            $errors = $this->validator->errors(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
+            return $this->response->errorBadRequest($errors);
         }
 
         $application = Application::create($this->request(
@@ -52,25 +52,25 @@ class ApplicationController extends ApiController {
 
         $permanent_address = ApplicationCity::create([
                 'application_id' => $aid,
-                'city_id' => $this->request->all()->input('permanent_applications_cities_id'),
-                'address' => $this->request->all()->input('permanent_address'),
+                'city_id' => $this->request->input('permanent_applications_cities_id'),
+                'address' => $this->request->input('permanent_address'),
                 'address_type' => 'permanent']);
 
         $mailing_address = ApplicationCity::create([
                 'application_id' => $aid,
-                'city_id' => $this->request->all()->input('mailing_applications_cities_id'),
-                'address' => $this->request->all()->input('mailing_address'),
+                'city_id' => $this->request->input('mailing_applications_cities_id'),
+                'address' => $this->request->input('mailing_address'),
                 'address_type' => 'mailing']);
 
         // create pivot tables programs -> min 1 wish, max 3 wishes
 
         $faculties = Faculty::all()->pluck('id')->toArray();
-        $wishes = ($this->request->all()->input('wishes'))->toJson;
+        $wishes = ($this->request->input('wishes'))->toJson;
 
         // [{faculty_id, is_double_degree, programs_id: [p1_id,p2_id]}, {faculty_id, is_double_degree, programs_id: [p1_id]}]
 
         if(! $wishes){
-            return $this->response->error("You must insert atleast one wish!", 400);
+            return $this->response->errorBadRequest("You must insert atleast one wish!");
         }
         else{
             for($i = 1; $i <= 3; $i++){
