@@ -36,6 +36,12 @@ class ApplicationController extends ApiController {
             return $this->response->errorBadRequest($errors);
         }
 
+        $wishes = ($this->request->input('wishes'))->toJson;
+
+        if(! $wishes){
+            return $this->response->errorBadRequest("You must insert atleast one wish!");
+        }
+
         $application = Application::create($this->request(
             ['user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
                 'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
@@ -65,31 +71,25 @@ class ApplicationController extends ApiController {
         // create pivot tables programs -> min 1 wish, max 3 wishes
 
         $faculties = Faculty::all()->pluck('id')->toArray();
-        $wishes = ($this->request->input('wishes'))->toJson;
 
         // [{faculty_id, is_double_degree, programs_id: [p1_id,p2_id]}, {faculty_id, is_double_degree, programs_id: [p1_id]}]
 
-        if(! $wishes){
-            return $this->response->errorBadRequest("You must insert atleast one wish!");
-        }
-        else{
-            for($i = 1; $i <= 3; $i++){
-                $wish = $wishes[$i];
-                if($wish["is_double_degree"] == false && in_array($wish["programs_id"],$faculties)){
+        for($i = 1; $i <= 3; $i++){
+            $wish = $wishes[$i];
+            if($wish["is_double_degree"] == false && in_array($wish["programs_id"],$faculties)){
+                $ap = ApplicationsPrograms::create([
+                    'application_id' => $aid,
+                    'faculty_program_id' => $wish["programs_id"],
+                    'status' => false,
+                    'choice_number' => $i]);
+            }
+            else if($wish["is_double_degree"] == true && in_array($wish["programs_id"][0],$faculties) && in_array($wish["programs_id"][1],$faculties)){
+                for($j = 0; $j <= 1; $j++){
                     $ap = ApplicationsPrograms::create([
                         'application_id' => $aid,
-                        'faculty_program_id' => $wish["programs_id"],
+                        'faculty_program_id' => $wish["programs_id"][$j],
                         'status' => false,
                         'choice_number' => $i]);
-                }
-                else if($wish["is_double_degree"] == true && in_array($wish["programs_id"][0],$faculties) && in_array($wish["programs_id"][1],$faculties)){
-                    for($j = 0; $j <= 1; $j++){
-                        $ap = ApplicationsPrograms::create([
-                            'application_id' => $aid,
-                            'faculty_program_id' => $wish["programs_id"][$j],
-                            'status' => false,
-                            'choice_number' => $i]);
-                    }
                 }
             }
         }

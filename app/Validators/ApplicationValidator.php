@@ -5,13 +5,16 @@ namespace App\Validators;
 use App\Models\Country;
 use App\Models\District;
 use App\Models\ApplicationInterval;
-use Illuminate\Validation\Validator;
 use Carbon\Carbon;
 
-class ApplicationValidator extends Validator{
+class ApplicationValidator{
+
     protected $errors;
+    protected $input;
 
     public function validate($input){
+
+        $this->input = $input;
 
         $rules = [
             'user_id' => 'required|exists:users,id',
@@ -34,36 +37,53 @@ class ApplicationValidator extends Validator{
             'mailing_applications_cities_id' => 'required|exists:cities,id'
         ];
 
-        $validator = ApplicationValidator::make($input, $rules);
+        $messages = [
+            'required' =>'This field is required.',
+            'integer' =>'This field must be an integer.',
+            'exists' =>'This field must exist in database.',
+            'min' =>'This field must be of certain numeric value.',
+            'max' =>'This field must be of certain numeric value.',
+            'in' =>'This field must be male or female.',
+            'date' =>'This field must be of date format.',
+            'before' =>'This field must be of date format and date before future.',
+            'regex' =>'This field must be a valid phone number.',
+            'alphanum' =>'This field must be an alphanumeric value.'
+        ];
 
-        $gender = $input['emso'];
-        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $input['country_id'];
-        $isBornInSLovenia = District::where('name','TUJINA')->pluck('id') != $input['district_id'];
+        $validator = app('validator')->make($input, $rules, $messages);
 
-        if(!($isFromSlovenia && $isBornInSLovenia)){
-            $validator->errors()->add('country_id', 'Please specify your nationality!');
-        }
+        $gender = $this->input['emso'];
+        $isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $this->input['country_id'];
+        $isBornInSlovenia = District::where('name','TUJINA')->pluck('id') != $this->input['district_id'];
 
-        if($isFromSlovenia){
-            if(!validateEMSO($input['emso'], $isFromSlovenia, $gender)){
-                $validator->errors()->add('emso', 'Please enter a valid EMSO!');
+        $validator->after(function($validator, $gender, $isFromSlovenia, $isBornInSlovenia)
+        {
+            if(!($isFromSlovenia && $isBornInSlovenia)){
+                $validator->errors()->add('country_id', 'Please specify your nationality!');
+            }
+
+            if($isFromSlovenia){
+                if(!validateEMSO($this->input['emso'], $isFromSlovenia, $gender)){
+                    $validator->errors()->add('emso', 'Please enter a valid EMSO!');
+                }
             }
             else {
                 // generate emso
                 $digits = 12;
                 $generated = rand(pow(10, $digits-1), pow(10, $digits)-1);
-                $input['emso'] = $generated;
+                $this->input['emso'] = $generated;
             }
-        }
 
-        $interval = ApplicationInterval::latest()->first();
-        $start_date = $interval->start_at->format('Y-m-d');
-        $end_date = $interval->ends_at->format('Y-m-d');
-       
-        $curr_date = date('Y-m-d');
-        if(!($curr_date >= $start_date && $curr_date <= $end_date)){
-            $validator->errors()->add('application_interval_id', 'Application interval has passed!');
-        }
+            $interval = ApplicationInterval::latest()->first();
+            $start_date = $interval->start_at->format('Y-m-d');
+            $end_date = $interval->ends_at->format('Y-m-d');
+
+            $curr_date = date('Y-m-d');
+            if(!($curr_date >= $start_date && $curr_date <= $end_date)){
+                $validator->errors()->add('user_id', 'Application interval has passed!');
+            }
+
+        });
 
         if($validator->fails()){
             $this->errors = $validator->messages();
