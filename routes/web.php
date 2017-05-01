@@ -30,9 +30,10 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
         // tests, without auth
-        $api->get('all', function() { return FacultyProgram::all(); });
-        $api->get('find', function() { return FacultyProgram::find("ZE10"); });
-        $api->post('test', 'FacultyProgramController@create');
+        $api->get('test_all', function() { return FacultyProgram::all(); });
+        $api->post('test_create', 'FacultyProgramController@create');
+        $api->post('test_update/{id}', 'FacultyProgramController@update');
+        $api->delete('test_delete/{id}', 'FacultyProgramController@destroy');
 
         // Authentication routes
         $api->post('login', 'AuthController@login');

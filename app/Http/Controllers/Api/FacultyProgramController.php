@@ -46,7 +46,7 @@ class FacultyProgramController extends ApiController
 
         $faculty_program = FacultyProgram::create($this->request->all());
 
-        return $this->response->created('Faculty program created');
+        return $this->response->created();
     }
 
     public function update($id){
@@ -64,11 +64,12 @@ class FacultyProgramController extends ApiController
         $faculty_program->max_accepted_foreign = $max_accepted_foreign;
         $faculty_program->save();
 
-        return $this->response->created('Faculty program updated');
+        return $this->response->created();
     }
 
     public function destroy($id){
         FacultyProgram::destroy($id);
+        return $this->response->noContent();
     }
 
     public function show($id)
