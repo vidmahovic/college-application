@@ -35,17 +35,15 @@ class ApplicationController extends ApiController {
             $errors = $this->validator->errors(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
             return $this->response->errorBadRequest($errors);
         }
-
-        $wishes = ($this->request->input('wishes'))->toJson;
-
-        if(! $wishes){
+        /*
+        if(! $this->request->input('wishes')){
             return $this->response->errorBadRequest("You must insert atleast one wish!");
         }
+        */
 
-        $application = Application::create($this->request(
-            ['user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
+        $application = Application::create($this->request->only(
+            'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
                 'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
-            ]
         ));
 
         // status -> default -> created
@@ -71,6 +69,7 @@ class ApplicationController extends ApiController {
         // create pivot tables programs -> min 1 wish, max 3 wishes
 
         $faculties = Faculty::all()->pluck('id')->toArray();
+        $wishes = ($this->request->input('wishes'))->toJson;
 
         // [{faculty_id, is_double_degree, programs_id: [p1_id,p2_id]}, {faculty_id, is_double_degree, programs_id: [p1_id]}]
 

@@ -13,7 +13,7 @@ class ApplicationValidator{
     protected $input;
     protected $gender;
     protected $isFromSlovenia;
-    protected $isBornInSlovenia;
+    protected $isBornForeign;
 
     public function validate($input){
 
@@ -55,13 +55,13 @@ class ApplicationValidator{
 
         $validator = app('validator')->make($input, $rules, $messages);
 
-        $this->gender = $this->input['emso'];
+        $this->gender = $this->input['gender'];
         $this->isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $this->input['country_id'];
-        $this->isBornInSlovenia = District::where('name', 'TUJINA')->pluck('id') == $this->input['district_id'];
+        $this->isBornForeign = District::where('name', 'TUJINA')->pluck('id') == $this->input['district_id'];
 
         $validator->after(function($validator)
         {
-            if(!($this->isFromSlovenia && !$this->isBornInSlovenia)){
+            if($this->isFromSlovenia && $this->isBornForeign){
                 $validator->errors()->add('country_id', 'Please specify your nationality!');
             }
 
