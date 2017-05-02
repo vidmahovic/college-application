@@ -62,19 +62,13 @@ class ApplicationValidator{
         $validator->after(function($validator)
         {
             if($this->isFromSlovenia && $this->isBornForeign){
-                $validator->errors()->add('country_id', 'Please specify your nationality!');
+                $validator->errors()->add('country_id', 'Please specify your origin!');
             }
 
             if($this->isFromSlovenia){
                 if(!validateEMSO($this->input['emso'], $this->isFromSlovenia, $this->gender)){
                     $validator->errors()->add('emso', 'Please enter a valid EMSO!');
                 }
-            }
-            else {
-                // generate emso
-                $digits = 12;
-                $generated = rand(pow(10, $digits-1), pow(10, $digits)-1);
-                $this->input['emso'] = $generated;
             }
 
             $interval = ApplicationInterval::all()->first();
@@ -85,7 +79,6 @@ class ApplicationValidator{
             if(!($curr_date >= $start_date && $curr_date <= $end_date)){
                 $validator->errors()->add('user_id', 'Application interval has passed!');
             }
-
         });
 
         if($validator->fails()){

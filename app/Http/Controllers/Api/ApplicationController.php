@@ -35,11 +35,10 @@ class ApplicationController extends ApiController {
             $errors = $this->validator->errors(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
             return $this->response->errorBadRequest($errors);
         }
-        /*
+
         if(! $this->request->input('wishes')){
             return $this->response->errorBadRequest("You must insert atleast one wish!");
         }
-        */
 
         $application = Application::create($this->request->only(
             'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
