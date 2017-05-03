@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Application;
+use App\Models\Faculty;
 use App\Models\Role;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -54,6 +55,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function applications() {
         return $this->hasMany(Application::class);
+    }
+
+    public function faculty() {
+        return $this->belongsTo(Faculty::class);
     }
 
     public function isReferent() {
