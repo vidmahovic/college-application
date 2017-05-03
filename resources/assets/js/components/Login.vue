@@ -6,10 +6,10 @@
           <div class="panel-heading">
             <div class="row">
               <div class="col-xs-6">
-                <a href="" class="active" id="login-form-link">Prijava</a>
+                <a class="active" id="login-form-link">Prijava</a>
               </div>
               <div class="col-xs-6">
-                <a href="" id="register-form-link">Registracija</a>
+                <a id="register-form-link">Registracija</a>
               </div>
             </div>
             <hr>
@@ -17,7 +17,7 @@
           <div class="panel-body">
             <div class="row">
               <div class="col-lg-12">
-                <form id="login-form" role="form" style="display: block;"  @submit.prevent="login">
+                <form id="login-form" role="form" style="display: block;"  @submit.prevent="checkCreds">
                   <div class="form-group">
                     <input class="form-control" name="username" placeholder="Username" type="text" v-model="login.username" tabindex="1">
                   </div>
@@ -50,7 +50,7 @@
                   </div>
                   -->
                 </form>
-                <form id="register-form" role="form" style="display: none;" @submit.prevent="register">
+                <form id="register-form" role="form" style="display: none;" @submit.prevent="doRegister">
                   <div class="form-group">
                     <input type="text" v-model="reg.username" class="form-control" name="username" placeholder="Username"  tabindex="1">
                     <!--<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">-->
@@ -105,7 +105,7 @@ module.exports = {
     }
   },
   methods: {
-    login: function(apl) {
+    checkCreds: function() {
         this.$http.post('api/login', {email: this.login.username, password: this.login.password})
           .then(function(res){
             let user = res.body.data
@@ -127,7 +127,7 @@ module.exports = {
             }
           });
       },
-      register: function() {
+      doRegister: function() {
         console.log(this.reg);
       }
     },
@@ -159,7 +159,11 @@ $(function() {
 });
 </script>
 <style>
-  .panel-login {
+
+#login-form-link, #register-form-link{
+  cursor: pointer;
+};
+.panel-login {
   border-color: #ccc;
   -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
