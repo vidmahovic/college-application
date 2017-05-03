@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Faculty;
 use App\Validators\AdminValidator;
 use Dingo\Api\Http\Request;
 use App\User;
 use Carbon\Carbon;
+use App\Transformers\FacultyTransformer;
 
 class AdminController extends ApiController
 {
@@ -17,8 +19,9 @@ class AdminController extends ApiController
         parent::__construct($request);
     }
 
-    public function index(){
-        return User::all()->where('role_id','!=',2);
+    public function faculties(){
+        $faculties = Faculty::all();
+        return $this->response->collection($faculties, new FacultyTransformer) ;
     }
 
     public function create(){

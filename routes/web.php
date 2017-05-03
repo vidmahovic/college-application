@@ -30,13 +30,6 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
         // tests, without auth
-        $api->get('test_all', function() { return FacultyProgram::all(); });
-        $api->post('test_create', 'FacultyProgramController@create');
-        $api->post('test_update/{id}', 'FacultyProgramController@update');
-        $api->delete('test_delete/{id}', 'FacultyProgramController@destroy');
-        
-        $api->get('staff_all', 'AdminController@index');
-        $api->post('staff_create', 'AdminController@create');
 
         // Authentication routes
         $api->post('login', 'AuthController@login');
@@ -53,7 +46,10 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             // PROGRAM
             $api->get('programs/paginate', 'FacultyProgramController@paginate');
             $api->get('programs','FacultyProgramController@index');
-            //$api->get('programs/{id}', 'FacultyProgramController@show');
+            $api->get('programs/{id}', 'FacultyProgramController@show');
+            $api->post('programs/create', 'FacultyProgramController@create');
+            $api->post('programs/update/{id}', 'FacultyProgramController@update');
+            $api->delete('programs/{id}', 'FacultyProgramController@destroy');
 
             // APPLICATION
             $api->get('applications/active', 'ApplicationController@active');
@@ -62,6 +58,10 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             $api->post('applications','ApplicationController@create');
             $api->delete('applications/{application}', 'ApplicationController@archive');
             $api->put('applications/{id}', 'ApplicationController@update');
+
+            //STAFF
+            $api->get('faculties', 'AdminController@faculties');
+            $api->post('create', 'AdminController@create');
         });
     });
 });
