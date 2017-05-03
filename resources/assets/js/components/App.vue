@@ -158,18 +158,17 @@
       $(this.$refs.vuemodal).on("hidden.bs.modal", this.doSomethingOnHidden)
 
       let token = window.localStorage.getItem('token');
-      console.log(JSON.stringify(window.localStorage.getItem('user')))
-      // console.log(window.localStorage.getItem('user'));
-      if( token == null) {
-        console.log("token is null", );
+      let user = JSON.parse(window.localStorage.getItem('user'));
+
+      if(token == null || token === 'undefined' || user == null) {
         this.$router.push('/login');
       }else {
-        // get user info
-        // MOCK
-        let user = JSON.parse(window.localStorage.getItem('user'));
 
-        this.user = user;
-        console.log("App vue ", user)
+        if(this.$route.path == '/') {
+          this.$router.push(user.role)
+        }
+        // get user info
+        this.user = user;      
        }
     }
 

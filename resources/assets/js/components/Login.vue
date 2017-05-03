@@ -19,10 +19,10 @@
               <div class="col-lg-12">
                 <form id="login-form" role="form" style="display: block;"  @submit.prevent="checkCreds">
                   <div class="form-group">
-                    <input class="form-control" name="username" placeholder="Username" type="text" v-model="login.username" tabindex="1">
+                    <input class="form-control" name="username" placeholder="Uporabniško ime" type="text" v-model="login.username" tabindex="1">
                   </div>
                   <div class="form-group">
-                    <input class="form-control" name="password" placeholder="Password" type="password" v-model="login.password" tabindex="2">
+                    <input class="form-control" name="password" placeholder="Geslo" type="password" v-model="login.password" tabindex="2">
                   </div>
                   <p v-show="showResponse" class="bg-danger" style="padding-top: 10px; padding-bottom: 10px; margin-top: 15px;"> {{ response }} </p>
                   <!--
@@ -52,18 +52,26 @@
                 </form>
                 <form id="register-form" role="form" style="display: none;" @submit.prevent="doRegister">
                   <div class="form-group">
-                    <input type="text" v-model="reg.username" class="form-control" name="username" placeholder="Username"  tabindex="1">
+                    <input type="text" v-model="reg.name" class="form-control" name="name" placeholder="Ime"  tabindex="1">
                     <!--<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">-->
                   </div>
                   <div class="form-group">
-                    <input type="email" v-model="reg.email" class="form-control" name="username" placeholder="Username" tabindex="1">
+                    <input type="text" v-model="reg.surname" class="form-control" name="surname" placeholder="Priimek"  tabindex="1">
+                    <!--<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">-->
+                  </div>
+                  <div class="form-group">
+                    <input type="text" v-model="reg.username" class="form-control" name="username" placeholder="Uporabniško ime"  tabindex="1">
+                    <!--<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">-->
+                  </div>
+                  <div class="form-group">
+                    <input type="email" v-model="reg.email" class="form-control" name="email" placeholder="Email" tabindex="2">
                     <!-- <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">-->
                   </div>
                   <div class="form-group">
-                    <input type="password" v-model="reg.pswd" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                    <input type="password" v-model="reg.pswd" name="password" id="password" tabindex="2" class="form-control" placeholder="Geslo">
                   </div>
                   <div class="form-group">
-                    <input type="password" v-model="reg.repswd" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                    <input type="password" v-model="reg.repswd" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Potrdi geslo">
                   </div>
                   <div class="form-group">
                     <div class="row">
@@ -95,6 +103,8 @@ module.exports = {
         password: ''
       },
       reg: {
+        name: '',
+        surname: '',
         username: '',
         email: '',
         pswd: '',
@@ -128,35 +138,49 @@ module.exports = {
           });
       },
       doRegister: function() {
-        console.log(this.reg);
+
+        this.$http.post('api/register', {username: this.reg.username, email: this.reg.email,
+                                        name: this.reg.name, surname: this.reg.surname, password: this.reg.email})
+          .then(function(res){
+            let user = res.body.data
+            this.$parent.user = user;
+
+            
+            window.localStorage.setItem('user', JSON.stringify(user));
+            window.localStorage.setItem('token', res.body.meta.api_token);
+
+            this.$router.push('/'+user.role);
+
+          }, function(err){
+            this.showResponse = true;
+            if(err.status == 423){
+              this.response = "Vaš IP naslov je začasno zaklenjen."
+            }
+            else {
+              this.response = "Uporabniško ime ali geslo ni pravilno.";
+            }
+          });
+       
       }
     },
     mounted() {
-      console.log("login mounted")
-    }
-
-  
+      $('#login-form-link').click(function(e) {
+      $("#login-form").delay(100).fadeIn(100);
+      $("#register-form").fadeOut(100);
+      $('#register-form-link').removeClass('active');
+      $(this).addClass('active');
+      e.preventDefault();
+    });
+    $('#register-form-link').click(function(e) {
+      $("#register-form").delay(100).fadeIn(100);
+      $("#login-form").fadeOut(100);
+      $('#login-form-link').removeClass('active');
+      $(this).addClass('active');
+      e.preventDefault();
+    });
+  }  
 }
 
-
-$(function() {
-
-    $('#login-form-link').click(function(e) {
-    $("#login-form").delay(100).fadeIn(100);
-    $("#register-form").fadeOut(100);
-    $('#register-form-link').removeClass('active');
-    $(this).addClass('active');
-    e.preventDefault();
-  });
-  $('#register-form-link').click(function(e) {
-    $("#register-form").delay(100).fadeIn(100);
-    $("#login-form").fadeOut(100);
-    $('#login-form-link').removeClass('active');
-    $(this).addClass('active');
-    e.preventDefault();
-  });
-
-});
 </script>
 <style>
 
