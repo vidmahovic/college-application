@@ -36,7 +36,7 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
         $api->delete('test_delete/{id}', 'FacultyProgramController@destroy');
         
         $api->post('staff_all', 'AdminController@index');
-        $api->post('staff_test', 'AdminController@create');
+        $api->post('staff_create', 'AdminController@create');
 
         // Authentication routes
         $api->post('login', 'AuthController@login');

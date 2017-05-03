@@ -7,7 +7,7 @@ use Dingo\Api\Http\Request;
 use App\User;
 use Carbon\Carbon;
 
-class AdminProgramController extends ApiController
+class AdminController extends ApiController
 {
     protected $validator;
 
