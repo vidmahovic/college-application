@@ -95,31 +95,6 @@ class ApplicationController extends ApiController {
         return $this->response->created('Application created');
     }
 
-    public function sifranti()
-    {
-        $countries = Country::all();
-        $cities = City::all();
-        $citizens = Citizen::all();
-        $faculties = Faculty::all();
-        $districts = District::all();
-        $facultyPrograms = FacultyProgram::all();
-        $education_types = EducationType::all();
-        $graduation_types = GraduationType::all();
-        $middle_schooles = MiddleSchool::all();
-
-        return $this->response->array([
-            'countries'=> $countries,
-            'cities'=> $cities,
-            'citizens'=> $citizens,
-            'faculties'=> $faculties,
-            'facultyPrograms'=> $facultyPrograms,
-            'districts'=> $districts,
-            'education_types'=> $education_types,
-            'graduation_types'=> $graduation_types,
-            'middle_schooles'=> $middle_schooles
-        ]);
-    }
-
     public function active()
     {
         $user = $this->request->user();
@@ -157,12 +132,6 @@ class ApplicationController extends ApiController {
 
     public function update($id)
     {
-        $user = $this->request->user();
-
-        if ($user->cannot('view-active', Application::class)) {
-            return $this->response->errorUnauthorized();
-        }
-
         $application = Application::findOrFail($id);
 
         if($application == null) {
@@ -170,5 +139,43 @@ class ApplicationController extends ApiController {
         }
 
         // TODO: update
+    }
+
+    public function store($id)
+    {
+        $application = Application::findOrFail($id);
+
+        if($application == null) {
+            return $this->response->errorNotFound();
+        }
+
+        // TODO: store
+        // $application->status = 'filed';
+        // KAKSNI SO STATUSI -> created, save, filed?
+    }
+
+    public function sifranti()
+    {
+        $countries = Country::all();
+        $cities = City::all();
+        $citizens = Citizen::all();
+        $faculties = Faculty::all();
+        $districts = District::all();
+        $facultyPrograms = FacultyProgram::all();
+        $education_types = EducationType::all();
+        $graduation_types = GraduationType::all();
+        $middle_schooles = MiddleSchool::all();
+
+        return $this->response->array([
+            'countries'=> $countries,
+            'cities'=> $cities,
+            'citizens'=> $citizens,
+            'faculties'=> $faculties,
+            'facultyPrograms'=> $facultyPrograms,
+            'districts'=> $districts,
+            'education_types'=> $education_types,
+            'graduation_types'=> $graduation_types,
+            'middle_schooles'=> $middle_schooles
+        ]);
     }
 }
