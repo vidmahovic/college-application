@@ -13,12 +13,12 @@ class AdminValidator{
 
         $rules = [
             'name' => 'required',
-            'username' => 'required|unique:user,username',
-            'email' => 'required|email|unique:user,email',
+            'username' => 'required|unique:users,username',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed',
             'password_confirmation' => 'required',
-            'role_id' => 'required|exist:roles,id',
-            'faculty_id' => 'null'
+            'role_id' => 'required|exists:roles,id',
+            'faculty_id' => 'nullable'
         ];
 
         $messages = [
