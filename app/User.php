@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Application;
+use App\Models\Faculty;
 use App\Models\Role;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -18,6 +19,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject, CanResetPasswordContract
 {
     use Authenticatable, Authorizable, SoftDeletes, CanResetPassword, Notifiable;
+
+    protected $table = 'users';
 
     /**
      * The attributes that are mass assignable.
@@ -54,6 +57,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function applications() {
         return $this->hasMany(Application::class);
+    }
+
+    public function faculty() {
+        return $this->belongsTo(Faculty::class);
     }
 
     public function isReferent() {
