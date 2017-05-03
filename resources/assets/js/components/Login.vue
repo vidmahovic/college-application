@@ -22,7 +22,7 @@
                     <input class="form-control" name="username" placeholder="Uporabniško ime" type="text" v-model="login.username" tabindex="1">
                   </div>
                   <div class="form-group">
-                    <input class="form-control" name="password" placeholder="Geslo" type="password" v-model="login.password" tabindex="2">
+                    <input class="form-control" name="login_password" placeholder="Geslo" type="password" v-model="login.password" tabindex="2">
                   </div>
                   <p v-show="showResponse" class="bg-danger" style="padding-top: 10px; padding-bottom: 10px; margin-top: 15px;"> {{ response }} </p>
                   <!--
@@ -43,7 +43,7 @@
                     <div class="row">
                       <div class="col-lg-12">
                         <div class="text-center">
-                          <a href="http://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
+                          <a href="" tabindex="5" class="forgot-password">Forgot Password?</a>
                         </div>
                       </div>
                     </div>
@@ -52,26 +52,30 @@
                 </form>
                 <form id="register-form" role="form" style="display: none;" @submit.prevent="doRegister">
                   <div class="form-group">
-                    <input type="text" v-model="reg.name" class="form-control" name="name" placeholder="Ime"  tabindex="1">
-                    <!--<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">-->
+                    <input type="text" v-model="reg.name" v-validate="'required'" class="form-control" name="name" placeholder="Ime" tabindex="1">
+                    <p class="text-danger" v-if="errors.has('name')"> <!--{{errors.first('name')}} -->Ime je obvezen podatek</p>
                   </div>
                   <div class="form-group">
-                    <input type="text" v-model="reg.surname" class="form-control" name="surname" placeholder="Priimek"  tabindex="1">
-                    <!--<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">-->
+                    <input type="text" v-model="reg.surname" v-validate="'required'" class="form-control" name="surname" placeholder="Priimek"  tabindex="1">
+                     <p class="text-danger" v-if="errors.has('surname')"> <!--{{errors.first('surname')}} -->Priimek je obvezen podatek</p>
                   </div>
                   <div class="form-group">
-                    <input type="text" v-model="reg.username" class="form-control" name="username" placeholder="Uporabniško ime"  tabindex="1">
-                    <!--<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">-->
+                    <input type="text" v-model="reg.username" v-validate="'required'" class="form-control" name="username" placeholder="Uporabniško ime"  tabindex="1">
+                     <p class="text-danger" v-if="errors.has('username')"> <!--{{errors.first('username')}} -->Uporabniško ime je obvezen podatek</p>
                   </div>
                   <div class="form-group">
-                    <input type="email" v-model="reg.email" class="form-control" name="email" placeholder="Email" tabindex="2">
-                    <!-- <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">-->
+                    <input type="text" v-model="reg.email" v-validate="'required|email'" class="form-control" name="email" placeholder="Email" tabindex="2">
+                    <p class="text-danger" v-if="errors.has('email')">{{ errors.first('email') }}</p>
                   </div>
                   <div class="form-group">
-                    <input type="password" v-model="reg.pswd" name="password" id="password" tabindex="2" class="form-control" placeholder="Geslo">
+                    <input type="password" v-model="reg.pswd" v-validate="'required|min:8'" name="reg_password" id="password" tabindex="2" class="form-control" placeholder="Geslo">
+                    <p class="text-danger" v-if="errors.has('password')">{{ errors.first('password') }}</p>
                   </div>
                   <div class="form-group">
-                    <input type="password" v-model="reg.repswd" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Potrdi geslo">
+                    <input type="password" v-model="reg.repswd" v-validate="'required|confirmed:reg_password'"  name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Potrdi geslo">
+                    <p class="text-danger" v-if="errors.has('confirm-password')">{{ errors.first('confirm-password') }}</p>
+                  
+
                   </div>
                   <div class="form-group">
                     <div class="row">
@@ -103,12 +107,12 @@ module.exports = {
         password: ''
       },
       reg: {
-        name: '',
-        surname: '',
-        username: '',
-        email: '',
-        pswd: '',
-        repswd: ''
+        name: null,
+        surname: null,
+        username: null,
+        email: null,
+        pswd: null,
+        repswd: null
       },
       response: '',
       showResponse: false
@@ -139,27 +143,20 @@ module.exports = {
       },
       doRegister: function() {
 
-        this.$http.post('api/register', {username: this.reg.username, email: this.reg.email,
-                                        name: this.reg.name, surname: this.reg.surname, password: this.reg.email})
-          .then(function(res){
-            let user = res.body.data
-            this.$parent.user = user;
+        this.$validator.validateAll();
+        if (this.errors.any()) {
+          console.log("VALIDATION FAILED") 
+          return;
+        }
 
-            
-            window.localStorage.setItem('user', JSON.stringify(user));
-            window.localStorage.setItem('token', res.body.meta.api_token);
+        console.log(this.reg)
 
-            this.$router.push('/'+user.role);
+        // this.$http.post('api/register', {username: this.reg.username, email: this.reg.email,
+        //                                 name: this.reg.name, surname: this.reg.surname, password: this.reg.email})
+        //   .then(function(res){
 
-          }, function(err){
-            this.showResponse = true;
-            if(err.status == 423){
-              this.response = "Vaš IP naslov je začasno zaklenjen."
-            }
-            else {
-              this.response = "Uporabniško ime ali geslo ni pravilno.";
-            }
-          });
+        //   }, function(err){
+        //   });
        
       }
     },
@@ -265,7 +262,6 @@ module.exports = {
   text-decoration: underline;
   color: #666;
 }
-
 .btn-register {
   background-color: #1CB94E;
   outline: none;

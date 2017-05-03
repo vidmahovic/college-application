@@ -25,8 +25,12 @@ import AppView from './components/App.vue'
 import vSelect from 'vue-select'
 
 import Datepicker from 'vuejs-datepicker'
+import VeeValidate from 'vee-validate';
+
 Vue.use(VueRouter)
 Vue.use(VueResource)
+Vue.use(VeeValidate)
+
 
 Vue.component('v-select', vSelect)
 Vue.component('datatable',require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
@@ -34,13 +38,11 @@ Vue.component('datepicker', Datepicker)
 
 
 
+
+
 Vue.http.interceptors.push(function(request, next) {
 
-	console.log("http interceptors")
-	//request.headers['Authorization'] = 'Bearer: ' + localStorage.getItem('token')
-  	request.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
-  	console.log(request);
-		
+	request.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));	
   	next();
 });
 
