@@ -15,7 +15,7 @@ class AdminValidator{
             'name' => 'required',
             'username' => 'required|unique:users,username',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|alphanum|min:8',
             'password_confirmation' => 'required',
             'role_id' => 'required|exists:roles,id',
             'faculty_id' => 'nullable'
