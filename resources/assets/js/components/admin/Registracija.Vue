@@ -66,10 +66,11 @@
           </div>
           <div class="row">
             <div class="col-md-4">
-              <v-select v-model="params.faculty"  label="name" :options="testData"></v-select>
+              <v-select v-model="params.faculty" label="name" :options="faculties"></v-select>
             </div>
           </div>
         </div>
+        {{params.faculty}}
         <button @click="submitRegistration" class="btn btn-primary button-registrationAdmin">Shrani zaposlenega</button>
         <div class="row">
           <div class="col-md-4">
@@ -105,12 +106,7 @@
             rePass: false,
             rePass: false
           },
-          testData: [
-            'Fakulteta za računalništvo in informatiko',
-            'Fakulteta za elektrotehniko',
-            'Fakulteta za kemijo in kemijsko tehnologijo',
-            'Filozofska fakulteta'
-          ],
+          faculties: null,
           showFaculties: false
         }
       },
@@ -160,6 +156,14 @@
             this.errMsg = "Niste izpolnili vseh polj!";
           }
         }
+      },
+      created: function() {
+        this.$http.get('/api/faculties')
+          .then(function(res) {
+            this.faculties = [];
+            var temp = res.data.data;
+            this.faculties = temp;
+          })
       }
   }
 </script>
