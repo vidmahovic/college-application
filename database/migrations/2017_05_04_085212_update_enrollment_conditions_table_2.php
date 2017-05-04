@@ -26,7 +26,7 @@ class UpdateEnrollmentConditionsTable2 extends Migration
     public function down()
     {
         Schema::table('enrollment_conditions', function(Blueprint $table) {
-            $table->nullable('weight')->integer()->change();
+            $table->integer('weight')->change();
         });
     }
 }

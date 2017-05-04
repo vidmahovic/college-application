@@ -8,6 +8,8 @@ class EnrollmentCondition extends Model // POGOJI
 {
     protected $table = 'enrollment_conditions';
 
+    public $timestamps = false;
+
     protected $fillable = ['faculty_program_id', 'name', 'type', 'conditions_subject_id', 'conditions_profession_id', 'weight'];
         // type -> 0 (splošna in poklicna matura), 1 (splošna matura), 2 (poklicna matura)
         // conditions_profession_id -> nullable, če je subject
