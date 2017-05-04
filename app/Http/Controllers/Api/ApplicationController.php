@@ -68,7 +68,9 @@ class ApplicationController extends ApiController {
         // create pivot tables programs -> min 1 wish, max 3 wishes
 
         $faculties = Faculty::all()->pluck('id')->toArray();
-        $wishes = ($this->request->input('wishes'))->toJson;
+
+        // $wishes = ($this->request->input('wishes'))->toJson;
+        $wishes = json_decode($this->request->input('wishes'), true);
 
         // [{faculty_id, is_double_degree, programs_id: [p1_id,p2_id]}, {faculty_id, is_double_degree, programs_id: [p1_id]}]
 
