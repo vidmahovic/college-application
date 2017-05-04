@@ -27,5 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call('CountriesTableSeeder');
         $this->call('MiddleSchoolsTableSeeder');
         $this->call('EducationTypeTableSeeder');
+        $this->call('SubjectsTableSeeder');
     }
 }
