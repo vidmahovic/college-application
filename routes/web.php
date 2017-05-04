@@ -31,7 +31,7 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
         // tests, without auth
         $api->get('program/{id}', function($id) { return FacultyProgram::with('enrollmentConditions')->find($id); });
-        $api->post('program/{id}/conditions', 'FacultyProgramController@conditions');
+        $api->post('program/{id}/conditions', 'ConditionController@create');
 
         // Authentication routes
         $api->post('login', 'AuthController@login');

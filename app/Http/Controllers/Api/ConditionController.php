@@ -32,7 +32,8 @@ class ConditionController extends ApiController
         ]);
     }
 
-    public function create($id){ // POST: /programs/{id}/conditions
+    public function create($id)
+    {
         /*
         $conditions = EnrollmentCondition::all()->where('faculty_program_id',$id)->toArray();
         if(is_array($conditions)){
@@ -43,16 +44,24 @@ class ConditionController extends ApiController
         }
         */
 
-        if(! $this->validator->validate($this->request->all(), $id)){
+        if (!$this->validator->validate($this->request->input('conditions'), $id)) {
             $errors = $this->validator->errors();
             return $this->response->errorBadRequest($errors);
         }
+
+        // type = 1,2 -> splosna ali poklicna matura
         // [
-        //  {name : 0, type : 0, conditions_subject_id : null, conditions_profession_id : null, weight : 40},
-        //  {name : 0, type : 0, conditions_subject_id : null, conditions_profession_id : null, weight : 60}
+        //  {type : 1, data : {{ name : 0, conditions_subject_id : null, conditions_profession_id : null, weight : 40},
+        //                    { name : 1, conditions_subject_id : null, conditions_profession_id : null, weight : 30},
+        //                    { name : 2, conditions_subject_id : 'M411', conditions_profession_id : null, weight : 30}}
+        //  },
+        //  {type : 2, data : {{ name : 0, conditions_subject_id : null, conditions_profession_id : null, weight : 40},
+        //                    { name : 3, conditions_subject_id : 'M411', conditions_profession_id : null, weight : 60},
+        //                    { name : 5, conditions_subject_id : null, conditions_profession_id : 57311, weight : null}}
+        //  }
         // ]
 
-        // TODO: create
+        // TODO
 
         return null;
     }

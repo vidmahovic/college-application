@@ -39,11 +39,20 @@ class ConditionsValidator
         {
             $conditions = json_decode($this->input['conditions'], true);
 
-            if($conditions[0]['type'] == 0){ // splosna in poklicna matura
+            // type = 0 -> splosna in poklicna matura
+            // [
+            //  {type : 0, data : {{ name : 0, conditions_subject_id : null, conditions_profession_id : null, weight : 40 },
+            //                     { name : 0, conditions_subject_id : null, conditions_profession_id : null, weight : 60 }}
+            //  }
+            // ]
+
+            for($i = 0; $i < count($conditions); $i = $i + 1){
+                $type = $conditions[$i]['type'];
+                $data = $conditions[$i]['data'];
                 $weights = 0;
-                for($i = 0; $i < count($conditions); $i = $i + 1){
-                    $current = $conditions[$i];
-                    switch($current['name']) {
+                for($j = 0; $j < count($data); $j = $j + 1) {
+                    $current = $data[$j];
+                    switch ($current['name']) {
                         case 0:
                         case 1:
                             if ($current['conditions_subject_id'] == null && $current['conditions_profession_id'] == null && $current['weight'] > 0) {
@@ -68,14 +77,13 @@ class ConditionsValidator
                                 $validator->errors()->add('conditions', 'Invalid data!');
                             }
                             break;
+                        default:
+                            $validator->errors()->add('conditions', 'Invalid condition name!');
                     }
                 }
                 if($weights != 100){
                     $validator->errors()->add('conditions', 'Weight must be 100% when summed!');
                 }
-            }
-            else{ // posebej splosna in poklicna matura
-
             }
         });
 
