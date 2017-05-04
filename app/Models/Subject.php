@@ -16,4 +16,9 @@ class Subject extends Model // PREDMET
         'id' => 'integer',
         'name' => 'string'
     ];
+
+    public function conditionsSubject()
+    {
+        return $this->hasMany(ConditionsSubject::class);
+    }
 }

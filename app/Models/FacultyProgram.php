@@ -36,6 +36,10 @@ class FacultyProgram extends Model // PROGRAM
             'application_id');
     }
 
+    public function enrollmentConditions(){
+        return $this->hasMany(EnrollmentCondition::class);
+    }
+
 //    public function countAll() {
 //       return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count');
 //    }
