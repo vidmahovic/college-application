@@ -44,26 +44,13 @@ class ConditionController extends ApiController
         }
         */
 
-        if (!$this->validator->validate($this->request->input('conditions'), $id)) {
+        if (!$this->validator->validate($this->request->all())) {
             $errors = $this->validator->errors();
             return $this->response->errorBadRequest($errors);
         }
 
-        // type = 1,2 -> splosna ali poklicna matura
-        // [
-        //  {type : 1, data : {{ name : 0, conditions_subject_id : null, conditions_profession_id : null, weight : 40},
-        //                    { name : 1, conditions_subject_id : null, conditions_profession_id : null, weight : 30},
-        //                    { name : 2, conditions_subject_id : 'M411', conditions_profession_id : null, weight : 30}}
-        //  },
-        //  {type : 2, data : {{ name : 0, conditions_subject_id : null, conditions_profession_id : null, weight : 40},
-        //                    { name : 3, conditions_subject_id : 'M411', conditions_profession_id : null, weight : 60},
-        //                    { name : 5, conditions_subject_id : null, conditions_profession_id : 57311, weight : null}}
-        //  }
-        // ]
-
         // TODO
 
-        return null;
+        return $this->response->created();
     }
-
 }
