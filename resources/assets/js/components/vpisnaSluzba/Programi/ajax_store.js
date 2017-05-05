@@ -16,9 +16,7 @@ export default {
 		table: null,
 		params: {
 			type: '',
-			is_regular: '',
-			name: '',
-			page: 1
+			is_regular: ''
 		},
 		apiUrl: '/api/programs/paginate'
 	}),
@@ -135,7 +133,7 @@ export default {
 			this.sort_dir = 'asc';
 		},
 		setPage(page_number, event){
-			this.params.page = page_number;
+			this.page = page_number;
 
 			this.getRows(this.apiUrl, function(){
 				this.page = page_number;
@@ -147,10 +145,9 @@ export default {
 			this.table = table;
 		},
 		setData(data){
-			debugger;
 			this.params.type = data.type;
 			this.params.is_regular = data.regular;
-			this.params.name = data.name;
+			//this.params.name = data.name;
 			this.getRows(this.apiUrl);
 		},
 		setFilterable(value){
@@ -163,7 +160,7 @@ export default {
 			this.sortable = value;
 		},
 		getRows(url, callback){
-			this.$http.get(url, {params: {filters: this.params}})
+			this.$http.get(url, {params: {filters: this.params, page: this.page}})
 				.then(function(res){
 					this.data = res.data.data;
 					this.page_size = res.data.meta.pagination.per_page;

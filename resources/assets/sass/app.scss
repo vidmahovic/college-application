@@ -152,8 +152,8 @@
 }
 
 .enroll-container {
-  width: 80%;
-  margin-left: 150px;
+  width: 90%;
+  margin-left: auto;
   margin-right: auto;
 }
 
@@ -172,4 +172,54 @@
 
 .button-registrationAdmin {
   margin-top: 20px;
+}
+
+.programs-header {
+  margin-bottom: 20px;
+  color: #000;
+}
+
+.marginB10 {
+  margin-bottom: 10px;
+}
+
+#datatable.programs-datatable th {
+  white-space: normal;
+}
+
+.programs-datatable th:nth-child(1) {
+  width: 20%;
+}
+
+.programs-datatable th:nth-child(2) {
+  width: 20%;
+}
+
+.programs-datatable th:nth-child(6) {
+  width: 5%;
+}
+
+.programs-datatable th:nth-child(7) {
+  width: 5%;
+}
+
+.programs-datatable th:nth-child(8) {
+  width: 5%;
+}
+
+.programs-datatable th:nth-child(9) {
+  width: 5%;
+}
+
+.programs-datatable th:nth-child(10) {
+  width: 5%;
+}
+
+.programs-datatable th:nth-child(11) {
+  width: 5%;
+}
+
+.select-has-error {
+  border-color: #a94442;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }

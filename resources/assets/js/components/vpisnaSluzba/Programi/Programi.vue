@@ -1,41 +1,50 @@
 <template>
   <div class="enroll-container">
     <div class="row">
-      <div class="col-md-2">
+      <div class="col-md-offset-2 col-md-8">
         <div class="panel panel-body">
-          <h2>Filtri:</h2>
-          <h4>Iskanje programa:</h4>
-          <input class="form-control" type="text" v-model="params.name" v-on:blur="name()" />
-          <br>
-          <h4>Način študija</h4>
-          <input type="radio" id="one" value="0" v-model="params.regular" v-on:click="regular1('0')">
-          <label for="one">Izredni programi</label>
-          <br>
-          <input type="radio" id="two" value="1" v-model="params.regular" v-on:click="regular1('1')">
-          <label for="two">Redni programi</label>
-          <br>
-          <h4>Vrsta programa</h4>
-          <input type="radio" id="one1" value="0" v-model="params.type" v-on:click="type1('0')">
-          <label for="one1">Univerzitetni</label>
-          <br>
-          <input type="radio" id="two2" value="1" v-model="params.type" v-on:click="type1('1')">
-          <label for="two2">Visokošolski</label>
-          <br>
-          <input type="radio" id="three3" value="2" v-model="params.type" v-on:click="type1('2')">
-          <label for="three3">Magistrski</label>
+          <h2 class="programs-header">Kriteriji za študijske programe</h2>
+          <h4>Iskanje fakultete:</h4>
+          <v-select v-model="selectedFaculty" label="name" :options="faculties"></v-select>
+          <div class="row marginB10">
+            <div class="col-md-5">
+              <h4>Način študija</h4>
+              <input type="radio" id="one" value="0" v-model="params.regular" v-on:click="regular1('0')">
+              <label style="margin-right: 10px;" for="one">Izredni programi</label>
+
+              <input type="radio" id="two" value="1" v-model="params.regular" v-on:click="regular1('1')">
+              <label for="two">Redni programi</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-7">
+              <h4>Vrsta programa</h4>
+              <input type="radio" id="one1" value="0" v-model="params.type" v-on:click="type1('0')">
+              <label style="margin-right: 10px;" for="one1">Univerzitetni</label>
+
+              <input type="radio" id="two2" value="1" v-model="params.type" v-on:click="type1('1')">
+              <label style="margin-right: 10px;" for="two2">Visokošolski</label>
+
+              <input type="radio" id="three3" value="2" v-model="params.type" v-on:click="type1('2')">
+              <label for="three3">Magistrski</label>
+            </div>
+          </div>
+
           <br>
           <button v-on:click="poenostavi" style="margin-top: 10px;" class="btn btn-link btn-xs">Poenostavi iskanje</button>
         </div>
       </div>
-        <div class="col-md-10">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                  <button class="btn btn-primary" v-on:click="savePdf">Shrani PDF</button>
-                  <h2 style="text-align: center;">Tabela študijskih programov</h2>
-                  <datatable id="datatable" :columns="table_columns" :data="params" :data-store="ajax_store" filterable paginate></datatable>
-                </div>
-            </div>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+          <div class="panel panel-default">
+              <div class="panel-body">
+                <button class="btn btn-primary" v-on:click="savePdf">Shrani PDF</button>
+                <h2 style="text-align: center;" class="programs-header">Tabela študijskih programov</h2>
+                <datatable id="datatable" :columns="table_columns" :data="params" :data-store="ajax_store" class="programs-datatable" filterable paginate></datatable>
+              </div>
+          </div>
+      </div>
     </div>
   </div>
 </template>
@@ -48,7 +57,7 @@ import ajax_store from './ajax_store.js';
 
 function programPdf(data){
 	var doc = new jsPDF('landscape');
-	var header = ["Fakulteta", "Program", "Vrsta programa", "Nacin študija", "Omejitev", "Razpisanih mest", "Število prijavljenih", "Število sprejetih"];
+	var header = ["Fakulteta", "Program", "Vrsta programa", "Nacin študija", "Omejitev", "Razpisanih mest (EU)", "Razpisanih mest (tujci)", "Število prijavljenih (EU)", "Število prijavljenih (tujci)", "Število sprejetih (EU)", "Število sprejetih (tujci)"];
 	//210 je visina, 297mm sirina
 	doc.setLineWidth(0.1);
 	doc.setFont("sans-serif");
@@ -58,40 +67,53 @@ function programPdf(data){
 	doc.text(148, 20, "Tabela študijskih programov", null, null, "center");
 
 	//table header
-	doc.setFontSize(12);
+	doc.setFontSize(10);
 
-	var x = 15;
+	var x = 8;
 	for(var i in header){
-    if(i == 2 || i == 5 || i == 6 || i == 7){
-      var res = header[i].split(" ");
-      doc.text(x, 30, res[0]);
+    var res = header[i].split(" ");
+
+    if(i == 2) {
+      doc.text(x, 35, res[0]);
+      doc.text(x, 40, res[1]);
+    }
+    else if(i == 5 || i == 6) {
+      doc.text(x, 35, res[0]);
+      doc.text(x, 40, res[1]+" "+res[2]);
+    }
+    else if(i == 7 || i == 8 || i == 9 || i == 10){
+      doc.text(x, 30, res[0])
       doc.text(x, 35, res[1]);
+      doc.text(x, 40, res[2]);
     }
     else {
-      doc.text(x, 35, header[i]);
+      doc.text(x, 40, header[i]);
     }
 
 
     if(i == 0 || i == 1){
-      x+=50;
+      x+=40;
+    }
+    else if(i == 2 || i == 3 || i == 4){
+      x+=30;
     }
     else {
-      x+=27;
+      x+=20;
     }
 	}
 
-	doc.line(15,37,282,37);
+	doc.line(8,42,289,42);
 
   // začetek vsebine
-
-  var y = 42
+  var y = 47
   for(var i in data.data){
-    x = 15;
+    x = 8;
     console.log(i);
     console.log();
     var tmp = data.data[i].faculty.data.name.split(" ");
     var tmpY = y;
 
+    doc.setFontSize(9);
     // ime fakultete
     for(var j = 0; j < tmp.length; j++){
       if(j+1 < tmp.length && tmp[j].length > 0 && tmp[j+1].length > 0 && (tmp[j+1].length < 3 || (tmp[j].length + tmp[j+1].length + 1) < 14)){
@@ -107,7 +129,7 @@ function programPdf(data){
       }
       tmpY += 4;
     }
-    x+=50;
+    x+=40;
 
     // ime programa
     tmp = data.data[i].name.split(" ");
@@ -127,7 +149,7 @@ function programPdf(data){
       }
       tmpY1 += 4;
     }
-    x+=50;
+    x+=40;
 
     var temp = "";
     if(data.data[i].type == 0){
@@ -144,7 +166,7 @@ function programPdf(data){
       doc.text(x, y+4, "magisterski");
       doc.text(x, y+8, "program");
     }
-    x+=27;
+    x+=30;
 
     if(data.data[i].is_regular){
       temp = "Redni študij";
@@ -153,7 +175,7 @@ function programPdf(data){
       temp = "Izredni študij";
     }
     doc.text(x, y, temp);
-    x+=27;
+    x+=30;
 
     if(data.data[i].min_points == 0){
       temp =  "Ni omejitve";
@@ -162,21 +184,30 @@ function programPdf(data){
       temp = row.min_points;
     }
     doc.text(x, y, temp);
-    x+=27;
+    x+=30;
 
     doc.text(x, y, data.data[i].max_accepted.toString());
-    x+=27;
+    x+=20;
 
-    //doc.text(x, 40, data.data[i].name);
-    x+=27;
+    doc.text(x, y, data.data[i].max_accepted_foreiqn.toString());
+    x+=20;
+
+    doc.text(x, y, data.data[i].count_enrolled.toString());
+    x+=20;
+
+    doc.text(x, y, data.data[i].count_enrolled_foreign.toString());
+    x+=20;
 
     doc.text(x, y, data.data[i].count_accepted.toString());
-    x+=27;
+    x+=20;
+
+    doc.text(x, y, data.data[i].count_accepted_foreign.toString());
+    x+=20;
 
 
     if(tmpY > tmpY1){
       if(tmpY + 33 < 210){
-        doc.line(15,tmpY,282,tmpY);
+        doc.line(8,tmpY,289,tmpY);
         y = tmpY+6;
       }
       else {
@@ -187,7 +218,7 @@ function programPdf(data){
     }
     else {
       if(tmpY1 + 33 < 210){
-        doc.line(15,tmpY1,282,tmpY1);
+        doc.line(8,tmpY1,289,tmpY1);
         y = tmpY1+6;
       }
       else {
@@ -209,7 +240,7 @@ function programPdf(data){
         params: {
           regular: '',
           type: '',
-          name: ''
+          selectedFaculty: ''
         },
         table_columns: [
           {label: 'Fakulteta', field: 'faculty.data.name'},
@@ -247,9 +278,12 @@ function programPdf(data){
               }
             }
           },
-          {label: 'Razpisanih mest', field: 'max_accepted', align: 'center'},
-          {label: 'Število prijavljenih'},
-          {label: 'Število sprejetih', field: 'count_accepted'}
+          {label: 'Razpisanih mest (EU)', field: 'max_accepted', align: 'center'},
+          {label: 'Razpisanih mest (tujci)', field: 'max_accepted_foreiqn', align: 'center'},
+          {label: 'Število prijavljenih (EU)', field: 'count_enrolled', align: 'center'},
+          {label: 'Število prijavljenih (tujci)', field: 'count_enrolled_foreign', align: 'center'},
+          {label: 'Število sprejetih (EU)', field: 'count_accepted', align: 'center'},
+          {label: 'Število sprejetih (tujci)', field: 'count_accepted_foreign', align: 'center'}
         ],
         ajax_store: ajax_store
       }
@@ -258,28 +292,25 @@ function programPdf(data){
       regular1: function(param){
         this.params = {
           regular: param,
-          type: this.params.type,
-          name: this.params.name.toUpperCase()
+          type: this.params.type
         };
       },
       type1: function(param){
         this.params = {
           regular: this.params.regular,
-          type: param,
-          name: this.params.name.toUpperCase()
+          type: param
         };
       },
 
       name: function(){
         this.params = {
           regular: this.params.regular,
-          type: this.params.type,
-          name: this.params.name.toUpperCase()
+          type: this.params.type
         };
       },
 
       savePdf: function(){
-        this.$http.get("/api/programs", {params: {filters: this.params}})
+        this.$http.get("/api/programs")
           .then(function(res){
               programPdf(res.data);
           }, function(err){
@@ -290,10 +321,15 @@ function programPdf(data){
       poenostavi: function(){
         this.params = {
           type: '',
-          regular: '',
-          name: ''
+          regular: ''
         };
       }
+    },
+    created: function() {
+      this.$http.get('/api/faculties')
+        .then(function(res){
+          this.faculties = res.data.data;
+        })
     }
   }
 

@@ -6,10 +6,10 @@
           <div class="panel-heading">
             <div class="row">
               <div class="col-xs-6">
-                <a href="" class="active" id="login-form-link">Prijava</a>
+                <a class="active" id="login-form-link">Prijava</a>
               </div>
               <div class="col-xs-6">
-                <a href="" id="register-form-link">Registracija</a>
+                <a id="register-form-link">Registracija</a>
               </div>
             </div>
             <hr>
@@ -17,12 +17,12 @@
           <div class="panel-body">
             <div class="row">
               <div class="col-lg-12">
-                <form id="login-form" role="form" style="display: block;"  @submit.prevent="login">
+                <form id="login-form" role="form" style="display: block;"  @submit.prevent="checkCreds">
                   <div class="form-group">
-                    <input class="form-control" name="username" placeholder="Username" type="text" v-model="login.username" tabindex="1">
+                    <input class="form-control" name="username" placeholder="Uporabniško ime" type="text" v-model="login.username" tabindex="1">
                   </div>
                   <div class="form-group">
-                    <input class="form-control" name="password" placeholder="Password" type="password" v-model="login.password" tabindex="2">
+                    <input class="form-control" name="login_password" placeholder="Geslo" type="password" v-model="login.password" tabindex="2">
                   </div>
                   <p v-show="showResponse" class="bg-danger" style="padding-top: 10px; padding-bottom: 10px; margin-top: 15px;"> {{ response }} </p>
                   <!--
@@ -43,27 +43,39 @@
                     <div class="row">
                       <div class="col-lg-12">
                         <div class="text-center">
-                          <a href="http://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
+                          <a href="" tabindex="5" class="forgot-password">Forgot Password?</a>
                         </div>
                       </div>
                     </div>
                   </div>
                   -->
                 </form>
-                <form id="register-form" role="form" style="display: none;" @submit.prevent="register">
+                <form id="register-form" role="form" style="display: none;" @submit.prevent="doRegister">
                   <div class="form-group">
-                    <input type="text" v-model="reg.username" class="form-control" name="username" placeholder="Username"  tabindex="1">
-                    <!--<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">-->
+                    <input type="text" v-model="reg.name" v-validate="'required'" class="form-control" name="name" placeholder="Ime" tabindex="1">
+                    <p class="text-danger" v-if="errors.has('name')"> <!--{{errors.first('name')}} -->Ime je obvezen podatek</p>
                   </div>
                   <div class="form-group">
-                    <input type="email" v-model="reg.email" class="form-control" name="username" placeholder="Username" tabindex="1">
-                    <!-- <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">-->
+                    <input type="text" v-model="reg.surname" v-validate="'required'" class="form-control" name="surname" placeholder="Priimek"  tabindex="1">
+                     <p class="text-danger" v-if="errors.has('surname')"> <!--{{errors.first('surname')}} -->Priimek je obvezen podatek</p>
                   </div>
                   <div class="form-group">
-                    <input type="password" v-model="reg.pswd" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                    <input type="text" v-model="reg.username" v-validate="'required'" class="form-control" name="username" placeholder="Uporabniško ime"  tabindex="1">
+                     <p class="text-danger" v-if="errors.has('username')"> <!--{{errors.first('username')}} -->Uporabniško ime je obvezen podatek</p>
                   </div>
                   <div class="form-group">
-                    <input type="password" v-model="reg.repswd" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                    <input type="text" v-model="reg.email" v-validate="'required|email'" class="form-control" name="email" placeholder="Email" tabindex="2">
+                    <p class="text-danger" v-if="errors.has('email')">{{ errors.first('email') }}</p>
+                  </div>
+                  <div class="form-group">
+                    <input type="password" v-model="reg.pswd" v-validate="'required|min:8'" name="reg_password" id="password" tabindex="2" class="form-control" placeholder="Geslo">
+                    <p class="text-danger" v-if="errors.has('password')">{{ errors.first('password') }}</p>
+                  </div>
+                  <div class="form-group">
+                    <input type="password" v-model="reg.repswd" v-validate="'required|confirmed:reg_password'"  name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Potrdi geslo">
+                    <p class="text-danger" v-if="errors.has('confirm-password')">{{ errors.first('confirm-password') }}</p>
+                  
+
                   </div>
                   <div class="form-group">
                     <div class="row">
@@ -95,17 +107,19 @@ module.exports = {
         password: ''
       },
       reg: {
-        username: '',
-        email: '',
-        pswd: '',
-        repswd: ''
+        name: null,
+        surname: null,
+        username: null,
+        email: null,
+        pswd: null,
+        repswd: null
       },
       response: '',
       showResponse: false
     }
   },
   methods: {
-    login: function(apl) {
+    checkCreds: function() {
         this.$http.post('api/login', {email: this.login.username, password: this.login.password})
           .then(function(res){
             let user = res.body.data
@@ -127,39 +141,50 @@ module.exports = {
             }
           });
       },
-      register: function() {
-        console.log(this.reg);
+      doRegister: function() {
+
+        this.$validator.validateAll();
+        if (this.errors.any()) {
+          console.log("VALIDATION FAILED") 
+          return;
+        }
+
+        console.log(this.reg)
+
+        // this.$http.post('api/register', {username: this.reg.username, email: this.reg.email,
+        //                                 name: this.reg.name, surname: this.reg.surname, password: this.reg.email})
+        //   .then(function(res){
+
+        //   }, function(err){
+        //   });
+       
       }
     },
     mounted() {
-      console.log("login mounted")
-    }
-
-  
+      $('#login-form-link').click(function(e) {
+      $("#login-form").delay(100).fadeIn(100);
+      $("#register-form").fadeOut(100);
+      $('#register-form-link').removeClass('active');
+      $(this).addClass('active');
+      e.preventDefault();
+    });
+    $('#register-form-link').click(function(e) {
+      $("#register-form").delay(100).fadeIn(100);
+      $("#login-form").fadeOut(100);
+      $('#login-form-link').removeClass('active');
+      $(this).addClass('active');
+      e.preventDefault();
+    });
+  }  
 }
 
-
-$(function() {
-
-    $('#login-form-link').click(function(e) {
-    $("#login-form").delay(100).fadeIn(100);
-    $("#register-form").fadeOut(100);
-    $('#register-form-link').removeClass('active');
-    $(this).addClass('active');
-    e.preventDefault();
-  });
-  $('#register-form-link').click(function(e) {
-    $("#register-form").delay(100).fadeIn(100);
-    $("#login-form").fadeOut(100);
-    $('#login-form-link').removeClass('active');
-    $(this).addClass('active');
-    e.preventDefault();
-  });
-
-});
 </script>
 <style>
-  .panel-login {
+
+#login-form-link, #register-form-link{
+  cursor: pointer;
+};
+.panel-login {
   border-color: #ccc;
   -webkit-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
   -moz-box-shadow: 0px 2px 3px 0px rgba(0,0,0,0.2);
@@ -237,7 +262,6 @@ $(function() {
   text-decoration: underline;
   color: #666;
 }
-
 .btn-register {
   background-color: #1CB94E;
   outline: none;
