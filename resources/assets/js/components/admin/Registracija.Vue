@@ -50,11 +50,11 @@
         </div>
         <div class="row">
           <div class="col-md-2">
-            <input type="radio" id="two2" value="0" v-model="radioButton" v-on:click="type1('0')">
+            <input type="radio" id="two2" value="0" v-model="radioButton" v-on:click="type1('3')">
             <label for="two2">Služba za vpis</label>
           </div>
           <div class="col-md-2">
-            <input type="radio" id="two3" value="1" v-model="radioButton" v-on:click="type1('1')">
+            <input type="radio" id="two3" value="1" v-model="radioButton" v-on:click="type1('2')">
             <label for="two3">Študentski referat</label>
           </div>
         </div>
@@ -66,11 +66,10 @@
           </div>
           <div class="row">
             <div class="col-md-4">
-              <v-select v-model="params.faculty" label="name" :options="faculties"></v-select>
+              <v-select v-bind:class="{'select-has-error': validation.faculty}" v-model="selectedFaculty" label="name" :options="faculties"></v-select>
             </div>
           </div>
         </div>
-        {{params.faculty}}
         <button @click="submitRegistration" class="btn btn-primary button-registrationAdmin">Shrani zaposlenega</button>
         <div class="row">
           <div class="col-md-4">
@@ -92,19 +91,22 @@
           faculty: '',
           rePassword: '',
           errMsg: '',
+          selectedFaculty: '',
           params: {
             password: '',
             email: '',
             name: '',
             surname: '',
-            faculty: ''
+            faculty_id: '',
+            role_id: ''
           },
           validation: {
             name: false,
             surname: false,
             email: false,
+            pass: false,
             rePass: false,
-            rePass: false
+            faculty: false
           },
           faculties: null,
           showFaculties: false
@@ -112,7 +114,8 @@
       },
       methods: {
         type1: function(param){
-          if(param == '1'){
+          this.params.role_id = param;
+          if(param == '2'){
             this.showFaculties = true;
           }
           else {
@@ -137,6 +140,8 @@
           this.validation.pass = (this.params.password.length < 7 || !patt.test(this.params.password));
           this.validation.rePass = (this.rePassword != this.params.password);
 
+          this.validation.faculty = this.selectedFaculty == '';
+
           if(this.validation.pass){
             this.errMsg = "Geslo ni dovolj močno. Uporabite vsaj 8 znakov, med katerimi mora biti vsaj en numeričen.";
             return;
@@ -147,9 +152,20 @@
           }
 
 
-          if(!this.validation.name && !this.validation.surname && !this.validation.email && !this.validation.pass && !this.validation.rePass){
+          if(!this.validation.name && !this.validation.surname && !this.validation.email && !this.validation.pass && !this.validation.rePass && !this.validation.faculty ){
             //ajax klic
             this.errMsg = '';
+
+            this.params.faculty_id = this.selectedFaculty.id;
+            this.$http.post("api/create", {name: this.params.name + " "+this.params.surname,
+                                          email: this.params.email,
+                                          password: this.params.password,
+                                          password_confirmation: this.rePassword,
+                                          role_id: this.params.role_id,
+                                          faculty_id: this.params.faculty_id,
+                                          username: this.params.email
+                                        });
+            console.log(this.params);
             console.log("Ajax klic");
           }
           else {

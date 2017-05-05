@@ -4,8 +4,8 @@
       <div class="col-md-offset-2 col-md-8">
         <div class="panel panel-body">
           <h2 class="programs-header">Kriteriji za študijske programe</h2>
-          <h4>Iskanje programa:</h4>
-          <input class="form-control marginB10" type="text" v-on:blur="name()" />
+          <h4>Iskanje fakultete:</h4>
+          <v-select v-model="selectedFaculty" label="name" :options="faculties"></v-select>
           <div class="row marginB10">
             <div class="col-md-5">
               <h4>Način študija</h4>
@@ -239,7 +239,8 @@ function programPdf(data){
       return {
         params: {
           regular: '',
-          type: ''
+          type: '',
+          selectedFaculty: ''
         },
         table_columns: [
           {label: 'Fakulteta', field: 'faculty.data.name'},
@@ -323,6 +324,12 @@ function programPdf(data){
           regular: ''
         };
       }
+    },
+    created: function() {
+      this.$http.get('/api/faculties')
+        .then(function(res){
+          this.faculties = res.data.data;
+        })
     }
   }
 

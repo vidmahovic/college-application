@@ -218,3 +218,8 @@
 .programs-datatable th:nth-child(11) {
   width: 5%;
 }
+
+.select-has-error {
+  border-color: #a94442;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
