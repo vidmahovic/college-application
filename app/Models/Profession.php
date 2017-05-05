@@ -19,4 +19,9 @@ class Profession extends Model // POKLIC
     {
         return $this->hasMany(Application::class);
     }
+
+    public function conditionsProfession()
+    {
+        return $this->hasMany(ConditionsProfession::class);
+    }
 }
