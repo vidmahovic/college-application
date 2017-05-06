@@ -45,8 +45,8 @@ class VerifyRegistration extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('You are receiving this email because you registered with our College Application app with this email.')
-            ->action('Confirm Registration', url('/register/verify') . '/'.$this->code)
-            ->line('If you did not register, no further action is required.');
+            ->line('Ta email ste prejeli, ker ste se registrirali v aplikcaijo College Application.')
+            ->action('Potrditev registracije', url('/register/verify') . '/'.$this->code)
+            ->line('Če se niste registrirali vi, smatrajte email kot brezpredmeten.');
     }
 }
