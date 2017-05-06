@@ -20,7 +20,7 @@ abstract class Search
                 $filter_class = ucfirst(camel_case($filter_name));
                 $filter = $this->getFiltersNamespace() . $filter_class;
 
-                if (class_exists($filter))
+                if (class_exists($filter) && $filter_val)
                     $query = $filter::apply($query, $filter_val);
 
             }
