@@ -5,6 +5,8 @@ namespace App;
 use App\Models\Application;
 use App\Models\Faculty;
 use App\Models\Role;
+
+use CollegeApplication\Authentication\CanConfirmRegistration;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
@@ -18,7 +20,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, SoftDeletes, CanResetPassword, Notifiable;
+    use Authenticatable, Authorizable, SoftDeletes, CanResetPassword, Notifiable, CanConfirmRegistration;
 
     protected $table = 'users';
 
@@ -28,7 +30,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'last_login'
+        'name', 'email', 'last_login', 'username'
     ];
 
     /**
@@ -40,7 +42,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
-    protected $dates = ['deleted_at', 'last_login', 'activated_at'];
+    protected $dates = ['deleted_at', 'last_login', 'activated_at', 'activation_email_sent_at', 'activation_expires_at'];
+
 
     public function role() {
         return $this->belongsTo(Role::class);
@@ -53,7 +56,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         }
         return explode($this->attributes['name'], ' ')[0];
     }
-
 
     public function applications() {
         return $this->hasMany(Application::class);

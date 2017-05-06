@@ -21,6 +21,8 @@ $app->get('api', function() {
     return app('files')->get(public_path('/swagger-ui/index.html'));
 });
 
+$app->get('register/verify/{code}', ['as' => 'register.verify', 'uses' => 'Api\AuthController@confirmRegistration']);
+
 // Password reset route (has to be without prefix due to Mailer requirements).
 $app->group(['middleware' => 'api.throttle'], function($app) {
     $app->get('password/reset/{token}', ['as' => 'password.reset', 'uses' => 'Auth\ResetPasswordController@showResetForm']);
@@ -34,6 +36,7 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
         $api->post('program/{id}/conditions', 'ConditionController@create');
 
         // Authentication routes
+        $api->post('register', 'AuthController@register');
         $api->post('login', 'AuthController@login');
         $api->post('password/email', 'PasswordController@sendPasswordResetEmail');
         $api->post('password/reset', 'PasswordController@resetPassword');

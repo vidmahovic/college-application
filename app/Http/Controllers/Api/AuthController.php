@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Models\Role;
 use App\Transformers\UserTransformer;
+use App\User;
 use Carbon\Carbon;
 use CollegeApplication\Authentication\AuthenticatesUsers;
 use CollegeApplication\Authentication\ThrottlesLogins;
+use Dingo\Api\Exception\StoreResourceFailedException;
+use Dingo\Api\Exception\ValidationHttpException;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -26,7 +30,7 @@ class AuthController extends ApiController
         try {
             $this->validateLoginParams($this->request);
         } catch(ValidationException $e) {
-            return $this->response->errorBadRequest('Validation has failed');
+            throw new ValidationHttpException($e->validator->errors());
         }
 
         // Then, we need to check if we need to send
@@ -80,11 +84,55 @@ class AuthController extends ApiController
     }
 
 
-    public function register() {
-        $this->validateRegisterParams($this->request);
-        // Validate the request
-        // Parse the data
-        // etc.
-        // TODO (Vid): implement registration logic.
+    public function register()
+    {
+        try {
+            $this->validateRegisterParams($this->request);
+        } catch(ValidationException $e) {
+            throw new ValidationHttpException($e->validator->errors());
+        }
+
+        $role = Role::student()->first();
+
+        $user = User::create([
+            'email' => $this->request->email,
+            'name' => $this->request->name,
+            'username' => $this->request->username,
+        ]);
+        $user->password = bcrypt($this->request->password);
+        $user->activation_email_sent_at = Carbon::now();
+        $user->activation_expires_at = Carbon::tomorrow();
+        $user->role()->associate($role);
+        $user->save();
+
+        event('UserHasRegistered', $user);
+
+        return $this->response->accepted();
+    }
+
+    public function confirmRegistration($verification_code)
+    {
+        $user = User::where('verification_code', $verification_code)->first();
+
+        $validator = $this->getValidationFactory()->make([
+            'verification_code' => $verification_code,
+            'verification_expires' => $user->activation_expires_at ?? null
+        ], [
+            'verification_code' => 'required|exists:users,verification_code'
+        ]);
+        // Validate activation expiration only if a user is found
+        $validator->sometimes('verification_expires', 'after_or_equal:'. Carbon::now(), function($input) {
+            return $input->verification_expires != null;
+        });
+
+        if($validator->fails()) {
+            return view('auth.verify')->withErrors($validator);
+        }
+
+        $user->activated_at = Carbon::now();
+        $user->verification_code = null;
+        $user->save();
+
+        return view('auth.verify', ['email' => $user->email]);
     }
 }
