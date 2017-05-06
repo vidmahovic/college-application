@@ -35,7 +35,15 @@ trait AuthenticatesUsers
     protected function validateRegisterParams(Request $request)
     {
         $this->validate($request, [
-           // TODO (Vid): Set registration rules
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email',
+            'username' => 'required|string|unique:users,username',
+            'password' => [
+                'required',
+                'regex:/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
+                'min:8'
+            ],
+            'confirm_password' => 'required|same:password'
         ]);
     }
 

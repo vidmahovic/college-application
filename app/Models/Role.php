@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,4 +38,7 @@ class Role extends Model
         $this->attributes['permissions'] = $permissions;
     }
 
+    public function scopeStudent($query) {
+        return $query->where('name', 'student');
+    }
 }
