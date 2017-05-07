@@ -16,7 +16,8 @@ export default {
 		table: null,
 		params: {
 			type: '',
-			is_regular: ''
+			regular: '',
+			faculty_id: ''
 		},
 		apiUrl: '/api/programs/paginate'
 	}),
@@ -146,8 +147,8 @@ export default {
 		},
 		setData(data){
 			this.params.type = data.type;
-			this.params.is_regular = data.regular;
-			//this.params.name = data.name;
+			this.params.regular = data.regular;
+			this.params.faculty_id = data.selectedFaculty.id
 			this.getRows(this.apiUrl);
 		},
 		setFilterable(value){

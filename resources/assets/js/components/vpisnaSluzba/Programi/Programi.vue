@@ -5,7 +5,7 @@
         <div class="panel panel-body">
           <h2 class="programs-header">Kriteriji za študijske programe</h2>
           <h4>Iskanje fakultete:</h4>
-          <v-select v-model="selectedFaculty" label="name" :options="faculties"></v-select>
+          <v-select v-model="params.selectedFaculty" label="name" :on-change="changeFaculty" :options="faculties"></v-select>
           <div class="row marginB10">
             <div class="col-md-5">
               <h4>Način študija</h4>
@@ -68,7 +68,7 @@ function programPdf(data){
 
 	//table header
 	doc.setFontSize(10);
-
+  doc.text(2, 40, "#");
 	var x = 8;
 	for(var i in header){
     var res = header[i].split(" ");
@@ -106,14 +106,15 @@ function programPdf(data){
 
   // začetek vsebine
   var y = 47
+  var counter = 1;
+  var totalPages = 1;
   for(var i in data.data){
     x = 8;
-    console.log(i);
-    console.log();
     var tmp = data.data[i].faculty.data.name.split(" ");
     var tmpY = y;
 
     doc.setFontSize(9);
+    doc.text(2, y, counter.toString());
     // ime fakultete
     for(var j = 0; j < tmp.length; j++){
       if(j+1 < tmp.length && tmp[j].length > 0 && tmp[j+1].length > 0 && (tmp[j+1].length < 3 || (tmp[j].length + tmp[j+1].length + 1) < 14)){
@@ -212,6 +213,7 @@ function programPdf(data){
       }
       else {
         doc.addPage();
+        totalPages++;
         y = 10;
       }
 
@@ -223,11 +225,17 @@ function programPdf(data){
       }
       else {
         doc.addPage();
+        totalPages++;
         y = 10;
       }
     }
 
+    counter++;
+  }
 
+  //footer (oštevilčenje strani)
+  for(var i = 1; i <= totalPages; i++){
+    doc.setPage(i).text(277, 207, "Stran "+ i +"/"+ totalPages);
   }
 
 	doc.output("datauri");
@@ -242,6 +250,7 @@ function programPdf(data){
           type: '',
           selectedFaculty: ''
         },
+        faculties: [],
         table_columns: [
           {label: 'Fakulteta', field: 'faculty.data.name'},
           {label: 'Program', field: 'name'},
@@ -292,25 +301,29 @@ function programPdf(data){
       regular1: function(param){
         this.params = {
           regular: param,
-          type: this.params.type
+          type: this.params.type,
+          selectedFaculty: this.params.selectedFaculty
         };
       },
       type1: function(param){
         this.params = {
           regular: this.params.regular,
-          type: param
+          type: param,
+          selectedFaculty: this.params.selectedFaculty
         };
       },
 
-      name: function(){
+      changeFaculty: function(val){
         this.params = {
           regular: this.params.regular,
-          type: this.params.type
+          type: this.params.type,
+          selectedFaculty: val
         };
+        console.log(this.params);
       },
 
       savePdf: function(){
-        this.$http.get("/api/programs")
+        this.$http.get("/api/programs", {params: {filters: {type: this.params.type, regular: this.params.regular, faculty_id: this.params.selectedFaculty}}})
           .then(function(res){
               programPdf(res.data);
           }, function(err){
@@ -321,7 +334,8 @@ function programPdf(data){
       poenostavi: function(){
         this.params = {
           type: '',
-          regular: ''
+          regular: '',
+          selectedFaculty: ''
         };
       }
     },
