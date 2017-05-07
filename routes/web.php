@@ -29,12 +29,11 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-        $api->get('test_all', function() { return Application::all(); }); // test
-        $api->post('test_template', 'ApplicationController@active');
+        $api->get('test_all', function() { return Application::with('applicationsPrograms','applicationCities')->get(); }); // test
+        $api->get('test_template', 'ApplicationController@active');
         $api->post('test_create', 'ApplicationController@create');
         $api->post('test_update/{id}', 'ApplicationController@update');
         $api->delete('test_delete/{id}', 'ApplicationController@archive');
-        $api->post('test_store/{id}', 'ApplicationController@store');
 
         // Authentication routes
         $api->post('login', 'AuthController@login');

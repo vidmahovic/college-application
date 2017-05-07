@@ -11,7 +11,7 @@ class Application extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;
 
-    protected $cascadeDeletes = ['application_cities', 'applications_programs'];
+    protected $cascadeDeletes = ['applicationCities', 'applicationsPrograms'];
 
     static $filters = [];
 
@@ -56,6 +56,11 @@ class Application extends Model
     public function applicationCities()
     {
         return $this->hasMany(ApplicationCity::class);
+    }
+
+    public function applicationsPrograms()
+    {
+        return $this->hasMany(ApplicationsPrograms::class);
     }
 
     public function district()

@@ -29,7 +29,7 @@ class ApplicationController extends ApiController {
         parent::__construct($request);
     }
 
-    public function create() // shrani, vendar ne odda prijave
+    public function create()
     {
         if(! $this->validator->validate($this->request->all())){
             $errors = $this->validator->errors(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
@@ -68,29 +68,19 @@ class ApplicationController extends ApiController {
         // create pivot tables programs -> min 1 wish, max 3 wishes
 
         $faculties = Faculty::all()->pluck('id')->toArray();
-
-        // $wishes = ($this->request->input('wishes'))->toJson;
         $wishes = json_decode($this->request->input('wishes'), true);
 
-        // [{faculty_id, is_double_degree, programs_id: [p1_id,p2_id]}, {faculty_id, is_double_degree, programs_id: [p1_id]}]
-
-        for($i = 1; $i <= 3; $i++){
-            $wish = $wishes[$i];
-            if($wish["is_double_degree"] == false && in_array($wish["programs_id"],$faculties)){
+        for($i = 0; $i < count($wishes); $i = $i + 1){
+            $current = $wishes[$i];
+            $num = count($current["programs_id"]);
+            // validate wishes
+            for($j = 0; $j < $num; $j = $j + 1){
+                $program = $current["programs_id"][$j];
                 $ap = ApplicationsPrograms::create([
                     'application_id' => $aid,
-                    'faculty_program_id' => $wish["programs_id"],
+                    'faculty_program_id' => $program,
                     'status' => false,
-                    'choice_number' => $i]);
-            }
-            else if($wish["is_double_degree"] == true && in_array($wish["programs_id"][0],$faculties) && in_array($wish["programs_id"][1],$faculties)){
-                for($j = 0; $j <= 1; $j++){
-                    $ap = ApplicationsPrograms::create([
-                        'application_id' => $aid,
-                        'faculty_program_id' => $wish["programs_id"][$j],
-                        'status' => false,
-                        'choice_number' => $i]);
-                }
+                    'choice_number' => $i+1]);
             }
         }
 
@@ -141,19 +131,6 @@ class ApplicationController extends ApiController {
         }
 
         // TODO: update
-    }
-
-    public function store($id)
-    {
-        $application = Application::findOrFail($id);
-
-        if($application == null) {
-            return $this->response->errorNotFound();
-        }
-
-        // TODO: store
-        // $application->status = 'filed';
-        // KAKSNI SO STATUSI -> created, save, filed?
     }
 
     public function sifranti()
