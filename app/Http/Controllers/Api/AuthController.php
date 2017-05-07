@@ -49,8 +49,8 @@ class AuthController extends ApiController
 
                 $user = $this->getUserFromRequest($this->request);
 
-                // If a user did not activate his account, he cannot login to the app.
-                if(! $user->activated())
+                // If a student did not activate his account, he cannot login to the app.
+                if($user->isStudent() && (! $user->activated()))
                     return $this->response->errorUnauthorized('User is not activated');
 
                 $this->clearLoginAttempts($this->request);
