@@ -292,7 +292,8 @@ function programPdf(data){
           {label: 'Število prijavljenih (EU)', field: 'count_enrolled', align: 'center'},
           {label: 'Število prijavljenih (tujci)', field: 'count_enrolled_foreign', align: 'center'},
           {label: 'Število sprejetih (EU)', field: 'count_accepted', align: 'center'},
-          {label: 'Število sprejetih (tujci)', field: 'count_accepted_foreign', align: 'center'}
+          {label: 'Število sprejetih (tujci)', field: 'count_accepted_foreign', align: 'center'},
+          {label: '', component: 'edit-program'}
         ],
         ajax_store: ajax_store
       }
