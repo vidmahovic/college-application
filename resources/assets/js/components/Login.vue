@@ -59,10 +59,12 @@
                     <input type="text" v-model="reg.surname" v-validate="'required'" class="form-control" name="surname" placeholder="Priimek"  tabindex="1">
                      <p class="text-danger" v-if="errors.has('surname')"> <!--{{errors.first('surname')}} -->Priimek je obvezen podatek</p>
                   </div>
+                  <!--
                   <div class="form-group">
                     <input type="text" v-model="reg.username" v-validate="'required'" class="form-control" name="username" placeholder="Uporabniško ime"  tabindex="1">
-                     <p class="text-danger" v-if="errors.has('username')"> <!--{{errors.first('username')}} -->Uporabniško ime je obvezen podatek</p>
+                     <p class="text-danger" v-if="errors.has('username')"> <!--{{errors.first('username')}} --><!--Uporabniško ime je obvezen podatek</p>
                   </div>
+                  -->
                   <div class="form-group">
                     <input type="text" v-model="reg.email" v-validate="'required|email'" class="form-control" name="email" placeholder="Email" tabindex="2">
                     <p class="text-danger" v-if="errors.has('email')">{{ errors.first('email') }}</p>
@@ -77,7 +79,10 @@
                   
 
                   </div>
+                   <p v-show="registerError" class="bg-danger" style="padding-top: 10px; padding-bottom: 10px; margin-top: 15px;">  {{ registerMsg }} </p>
+                   
                   <div class="form-group">
+                     
                     <div class="row">
                       <div class="col-sm-6 col-sm-offset-3">
                         <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Registriraj">
@@ -115,7 +120,9 @@ module.exports = {
         repswd: null
       },
       response: '',
-      showResponse: false
+      showResponse: false,
+      registerError: false,
+      registerMsg: ""
     }
   },
   methods: {
@@ -151,12 +158,27 @@ module.exports = {
 
         console.log(this.reg)
 
-        // this.$http.post('api/register', {username: this.reg.username, email: this.reg.email,
-        //                                 name: this.reg.name, surname: this.reg.surname, password: this.reg.email})
-        //   .then(function(res){
+          //'name', 'email', 'password', 'confirm_password', 'username'
+        this.$http.post('api/register', {username: this.reg.email, email: this.reg.email,
+                                        name: this.reg.name+' '+this.reg.surname,
+                                        password: this.reg.pswd, confirm_password: this.reg.repswd})
+          .then(function(res){
 
-        //   }, function(err){
-        //   });
+            this.registerError = false;
+            
+            console.log(res);
+          }, function(err){
+            
+            let errs = err.body.errors;
+            Object.entries(errs).forEach(
+              ([key, value]) => this.registerMsg = this.registerMsg.concat(value)
+
+            );
+
+            this.registerError = true;
+
+            console.log(err);
+          });
        
       }
     },
