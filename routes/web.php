@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\FacultyProgram;
+use App\Models\Application;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +31,11 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-        // tests, without auth
-        $api->get('program/{id}', function($id) { return FacultyProgram::with('enrollmentConditions')->find($id); });
-        $api->post('program/{id}/conditions', 'ConditionController@create');
+        $api->get('test_all', function() { return Application::with('applicationsPrograms','applicationCities')->get(); }); // test
+        $api->get('test_template', 'ApplicationController@active');
+        $api->post('test_create', 'ApplicationController@create');
+        $api->post('test_update/{id}', 'ApplicationController@update');
+        $api->delete('test_delete/{id}', 'ApplicationController@archive');
 
         // Authentication routes
         $api->post('register', 'AuthController@register');

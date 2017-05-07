@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ApplicationsPrograms extends Model // PIVOT MED VPISNIM LISTOM IN PROGRAMOM
 {
-
+    protected $table = 'applications_programs';
     protected $fillable = ['application_id', 'faculty_program_id', 'status', 'choice_number'];
     protected $guarded = ['id'];
 
@@ -20,5 +20,9 @@ class ApplicationsPrograms extends Model // PIVOT MED VPISNIM LISTOM IN PROGRAMO
 
     public function facultyProgram() {
         return $this->belongsTo(FacultyProgram::class);
+    }
+
+    public function application() {
+        return $this->belongsTo(Application::class);
     }
 }
