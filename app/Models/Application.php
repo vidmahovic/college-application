@@ -76,30 +76,10 @@ class Application extends Model
         return $this->whereIn('status', ['created', 'saved']);
     }
 
-    public static function createTemplate(User $applicant) {
-        $app = new \StdClass;
-
-        $app->applicant = $applicant;
-        $app->emso = null;
-        $app->gender = null;
-        $app->date_of_birth = null;
-        $app->phone = null;
-
-        $app->country_id = null;
-        $app->citizen_id = null;
-        $app->district_id = null;
-        $app->middle_school_id = null;
-        $app->profession_id = null;
-        $app->education_type_id = null;
-        $app->graduation_type_id = null;
-
-        $app->permanent_address = null;
-        $app->mailing_address = null;
-        $app->permanent_applications_cities_id = null;
-        $app->mailing_applications_cities_id = null;
-
-        $app->wishes = null;
-
+    public static function createTemplate(User $applicant)
+    {
+        $app = new static;
+        $app->user = $applicant;
         return $app;
     }
 }

@@ -16,6 +16,7 @@ use App\Models\EducationType;
 use App\Models\Country;
 use App\Models\MiddleSchool;
 use App\Transformers\ApplicationTransformer;
+use App\Transformers\ApplicationTemplateTransformer;
 use Dingo\Api\Exception\ResourceException;
 use App\Validators\ApplicationValidator;
 use Dingo\Api\Http\Request;
@@ -98,7 +99,7 @@ class ApplicationController extends ApiController {
         $application = $user->applications()->active()->latest()->first();
 
         if($application == null) {
-            $application = Application::createTemplate($user->id);
+            return $this->response->item(Application::createTemplate($user), new ApplicationTemplateTransformer);
         }
 
         return $this->response->item($application, new ApplicationTransformer);
