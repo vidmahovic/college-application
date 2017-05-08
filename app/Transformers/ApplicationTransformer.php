@@ -14,14 +14,14 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
 {
 
     protected $defaultIncludes = [
-        'applicant', 'citizen', 'interval', 'middle_school', 'nationality', 'education', 'profession', 'graduation'
+        'applicant', 'citizen', 'interval', 'middle_school', 'education', 'profession', 'graduation'
     ];
 
     public function transform(Application $application)
     {
         return [
             'id' => $application->id,
-            'middle_name' => $application->middle_name,
+            'phone' => $application->phone,
             'gender' => $application->gender,
             'emso' => $application->emso,
             'date_of_birth' => $application->date_of_birth,
@@ -39,10 +39,6 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
 
     public function includeMiddleSchool(Application $application) {
         return $this->item($application->middleSchool, new MiddleSchoolTransformer);
-    }
-
-    public function includeNationality(Application $application) {
-        return $this->item($application->nationality, new NationalityTypeTransformer);
     }
 
     public function includeEducation(Application $application) {
@@ -64,7 +60,4 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
     public function includeGraduation(Application $application) {
         return $this->item($application->graduation, new GraduationTypeTransformer);
     }
-
-
-
 }

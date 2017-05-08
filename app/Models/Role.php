@@ -30,9 +30,9 @@ class Role extends Model
      * Permissions are presented as serialized JSON so we have to unserialize it / convert it to JSON.
      * @return mixed
      */
-    public function getPermissionsAttribute() {
-        return unserialize($this->permissions);
-    }
+//    public function getPermissionsAttribute() {
+//        return unserialize($this->permissions);
+//    }
 
     public function setPermissionsAttribute($permissions) {
         $this->attributes['permissions'] = $permissions;

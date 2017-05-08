@@ -152,7 +152,7 @@
           }
 
 
-          if(!this.validation.name && !this.validation.surname && !this.validation.email && !this.validation.pass && !this.validation.rePass && !this.validation.faculty ){
+          if(!this.validation.name && !this.validation.surname && !this.validation.email && !this.validation.pass && !this.validation.rePass && ((this.params.role_id == '2' && !this.validation.faculty) || this.params.role_id == '3')){
             //ajax klic
             this.errMsg = '';
 

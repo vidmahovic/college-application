@@ -16,6 +16,8 @@ import StudentApplication from './components/student/Application.vue'
 import VpisnaSluzbaView from './components/vpisnaSluzba.vue'
 import VpisnaSluzbaDashboard from './components/vpisnaSluzba/Dashboard.vue'
 import VpisnaSluzbaProgrami from './components/vpisnaSluzba/Programi/Programi.vue'
+import VpisnaSluzbaProgramiUrejanje from './components/vpisnaSluzba/Programi/Urejanje.vue'
+import VpisnaSluzbaProgramiUstvari from './components/vpisnaSluzba/Programi/Ustvari.vue'
 
 const routes = [
 	{
@@ -80,6 +82,16 @@ const routes = [
 				component: VpisnaSluzbaProgrami,
 				name: 'VpisnaSluzbaProgrami',
 				meta: {description: 'VpisnaSluzbaProgrami'}
+			},
+			{
+				path: '/vpisna_sluzba/programi/ustvari',
+				component: VpisnaSluzbaProgramiUstvari,
+				name: 'VpisnaSluzbaProgramiUstvari'
+			},
+			{
+				path: '/vpisna_sluzba/programi/:id',
+				component: VpisnaSluzbaProgramiUrejanje,
+				name: 'VpisnaSluzbaProgramiUrejanje'
 			}
 		]
 	},

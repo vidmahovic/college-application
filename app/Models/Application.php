@@ -5,12 +5,20 @@ namespace App\Models;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
 
 class Application extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
+
+    protected $cascadeDeletes = ['applicationCities', 'applicationsPrograms'];
 
     static $filters = [];
+
+    protected $table = 'applications';
+
+    protected $fillable = ['user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
+        'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id', 'status'];
 
     public function middleSchool() {
         return $this->belongsTo(MiddleSchool::class, 'middle_school_id');
@@ -22,10 +30,6 @@ class Application extends Model
 
     public function profession(){
         return $this->belongsTo(Profession::class);
-    }
-
-    public function nationality() {
-        return $this->belongsTo(NationalityType::class, 'nationality_type_id');
     }
 
     public function interval(){
@@ -54,6 +58,11 @@ class Application extends Model
         return $this->hasMany(ApplicationCity::class);
     }
 
+    public function applicationsPrograms()
+    {
+        return $this->hasMany(ApplicationsPrograms::class);
+    }
+
     public function district()
     {
         return $this->belongsTo(District::class);
@@ -67,28 +76,10 @@ class Application extends Model
         return $this->whereIn('status', ['created', 'saved']);
     }
 
-    public static function createTemplate(User $applicant) {
-        $app = new \StdClass;
-
-        $app->applicant = $applicant;
-        $app->date_of_birth = null;
-        // TODO: Add other attributes to stdClass and return the object.
-
+    public static function createTemplate(User $applicant)
+    {
+        $app = new static;
+        $app->user = $applicant;
         return $app;
-
-//        $application = new static;
-//        $application->status = 'created';
-//        $application->user_id = $user_id;
-//        $application->education_type_id = EducationType::orderBy('name')->first()->id;
-//        $application->graduation_type_id = GraduationType::orderBy('name')->first()->id;
-//        $application->application_interval_id = ApplicationInterval::current()->first()->id;
-//        $application->nationality_type_id = NationalityType::orderBy('type')->first()->id;
-//        $application->profession_id = Profession::orderBy('name')->first()->id;
-//        $application->middle_school_id = MiddleSchool::orderBy('name')->first()->id;
-//        $application->citizen_id = Citizen::orderBy('name')->first()->id;
-//
-//        $application->save();
-//
-//        return $application;
     }
 }
