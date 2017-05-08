@@ -15,6 +15,7 @@ use App\Models\GraduationType;
 use App\Models\EducationType;
 use App\Models\Country;
 use App\Models\MiddleSchool;
+use App\Models\Profession;
 use App\Transformers\ApplicationTransformer;
 use App\Transformers\ApplicationTemplateTransformer;
 use Dingo\Api\Exception\ResourceException;
@@ -158,14 +159,14 @@ class ApplicationController extends ApiController {
             'application_id' => $id,
             'city_id' => $this->request->input('permanent_applications_cities_id'),
             'address' => $this->request->input('permanent_address'),
-            'country_name' => $this->request->input('permanent_country_name'),
+            'country_id' => $this->request->input('permanent_country_id'),
             'address_type' => 0]);
 
         $mailing_address = ApplicationCity::create([
             'application_id' => $id,
             'city_id' => $this->request->input('mailing_applications_cities_id'),
             'address' => $this->request->input('mailing_address'),
-            'country_name' => $this->request->input('mailing_country_name'),
+            'country_id' => $this->request->input('mailing_country_id'),
             'address_type' => 1]);
 
         $wishes = json_decode($this->request->input('wishes'), true);
@@ -198,6 +199,7 @@ class ApplicationController extends ApiController {
         $education_types = EducationType::all();
         $graduation_types = GraduationType::all();
         $middle_schooles = MiddleSchool::all();
+        $professions = Profession::all();
 
         return $this->response->array([
             'countries'=> $countries,
@@ -208,7 +210,8 @@ class ApplicationController extends ApiController {
             'districts'=> $districts,
             'education_types'=> $education_types,
             'graduation_types'=> $graduation_types,
-            'middle_schooles'=> $middle_schooles
+            'middle_schooles'=> $middle_schooles,
+            'professions'=> $professions
         ]);
     }
 }

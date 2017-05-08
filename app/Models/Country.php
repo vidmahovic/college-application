@@ -20,4 +20,9 @@ class Country extends Model // DRŽAVA
     {
         return $this->hasMany(Application::class);
     }
+
+    public function applicationCities()
+    {
+        return $this->hasMany(ApplicationCity::class);
+    }
 }
