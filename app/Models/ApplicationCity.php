@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ApplicationCity extends Model // PIVOT MED PIJAVO IN POŠTO
 {
     protected $table = 'application_cities';
-    protected $fillable = ['application_id', 'city_id', 'address', 'address_type'];
+    protected $fillable = ['application_id', 'city_id', 'address', 'address_type', 'country_name'];
     protected $guarded = ['id'];
 
      public function city(){

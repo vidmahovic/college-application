@@ -112,13 +112,7 @@ class ApplicationController extends ApiController {
     {
         $application = Application::find($id);
 
-        if($application == null) {
-            throw new ResourceException('Resource not found');
-        }
 
-        if($this->request->user()->cannot('archive', $application)) {
-            return $this->response->errorUnauthorized();
-        }
 
         $application->delete();
 
@@ -133,7 +127,64 @@ class ApplicationController extends ApiController {
             return $this->response->errorNotFound();
         }
 
-        // TODO: update
+        if(! $this->validator->validate($this->request->all())){
+            $errors = $this->validator->errors();
+            return $this->response->errorBadRequest($errors);
+        }
+
+        if(! $this->request->input('wishes')){
+            return $this->response->errorBadRequest("You must insert atleast one wish!");
+        }
+
+        $application->update($this->request->only(
+            'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
+            'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
+        ));
+
+        $application->application_interval_id = ApplicationInterval::latest()->first();
+        $application->save();
+
+        $cities = (ApplicationCity::all()->where('application_id',$id)->pluck('id'))->toArray();
+        for($i = 0; $i < count($cities); $i = $i + 1){
+            ApplicationCity::destroy($cities[$i]);
+        }
+
+        $programs = (ApplicationsPrograms::all()->where('application_id',$id)->pluck('id'))->toArray();
+        for($i = 0; $i < count($programs); $i = $i + 1){
+            ApplicationsPrograms::destroy($programs[$i]);
+        }
+
+        $permanent_address = ApplicationCity::create([
+            'application_id' => $id,
+            'city_id' => $this->request->input('permanent_applications_cities_id'),
+            'address' => $this->request->input('permanent_address'),
+            'country_name' => $this->request->input('permanent_country_name'),
+            'address_type' => 0]);
+
+        $mailing_address = ApplicationCity::create([
+            'application_id' => $id,
+            'city_id' => $this->request->input('mailing_applications_cities_id'),
+            'address' => $this->request->input('mailing_address'),
+            'country_name' => $this->request->input('mailing_country_name'),
+            'address_type' => 1]);
+
+        $wishes = json_decode($this->request->input('wishes'), true);
+
+        for($i = 0; $i < count($wishes); $i = $i + 1){
+            $current = $wishes[$i];
+            $num = count($current["programs_id"]);
+            // validate wishes
+            for($j = 0; $j < $num; $j = $j + 1){
+                $program = $current["programs_id"][$j];
+                $ap = ApplicationsPrograms::create([
+                    'application_id' => $id,
+                    'faculty_program_id' => $program,
+                    'status' => false,
+                    'choice_number' => $i+1]);
+            }
+        }
+
+        return $this->response->created('Application updated');
     }
 
     public function sifranti()
