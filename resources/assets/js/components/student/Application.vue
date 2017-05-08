@@ -178,10 +178,10 @@
                   <label for="nacin_srednje_sole">Način zaključka srednje šole</label>
                   <div v-if="doRender">
                     <div v-if="formControl.enableMidSchools">
-                    <v-select  v-model="apl.graduation_id" label="name" :options="sifrants.graduation_types"></v-select>
+                    <v-select  v-model="apl.graduation_type_id" label="name" :options="sifrants.graduation_types"></v-select>
                     </div>
                     <div v-else>
-                      <input v-model="apl.graduation_id.name" disabled="true" class="form-control">
+                      <input v-model="apl.graduation_type_id.name" disabled="true" class="form-control">
                     </div>
                   </div>
                 </div>
@@ -407,11 +407,11 @@
           // check if country is not slovenia => set other 2 fields
           if (parseInt(currentValue.id) != 705){
             this.apl.middle_school_id = {id: 9, name: "DRUGO"};
-            this.apl.graduation_id = {id: 1, name: "PODATEK MANJKA"},
+            this.apl.graduation_type_id = {id: 1, name: "PODATEK MANJKA"},
             this.formControl.enableMidSchools = false;
           }else{
             this.apl.middle_school_id = null;
-            this.apl.graduation_id = null,
+            this.apl.graduation_type_id = null,
             this.formControl.enableMidSchools = true;
           }
         },
