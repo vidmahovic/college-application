@@ -58,13 +58,15 @@ class ApplicationController extends ApiController {
                 'application_id' => $aid,
                 'city_id' => $this->request->input('permanent_applications_cities_id'),
                 'address' => $this->request->input('permanent_address'),
-                'address_type' => 'permanent']);
+                'country_name' => $this->request->input('permanent_country_name'),
+                'address_type' => 0]);
 
         $mailing_address = ApplicationCity::create([
                 'application_id' => $aid,
                 'city_id' => $this->request->input('mailing_applications_cities_id'),
                 'address' => $this->request->input('mailing_address'),
-                'address_type' => 'mailing']);
+                'country_name' => $this->request->input('mailing_country_name'),
+                'address_type' => 1]);
 
         // create pivot tables programs -> min 1 wish, max 3 wishes
 
