@@ -107,9 +107,28 @@
         doc.text(section_start, permanentAddr_start, "STALNI NASLOV");
         doc.line(line_start,permanentAddr_start+2,line_end,permanentAddr_start+2);
 
+        doc.text(col1_start, permanentAddr_start+10, "Naslov: "); doc.text(col1_text, permanentAddr_start+10, this.displayField(apl.permanent_address));
+        doc.text(col1_start, permanentAddr_start+20, "Kraj in Država: "); doc.text(col1_text, permanentAddr_start+20, this.displayField(apl.permanent_address_city)+
+                                                                                                                    this.displayField(apl.permanent_address_country));
+
+        // Naslov ZA POŠILJANJE
+        const mailingAddr_start = permanentAddr_start+40;
+        doc.text(section_start, mailingAddr_start, "NASLOV ZA POŠILJANJE");
+        doc.line(line_start,mailingAddr_start+2,line_end,mailingAddr_start+2);
+
+        doc.text(col1_start, mailingAddr_start+10, "Naslov: "); doc.text(col1_text, mailingAddr_start+10, this.displayField(apl.mailing_address));
+        doc.text(col1_start, mailingAddr_start+20, "Kraj in Država: "); doc.text(col1_text, mailingAddr_start+20, this.displayField(apl.mailing_address_city)+
+                                                                                                                    this.displayField(apl.mailing_address_country));
+
+        // DOSEDANJA IZOBRAZBA
+        const education_start = mailingAddr_start + 40;
+        doc.text(section_start, education_start, "DOSEDANJA IZOBRAZBA");
+        doc.line(line_start, education_start+2, line_end, education_start+2);
+
+        doc.text(col1_start, education_start+10, "KLASIUS SRV: "); doc.text(col1_text, education_start+10, this.displayField(apl.education_type_id))
 
         
-        
+
 
     
         //footer (oštevilčenje strani)
