@@ -36,6 +36,8 @@ class ApplicationValidator{
 
             'permanent_address' => 'required|string',
             'mailing_address' => 'required|string',
+            'permanent_country_name' => 'required|exists:countries,name',
+            'mailing_country_name' => 'required|exists:countries,name',
             'permanent_applications_cities_id' => 'required|exists:cities,id',
             'mailing_applications_cities_id' => 'required|exists:cities,id'
         ];
