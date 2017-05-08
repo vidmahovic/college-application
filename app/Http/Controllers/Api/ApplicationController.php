@@ -15,6 +15,7 @@ use App\Models\GraduationType;
 use App\Models\EducationType;
 use App\Models\Country;
 use App\Models\MiddleSchool;
+use App\Models\Profession;
 use App\Transformers\ApplicationTransformer;
 use App\Transformers\ApplicationTemplateTransformer;
 use Dingo\Api\Exception\ResourceException;
@@ -198,6 +199,7 @@ class ApplicationController extends ApiController {
         $education_types = EducationType::all();
         $graduation_types = GraduationType::all();
         $middle_schooles = MiddleSchool::all();
+        $professions = Profession::all();
 
         return $this->response->array([
             'countries'=> $countries,
@@ -208,7 +210,8 @@ class ApplicationController extends ApiController {
             'districts'=> $districts,
             'education_types'=> $education_types,
             'graduation_types'=> $graduation_types,
-            'middle_schooles'=> $middle_schooles
+            'middle_schooles'=> $middle_schooles,
+            'professions'=> $professions
         ]);
     }
 }
