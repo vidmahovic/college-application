@@ -54,7 +54,6 @@
 import ajax_store from './ajax_store.js';
 
 
-
 function programPdf(data){
 	var doc = new jsPDF('landscape');
 	var header = ["Fakulteta", "Program", "Vrsta programa", "Nacin študija", "Omejitev", "Razpisanih mest (EU)", "Razpisanih mest (tujci)", "Število prijavljenih (EU)", "Število prijavljenih (tujci)", "Število sprejetih (EU)", "Število sprejetih (tujci)"];
