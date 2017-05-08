@@ -178,10 +178,10 @@
                   <label for="nacin_srednje_sole">Način zaključka srednje šole</label>
                   <div v-if="doRender">
                     <div v-if="formControl.enableMidSchools">
-                    <v-select  v-model="apl.graduation_type_id" label="name" :options="sifrants.graduation_types"></v-select>
+                    <v-select  v-model="apl.graduation_id" label="name" :options="sifrants.graduation_types"></v-select>
                     </div>
                     <div v-else>
-                      <input v-model="apl.graduation_type_id.name" disabled="true" class="form-control">
+                      <input v-model="apl.graduation_id.name" disabled="true" class="form-control">
                     </div>
                   </div>
                 </div>
@@ -202,7 +202,7 @@
                   <label for="srednja_sola">Pridobljeni poklic</label>
                   <div v-if="doRender">
                     <!--<div v-if="formControl.enableMidSchools">-->
-                      <v-select v-model="apl.profession_type_id" label="name" :options="sifrants.professions"></v-select>
+                      <v-select v-model="apl.profession_id" label="name" :options="sifrants.professions"></v-select>
                     <!--</div>
                     <div v-else>
                       <input v-model="apl.middle_school_id.name" disabled="true" class="form-control">
@@ -332,7 +332,15 @@
         //console.log(this.apl)
         //console.log(JSON.stringify(this.apl))
         this.apl.wishes = this.wishes;
-        this.preprocessApplication();
+        let send_apl = this.preprocessApplication();
+
+        this.$http.post("api/applications", send_apl)
+        .then(function(data) {
+          console.log(data)
+        }, function(err) {
+          console.log(err);
+        })
+
         //console.log(this.apl);
       },
       add_wish: function(programs) {
@@ -399,11 +407,11 @@
           // check if country is not slovenia => set other 2 fields
           if (parseInt(currentValue.id) != 705){
             this.apl.middle_school_id = {id: 9, name: "DRUGO"};
-            this.apl.graduation_type_id = {id: 1, name: "PODATEK MANJKA"},
+            this.apl.graduation_id = {id: 1, name: "PODATEK MANJKA"},
             this.formControl.enableMidSchools = false;
           }else{
             this.apl.middle_school_id = null;
-            this.apl.graduation_type_id = null,
+            this.apl.graduation_id = null,
             this.formControl.enableMidSchools = true;
           }
         },
@@ -475,8 +483,9 @@
             apl.mailing_applications_cities_id = apl.permanent_applications_cities_id;
             //todo drzava
           }
+          apl.user_id = apl.user.data.id;
 
-
+          delete apl.user;
           console.log("FINAL");
           console.log(apl);
           return apl;
