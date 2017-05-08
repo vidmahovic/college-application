@@ -22,7 +22,7 @@ class ApplicationValidator{
         $rules = [
             'user_id' => 'required|exists:users,id',
             'emso' => 'required|min:12|max:13',
-            'gender' => 'required|in:male,female',
+            'gender' => 'required',
             'date_of_birth' => 'required|date|before:' . (string) Carbon::now()->subYears(14),
             'phone' => ['required', 'regex:/^[0-9]{9}$/'],
 
@@ -36,8 +36,8 @@ class ApplicationValidator{
 
             'permanent_address' => 'required|string',
             'mailing_address' => 'required|string',
-            'permanent_country_name' => 'required|exists:countries,name',
-            'mailing_country_name' => 'required|exists:countries,name',
+            'permanent_country_id' => 'required|exists:countries,id',
+            'mailing_country_id' => 'required|exists:countries,id',
             'permanent_applications_cities_id' => 'required|exists:cities,id',
             'mailing_applications_cities_id' => 'required|exists:cities,id'
         ];
@@ -58,8 +58,8 @@ class ApplicationValidator{
         $validator = app('validator')->make($input, $rules, $messages);
 
         $this->gender = $this->input['gender'];
-        $this->isFromSlovenia = Country::where('name','SLOVENIJA')->pluck('id') == $this->input['country_id'];
-        $this->isBornForeign = District::where('name', 'TUJINA')->pluck('id') == $this->input['district_id'];
+        $this->isFromSlovenia = Country::where('name','SLOVENIJA')->first()->id == $this->input['country_id'];
+        $this->isBornForeign = District::where('name', 'TUJINA')->first()->id == $this->input['district_id'];
 
         $validator->after(function($validator)
         {
