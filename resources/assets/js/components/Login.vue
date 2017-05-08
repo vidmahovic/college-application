@@ -70,11 +70,11 @@
                     <p class="text-danger" v-if="errors.has('email')">{{ errors.first('email') }}</p>
                   </div>
                   <div class="form-group">
-                    <input type="password" v-model="reg.pswd" v-validate="'required|min:8'" name="reg_password" id="password" tabindex="2" class="form-control" placeholder="Geslo">
+                    <input type="password" v-model="reg.pswd" v-validate="'required|min:8'" name="password" id="password" tabindex="2" class="form-control" placeholder="Geslo">
                     <p class="text-danger" v-if="errors.has('password')">{{ errors.first('password') }}</p>
                   </div>
                   <div class="form-group">
-                    <input type="password" v-model="reg.repswd" v-validate="'required|confirmed:reg_password'"  name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Potrdi geslo">
+                    <input type="password" v-model="reg.repswd" v-validate="'required|confirmed:password'"  name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Potrdi geslo">
                     <p class="text-danger" v-if="errors.has('confirm-password')">{{ errors.first('confirm-password') }}</p>
                   
 
