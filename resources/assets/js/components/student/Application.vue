@@ -8,6 +8,7 @@
                 <div class="form-group col-md-6">
                   <label for="ime">Ime</label>
                   <input disabled v-model="apl.user.data.name.split(' ')[0]" placeholder="Ime" class="form-control" id="ime">
+
                 </div>
                 <div class="form-group col-md-6">
                   <label for="primmek">Priimek</label>
@@ -18,7 +19,8 @@
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="emso">EMŠO</label>
-                  <input v-model.number="apl.emso" type="number" placeholder="EMŠO" class="form-control" id="emso" maxlength="13">
+                  <input v-model.number="apl.emso" v-validate="'required|digits:13'" name="emso" type="number" placeholder="EMŠO" class="form-control" id="emso" maxlength="13">
+                  <p class="text-danger" v-if="errors.has('emso')">{{errors.first('emso')}} </p>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="spol">Spol</label>
@@ -66,7 +68,8 @@
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="ime">Kontaktni telefon</label>
-                  <input v-model="apl.phone" placeholder="Kontaktni telefon" class="form-control" id="ime">
+                  <input v-model="apl.phone" v-validate="'required|digits:9'" name="phone" placeholder="Kontaktni telefon" class="form-control" id="ime">
+                  <p class="text-danger" v-if="errors.has('phone')">{{errors.first('phone')}} </p>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="primmek">Email</label>
@@ -132,7 +135,7 @@
                   <label for="drzava_stalni_naslov">Mesto</label>
                   <div v-if="doRender">
                     <div v-if="formControl.enable_mailing_city">
-                    <v-select  v-model="apl.mailing_applications_cities_id" label="name" :options="sifrants.cities"></v-select>
+                    <v-select v-model="apl.mailing_applications_cities_id" label="name" :options="sifrants.cities"></v-select>
                     </div>
                     <div v-else>
                       <input v-model="apl.mailing_applications_cities_id.name" disabled="true" class="form-control">
@@ -333,7 +336,7 @@
         //console.log(JSON.stringify(this.apl))
         this.apl.wishes = this.wishes;
         let send_apl = this.preprocessApplication();
-
+        send_apl['status'] = 'saved';
         this.$http.post("api/applications", send_apl)
         .then(function(data) {
           console.log(data)
@@ -494,6 +497,9 @@
 
     },
     created: function(){
+      
+      console.log(this.$parent.apl);
+
       this.add_wish();
 
       this.$http.get('/api/applications/active')
