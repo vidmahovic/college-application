@@ -53,15 +53,57 @@ class Application extends Model
         return $this->belongsTo(Country::class);
     }
 
-    public function applicationCities()
+
+    public function mailingAddress()
     {
-        return $this->hasMany(ApplicationCity::class);
+        return $this->cities()->wherePivot('address_type', 2);
     }
 
-    public function applicationsPrograms()
+    public function permanentAddress()
     {
-        return $this->hasMany(ApplicationsPrograms::class);
+        return $this->cities()->wherePivot('address_type', 1);
     }
+
+    public function cities()
+    {
+        return $this
+            ->belongsToMany(City::class, 'application_cities', 'application_id', 'city_id')
+            ->withPivot('address', 'address_type');
+    }
+
+//    public function applicationCities()
+//    {
+//        return $this
+//            ->belongsToMany(ApplicationCity::class, 'application_cities', 'application_id', 'city_id')
+//            ->withPivot('address', 'address_type');
+//    }
+
+    public function wishes()
+    {
+        return $this
+            ->belongsToMany(FacultyProgram::class, 'applications_programs', 'application_id', 'faculty_program_id')
+            ->withPivot('status', 'choice_number');
+    }
+
+    public function firstWish()
+    {
+        return $this->wishes()->wherePivot('choice_num', 1);
+    }
+
+    public function secondWish()
+    {
+        return $this->wishes()->wherePivot('choice_num', 2);
+    }
+
+    public function thirdWish()
+    {
+        return $this->wishes()->wherePivot('choice_num', 3);
+    }
+
+//    public function applicationsPrograms()
+//    {
+//        return $this->hasMany(ApplicationsPrograms::class);
+//    }
 
     public function district()
     {
