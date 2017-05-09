@@ -44,7 +44,7 @@ class ApplicationController extends ApiController {
         if($this->request->input('status') == 'file'){
             $application->status = 'filed';
         }
-        $application->application_interval_id = ApplicationInterval::latest()->first();
+        $application->application_interval_id = ApplicationInterval::latest()->first()->id;
         $application->save();
 
         $aid = $application->id;
