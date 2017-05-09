@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Faculty;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -68,6 +69,7 @@ class UsersTableSeeder extends Seeder
             'username' => 'referent_fri',
             'password' => bcrypt('referentfri1'),
             'activated_at' => Carbon::now(),
+            'faculty_id' => Faculty::where('name', 'like', '%fakulteta za računalništvo%')->first()->id,
             'role_id' => 2
         ]);
 
@@ -76,6 +78,7 @@ class UsersTableSeeder extends Seeder
             'username' => 'referent_ff',
             'password' => bcrypt('referentff1'),
             'activated_at' => Carbon::now(),
+            'faculty_id' => Faculty::where('name', 'like', '%filozofska%')->first()->id,
             'role_id' => 2
         ]);
 
