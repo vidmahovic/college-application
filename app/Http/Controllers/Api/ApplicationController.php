@@ -33,20 +33,7 @@ class ApplicationController extends ApiController {
 
     public function create()
     {
-        $user = $this->request->user();
 
-        if ($user->cannot('create', Application::class)) {
-            return $this->response->errorUnauthorized();
-        }
-
-        if(! $this->validator->validate($this->request->all())){
-            $errors = $this->validator->errors(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
-            return $this->response->errorBadRequest($errors);
-        }
-
-        if(! $this->request->input('wishes')){
-            return $this->response->errorBadRequest("You must insert atleast one wish!");
-        }
 
         $application = Application::create($this->request->only(
             'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
@@ -81,7 +68,7 @@ class ApplicationController extends ApiController {
         // create pivot tables programs -> min 1 wish, max 3 wishes
 
         $faculties = Faculty::all()->pluck('id')->toArray();
-        $wishes = json_decode($this->request->input('wishes'), true);
+        $wishes = json_decode((string)$this->request->input('wishes'), true);
 
         for($i = 0; $i < count($wishes); $i = $i + 1){
             $current = $wishes[$i];
