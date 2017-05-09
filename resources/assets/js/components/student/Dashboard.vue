@@ -46,17 +46,24 @@
         return {
           section: 'Student',
           application: null,
-          hasApplication: false
+          hasApplication: false,
+          mock_apl: {"emso":1504993500099,"gender":"female","date_of_birth":"1991-05-02T22:00:00.000Z","phone":"141123456","country_id":9,"citizen_id":1,"district_id":0,"middle_school_id":9,"profession_id":50103,"education_type_id":16102,"graduation_type_id":1,"permanent_address":"Jabadu","mailing_address":"Slovenska","permanent_country_id":20,"mailing_country_id":705,"permanent_applications_cities_id":1,"mailing_applications_cities_id":1210,"wishes":[{"faculty_id":63,"programs_id":["VU00"]},{"faculty_id":18,"programs_id":["Q200","Q300"]}],"user_id":2}
+
         }    
     },
     methods: {
       goto_application: function(event, application) {
         this.$router.push('application')
       },
+      translate_gender: function(val) {
+
+        if(val === "female") return "Ženski";
+        return "Moški";
+      },
       displayField: function(value) {
         if(value == null || value==='undefined') return '/'
 
-        return value;
+        return String(value);
       },
       applicationPdf: function(apl) {
         var doc = new jsPDF();
@@ -90,9 +97,12 @@
         //doc.text(100,50, "Priimek:"); doc.text(150,50,"Novak");
         
         doc.text(col1_start,personalData_start+20, "Emso:"); doc.text(col1_text,personalData_start+20, this.displayField(apl.emso));
-        doc.text(col2_start,personalData_start+20, "Spol:"); doc.text(col2_text,personalData_start+20, this.displayField(apl.gender));
+        doc.text(col2_start,personalData_start+20, "Spol:"); doc.text(col2_text,personalData_start+20, this.displayField(this.translate_gender(apl.gender)));
         
-        doc.text(col1_start,personalData_start+30, "Datum rojstva:"); doc.text(col1_text,personalData_start+30, this.displayField(apl.date_of_birth));
+        let date_of_birth = new Date(apl.date_of_birth);
+        date_of_birth = date_of_birth.getDay()+"."+(date_of_birth.getMonth()+1)+"."+date_of_birth.getFullYear();
+        
+        doc.text(col1_start,personalData_start+30, "Datum rojstva:"); doc.text(col1_text,personalData_start+30, String(date_of_birth));
         doc.text(col2_start,personalData_start+30, "Država rojstva:"); doc.text(col2_text,personalData_start+30, "Slovenija");
         
         doc.text(col1_start,personalData_start+40, "Kraj rojstva:"); doc.text(col1_text,personalData_start+40,"Jazne");
@@ -134,7 +144,11 @@
           }
           this.apl = application;
           
+
+        }, function(err) {
+          this.applicationPdf(this.mock_apl);
         });
+
 
     },
     mounted() {
