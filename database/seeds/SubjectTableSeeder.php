@@ -2,9 +2,8 @@
 
 use App\Models\Subject;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\App;
 
-class SubjectsTableSeeder extends Seeder
+class SubjectTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

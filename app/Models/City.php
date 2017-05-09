@@ -15,8 +15,15 @@ class City extends Model // POŠTA
         'name' => 'string'
     ];
 
-    public function applicationCities()
+//    public function applicationCities()
+//    {
+//        return $this->hasMany(ApplicationCity::class);
+//    }
+
+    public function applications()
     {
-        return $this->hasMany(ApplicationCity::class);
+        return $this
+            ->belongsToMany(Application::class, 'application_cities', 'city_id', 'application_id')
+            ->withPivot('address', 'address_type');
     }
 }

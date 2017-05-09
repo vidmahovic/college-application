@@ -18,18 +18,59 @@ use App\Models\MiddleSchool;
 use App\Models\Profession;
 use App\Transformers\ApplicationTransformer;
 use App\Transformers\ApplicationTemplateTransformer;
+use CollegeApplication\Search\ApplicationSearch\ApplicationSearch;
 use Dingo\Api\Exception\ResourceException;
 use App\Validators\ApplicationValidator;
 use Dingo\Api\Http\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ApplicationController extends ApiController {
 
     protected $validator;
+    protected $search;
 
-    public function __construct(Request $request, ApplicationValidator $validator){
+    public function __construct(Request $request, ApplicationValidator $validator, ApplicationSearch $search) {
         $this->validator = $validator;
+        $this->search = $search;
         parent::__construct($request);
+    }
+
+    public function index()
+    {
+        $user = $this->request->user();
+
+        if($user->cannot('get', Application::class))
+            throw new UnauthorizedHttpException('Basic');
+
+        // If user is a referent for the faculty, allow him to view only applications that are connected to his faculty.
+        if($user->isReferent())
+            $this->request['filters'] = ['faculty_id' => $user->faculty_id];
+
+        // Send only applications with status 'filed'
+        $applications = $this->search->applyFiltersFromRequest($this->request)->filed()->get();
+
+        return $this->response->collection($applications, new ApplicationTransformer)->addMeta('count', $applications->count());
+    }
+
+    public function paginate()
+    {
+        $user = $this->request->user();
+
+        if($user->cannot('paginate', Application::class))
+            throw new UnauthorizedHttpException('Basic');
+
+        // If user is a referent for the faculty, allow him to view only applications that are connected to his faculty.
+        if($user->isReferent())
+            $this->request['filters'] = ['faculty_id' => $user->faculty_id];
+
+        // Send only applications with status 'filed'
+        $applications = $this->search
+            ->applyFiltersFromRequest($this->request)
+            ->filed()
+            ->paginate($this->request->get('perPage') ?? 30);
+
+        return $this->response->paginator($applications, new ApplicationTransformer);
     }
 
     public function create()
@@ -186,29 +227,21 @@ class ApplicationController extends ApiController {
         $application->application_interval_id = ApplicationInterval::latest()->first();
         $application->save();
 
-        $cities = (ApplicationCity::all()->where('application_id',$id)->pluck('id'))->toArray();
-        for($i = 0; $i < count($cities); $i = $i + 1){
-            ApplicationCity::destroy($cities[$i]);
-        }
+        $aid = $application->id;
 
-        $programs = (ApplicationsPrograms::all()->where('application_id',$id)->pluck('id'))->toArray();
-        for($i = 0; $i < count($programs); $i = $i + 1){
-            ApplicationsPrograms::destroy($programs[$i]);
-        }
+        // create pivot tables cities
 
         $permanent_address = ApplicationCity::create([
-            'application_id' => $id,
-            'city_id' => $this->request->input('permanent_applications_cities_id'),
-            'address' => $this->request->input('permanent_address'),
-            'country_id' => $this->request->input('permanent_country_id'),
-            'address_type' => 0]);
+                'application_id' => $aid,
+                'city_id' => $this->request->input('permanent_applications_cities_id'),
+                'address' => $this->request->input('permanent_address'),
+                'address_type' => 'permanent']);
 
         $mailing_address = ApplicationCity::create([
-            'application_id' => $id,
-            'city_id' => $this->request->input('mailing_applications_cities_id'),
-            'address' => $this->request->input('mailing_address'),
-            'country_id' => $this->request->input('mailing_country_id'),
-            'address_type' => 1]);
+                'application_id' => $aid,
+                'city_id' => $this->request->input('mailing_applications_cities_id'),
+                'address' => $this->request->input('mailing_address'),
+                'address_type' => 'mailing']);
 
         $wishes = json_decode($this->request->input('wishes'), true);
 
