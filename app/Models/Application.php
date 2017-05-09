@@ -45,6 +45,12 @@ class Application extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function cities()
+    {
+        return $this->belongsToMany(City::class, 'application_cities', 'application_id', 'city_id')
+            ->withPivot(['address_type', 'address', 'country_name']);
+    }
+
     public function citizen(){
         return $this->belongsTo(Citizen::class);
     }
@@ -69,11 +75,11 @@ class Application extends Model
     }
 
     public function scopeFiled($scope) {
-        return $this->where('status', 'filed');
+        return $scope->where('status', 'filed');
     }
 
     public function scopeActive($scope) {
-        return $this->whereIn('status', ['created', 'saved']);
+        return $scope->whereIn('status', ['created', 'saved']);
     }
 
     public static function createTemplate(User $applicant)

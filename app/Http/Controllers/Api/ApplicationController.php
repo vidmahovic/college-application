@@ -21,6 +21,7 @@ use App\Transformers\ApplicationTemplateTransformer;
 use Dingo\Api\Exception\ResourceException;
 use App\Validators\ApplicationValidator;
 use Dingo\Api\Http\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ApplicationController extends ApiController {
 
@@ -40,49 +41,73 @@ class ApplicationController extends ApiController {
                 'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
         ));
 
-        // status -> default -> created
-        if($this->request->input('status') == 'file'){
-            $application->status = 'filed';
-        }
+        $application->status = $this->request->input('status') ?? 'created';
         $application->application_interval_id = ApplicationInterval::latest()->first()->id;
         $application->save();
 
-        $aid = $application->id;
+        // Create pivot tables for addresses.
+        $permanent_address = City::find($this->request->input('permanent_applications_cities_id'));
+        $mailing_address = City::find($this->request->input('mailing_applications_cities_id'));
 
-        // create pivot tables cities
-
-        $permanent_address = ApplicationCity::create([
-                'application_id' => $aid,
-                'city_id' => $this->request->input('permanent_applications_cities_id'),
+        $application->cities()->sync([
+            [$permanent_address->id => [
                 'address' => $this->request->input('permanent_address'),
-                'country_name' => $this->request->input('permanent_country_name'),
-                'address_type' => 0]);
-
-        $mailing_address = ApplicationCity::create([
-                'application_id' => $aid,
-                'city_id' => $this->request->input('mailing_applications_cities_id'),
+                'address_type' => 0,
+                'country_name' => $this->request->input('permanent_country_name')
+            ]],
+            [$mailing_address->id => [
                 'address' => $this->request->input('mailing_address'),
-                'country_name' => $this->request->input('mailing_country_name'),
-                'address_type' => 1]);
+                'address_type' => 1,
+                'country_name' => $this->request->input('mailing_counrty_name')
+            ]]
+        ]);
+
+        $wish_ids = array_pluck($this->request->input('wishes'), 'faculty_id');
+        dd($wish_ids);
+
+        // Create pivot tables for wishes.
+        if(! count($wish_ids)) {
+            throw new BadRequestHttpException("At least one wish must be provided.");
+        }
+
+//        $programs = FacultyProgram::whereIn('faculty_id', $wish_ids)->get();
+//        $first_wish = $programs->first();
+//        $second_wish = $programs->slice(1)->first();
+//
+//        $application->wishes()->save($programs->fir);
+
+//        $permanent_address = ApplicationCity::create([
+//                'application_id' => $application->id,
+//                'city_id' => $this->request->input('permanent_applications_cities_id'),
+//                'address' => $this->request->input('permanent_address'),
+//                'country_name' => $this->request->input('permanent_country_name'),
+//                'address_type' => 0]);
+//
+//        $mailing_address = ApplicationCity::create([
+//                'application_id' => $application->id,
+//                'city_id' => $this->request->input('mailing_applications_cities_id'),
+//                'address' => $this->request->input('mailing_address'),
+//                'country_name' => $this->request->input('mailing_country_name'),
+//                'address_type' => 1]);
 
         // create pivot tables programs -> min 1 wish, max 3 wishes
 
-        $faculties = Faculty::all()->pluck('id')->toArray();
-        $wishes = $this->request->input('wishes');
-
-        for($i = 0; $i < count($wishes); $i = $i + 1){
-            $current = $wishes[$i];
-            $num = count($current["programs_id"]);
-            // validate wishes
-            for($j = 0; $j < $num; $j = $j + 1){
-                $program = $current["programs_id"][$j];
-                $ap = ApplicationsPrograms::create([
-                    'application_id' => $aid,
-                    'faculty_program_id' => $program,
-                    'status' => false,
-                    'choice_number' => $i+1]);
-            }
-        }
+//        $faculties = Faculty::all()->pluck('id')->toArray();
+//        $wishes = $this->request->input('wishes');
+//
+//        for($i = 0; $i < count($wishes); $i = $i + 1){
+//            $current = $wishes[$i];
+//            $num = count($current["programs_id"]);
+//            // validate wishes
+//            for($j = 0; $j < $num; $j = $j + 1){
+//                $program = $current["programs_id"][$j];
+//                $ap = ApplicationsPrograms::create([
+//                    'application_id' => $aid,
+//                    'faculty_program_id' => $program,
+//                    'status' => false,
+//                    'choice_number' => $i+1]);
+//            }
+//        }
 
         return $this->response->created('Application created');
     }
