@@ -75,7 +75,6 @@ class ApplicationController extends ApiController {
 
     public function create()
     {
-
         $application = Application::create($this->request->only(
             'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
                 'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
@@ -116,45 +115,6 @@ class ApplicationController extends ApiController {
 
         // Create pivot tables for wishes.
         $application->wishes()->sync($syncable_wishes);
-
-//        $programs = FacultyProgram::whereIn('faculty_id', $wish_ids)->get();
-//        $first_wish = $programs->first();
-//        $second_wish = $programs->slice(1)->first();
-//
-//        $application->wishes()->save($programs->fir);
-
-//        $permanent_address = ApplicationCity::create([
-//                'application_id' => $application->id,
-//                'city_id' => $this->request->input('permanent_applications_cities_id'),
-//                'address' => $this->request->input('permanent_address'),
-//                'country_name' => $this->request->input('permanent_country_name'),
-//                'address_type' => 0]);
-//
-//        $mailing_address = ApplicationCity::create([
-//                'application_id' => $application->id,
-//                'city_id' => $this->request->input('mailing_applications_cities_id'),
-//                'address' => $this->request->input('mailing_address'),
-//                'country_name' => $this->request->input('mailing_country_name'),
-//                'address_type' => 1]);
-
-        // create pivot tables programs -> min 1 wish, max 3 wishes
-
-//        $faculties = Faculty::all()->pluck('id')->toArray();
-//        $wishes = $this->request->input('wishes');
-//
-//        for($i = 0; $i < count($wishes); $i = $i + 1){
-//            $current = $wishes[$i];
-//            $num = count($current["programs_id"]);
-//            // validate wishes
-//            for($j = 0; $j < $num; $j = $j + 1){
-//                $program = $current["programs_id"][$j];
-//                $ap = ApplicationsPrograms::create([
-//                    'application_id' => $aid,
-//                    'faculty_program_id' => $program,
-//                    'status' => false,
-//                    'choice_number' => $i+1]);
-//            }
-//        }
 
         return $this->response->created('Application created');
     }

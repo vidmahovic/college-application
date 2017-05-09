@@ -27,7 +27,7 @@ $factory->define(App\Models\Application::class, function(Faker\Generator $faker)
     $profession_ids = \App\Models\Profession::pluck('id')->shuffle()->toArray();
     //$nationality_type_ids = \App\Models\Nationa::pluck('id')->shuffle()->toArray();
     $graduation_type_ids = \App\Models\GraduationType::pluck('id')->shuffle()->toArray();
-    $country_ids = \App\Models\Country::pluck('id')->shuffle()->toArray();
+    //$country_ids = \App\Models\Country::pluck('id')->shuffle()->toArray();
     $citizen_ids = \App\Models\Citizen::pluck('id')->shuffle()->toArray();
 
     return [
@@ -38,7 +38,7 @@ $factory->define(App\Models\Application::class, function(Faker\Generator $faker)
         'profession_id' => $profession_ids[0],
         //'nationality_type_id' => null, //$nationality_type_ids[0],
         'graduation_type_id' => $graduation_type_ids[0],
-        'country_id' => $country_ids[0],
+        //'country_id' => $country_ids[0],
         'citizen_id' => $citizen_ids[0],
         //'middle_name' => $faker->randomElement([$faker->name, null, null, null, null]),
         'phone' => $faker->phoneNumber,

@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use App\Models\Application;
 use App\Models\FacultyProgram;
+use Illuminate\Support\Facades\App;
 use League\Fractal;
 
 /**
@@ -16,7 +17,8 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
 
     protected $defaultIncludes = [
         'applicant', 'citizen', 'interval', 'middleSchool', 'education', 'profession', 'graduation',
-        'firstWish', 'secondWish', 'thirdWish', 'permanentAddress', 'mailingAddress'
+        'firstWish', 'secondWish', 'thirdWish', 'permanentAddress', 'mailingAddress', 'permanentCountry',
+        'mailingCountry'
     ];
 
     public function transform(Application $application)
@@ -76,15 +78,21 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
         return $this->item($application->profession, new ProfessionTransformer);
     }
 
-    public function includeCountry(Application $application) {
-        return $this->item($application->country, new CountryTransformer);
-    }
-
     public function includeApplicant(Application $application) {
         return $this->item($application->applicant, new UserTransformer);
     }
 
     public function includeGraduation(Application $application) {
         return $this->item($application->graduation, new GraduationTypeTransformer);
+    }
+
+    public function includePermanentCountry(Application $application) {
+        if(($permanentCountry = $application->permanentCountry->first()) != null)
+            return $this->item($permanentCountry, new CountryTransformer);
+    }
+
+    public function includeMailingCountry(Application $application) {
+        if(($mailingCountry = $application->mailingCountry->first()) != null)
+            return $this->item($mailingCountry, new CountryTransformer);
     }
 }
