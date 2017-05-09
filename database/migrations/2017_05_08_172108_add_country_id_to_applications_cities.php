@@ -27,8 +27,11 @@ class AddCountryIdToApplicationsCities extends Migration
     public function down()
     {
         Schema::table('application_cities', function(Blueprint $table) {
-            $table->string('country_name')->change();
             $table->renameColumn('country_id','country_name');
+        });
+
+        Schema::table('application_cities', function(Blueprint $table) {
+            $table->string('country_name')->change();
         });
     }
 }
