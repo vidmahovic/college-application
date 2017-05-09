@@ -82,14 +82,14 @@
               <hr />
               <h3>NASLOV STALNEGA PREBIVALIŠČA</h3>
               
+              
               <div class="row">
-                
-                <div class="form-group col-md-6">
-                  <label for="drzava_stalni_naslov">Država</label>
-                  <div v-if="doRender">
-                    <v-select  v-model="apl.drzava_stalni_naslov" label="name" value="id" :options="sifrants.countries" :on-change="handlePermanentAdress"></v-select>
-                  </div>
+                <div class="form-group col-md-12">
+                  <label for="naslov_stalni">Naslov</label>
+                  <input v-model="apl.permanent_address" placeholder="Naslov" class="form-control" id="naslov_stalni">
                 </div>
+              </div>
+              <div class="row">
                 <div class="form-group col-md-6">
                   <label for="drzava_stalni_naslov">Mesto</label>
                   <div v-if="doRender">
@@ -102,14 +102,14 @@
                     <!--<v-select  v-model="apl.permanent_applications_cities_id" label="name" :options="sifrants.cities"></v-select>-->
                   </div>
                 </div>
+                <div class="form-group col-md-6">
+                  <label for="drzava_stalni_naslov">Država</label>
+                  <div v-if="doRender">
+                    <v-select  v-model="apl.drzava_stalni_naslov" label="name" value="id" :options="sifrants.countries" :on-change="handlePermanentAdress"></v-select>
+                  </div>
+                </div>
 
                 
-              </div>
-              <div class="row">
-                <div class="form-group col-md-12">
-                  <label for="naslov_stalni">Naslov</label>
-                  <input v-model="apl.permanent_address" placeholder="Naslov" class="form-control" id="naslov_stalni">
-                </div>
               </div>
 
               <hr />
@@ -123,15 +123,15 @@
               </div>
 
               <div v-if="!send_address_same">
+                  <div class="row">
+                <div class="form-group col-md-12">
+                  <label for="naslov_stalni">Naslov</label>
+                  <input v-model="apl.mailing_address" placeholder="Naslov" class="form-control" id="naslov_stalni">
+                </div>
+              </div>
                 <div class="row">
                 
-                <div class="form-group col-md-6">
-                  <label for="drzava_stalni_naslov">Država</label>
-                  <div v-if="doRender">
-                    <v-select  v-model="apl.drzava_send_naslov" label="name" :options="sifrants.countries" :on-change="handleMailingAdress"></v-select>
-                  </div>
-                </div>
-                <div class="form-group col-md-6">
+                   <div class="form-group col-md-6">
                   <label for="drzava_stalni_naslov">Mesto</label>
                   <div v-if="doRender">
                     <div v-if="formControl.enable_mailing_city">
@@ -143,14 +143,16 @@
                     <!--<v-select  v-model="apl.mailing_applications_cities_id" label="name" :options="sifrants.cities"></v-select>-->
                   </div>
                 </div>
+                <div class="form-group col-md-6">
+                  <label for="drzava_stalni_naslov">Država</label>
+                  <div v-if="doRender">
+                    <v-select  v-model="apl.mailing_country_id" label="name" :options="sifrants.countries" :on-change="handleMailingAdress"></v-select>
+                  </div>
+                </div>
+             
                 
               </div>
-              <div class="row">
-                <div class="form-group col-md-12">
-                  <label for="naslov_stalni">Naslov</label>
-                  <input v-model="apl.mailing_address" placeholder="Naslov" class="form-control" id="naslov_stalni">
-                </div>
-              </div>
+            
               </div>
               
               
@@ -420,29 +422,33 @@
         },
         handlePermanentAdress: function(currentValue) {
 
+          this.apl.permanent_country_id = currentValue;
           if(parseInt(currentValue.id) != 705) {
             this.apl.permanent_applications_cities_id = {id:1, name:"NEZNANA POŠTA"}; // cities[0]
             this.formControl.enable_permanent_city = false;
           }else {
-            this.apl.permanent_applications_cities_id = null;
+            
+            if(this.apl.permanent_applications_cities_id.id == 1) this.apl.permanent_applications_cities_id = null;
             this.formControl.enable_permanent_city = true;
           }
 
         },
         handleMailingAdress: function(currentValue) {
 
+          this.apl.mailing_country_id = currentValue;
           if(parseInt(currentValue.id) != 705) {
             this.apl.mailing_applications_cities_id = {id:1, name:"NEZNANA POŠTA"}; // cities[0]
             this.formControl.enable_mailing_city = false;
           }else {
-            this.apl.mailing_applications_cities_id = null;
+             if(this.apl.mailing_applications_cities_id.id == 1) this.apl.mailing_applications_cities_id = null;
+           
+            //this.apl.mailing_applications_cities_id = null;
             this.formControl.enable_mailing_city = true;
           }
 
         },
         handleCountryOfBirth: function(currentValue) {
 
-          console.log(currentValue);
           this.apl.country_id = currentValue;
           if(parseInt(currentValue.id) != 705) {
             this.apl.district_id = {id: 0, name: "TUJINA"}; // cities[0]
