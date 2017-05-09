@@ -78,7 +78,7 @@
         //table header
         doc.setFontSize(12);
 
-                
+                  
         const col1_start = 20,
           col1_text = 60,
           col2_start = 110,
@@ -86,10 +86,13 @@
           section_start=20,
           line_start=8,
           line_end=200;
+        let page_count = 1;
 
         // OSEBNI PODATKI
         const personalData_start=70;
-
+        let date_of_birth = new Date(apl.date_of_birth);
+        date_of_birth = date_of_birth.getDay()+"."+(date_of_birth.getMonth()+1)+"."+date_of_birth.getFullYear();
+        
         doc.text(section_start, personalData_start, "OSEBNI PODATKI");
         doc.line(line_start,personalData_start+2,line_end,personalData_start+2);
 
@@ -98,9 +101,6 @@
         
         doc.text(col1_start,personalData_start+20, "Emso:"); doc.text(col1_text,personalData_start+20, this.displayField(apl.emso));
         doc.text(col2_start,personalData_start+20, "Spol:"); doc.text(col2_text,personalData_start+20, this.displayField(this.translate_gender(apl.gender)));
-        
-        let date_of_birth = new Date(apl.date_of_birth);
-        date_of_birth = date_of_birth.getDay()+"."+(date_of_birth.getMonth()+1)+"."+date_of_birth.getFullYear();
         
         doc.text(col1_start,personalData_start+30, "Datum rojstva:"); doc.text(col1_text,personalData_start+30, String(date_of_birth));
         doc.text(col2_start,personalData_start+30, "Država rojstva:"); doc.text(col2_text,personalData_start+30, "Slovenija");
@@ -117,14 +117,67 @@
         doc.text(section_start, permanentAddr_start, "STALNI NASLOV");
         doc.line(line_start,permanentAddr_start+2,line_end,permanentAddr_start+2);
 
+        doc.text(col1_start, permanentAddr_start+10, "Naslov: "); doc.text(col1_text, permanentAddr_start+10, this.displayField(apl.permanent_address));
 
-        
-        
+        doc.text(col1_start, permanentAddr_start+20, "Kraj: "); doc.text(col1_text, permanentAddr_start+20, this.displayField(apl.permanent_country_id));
+        doc.text(col2_start, permanentAddr_start+20, "Država: "); doc.text(col2_text, permanentAddr_start+20, this.displayField(apl.permanent_applications_cities_id));
 
-    
+        // NASLOV STLANEGA PREBIVALIŠČA
+        const mailingAddr_start = permanentAddr_start+40;
+        doc.text(section_start, mailingAddr_start, "NASLOV ZA POŠILJANJE");
+        doc.line(line_start,mailingAddr_start+2,line_end,mailingAddr_start+2);
+
+        doc.text(col1_start, mailingAddr_start+10, "Naslov: "); doc.text(col1_text, mailingAddr_start+10, this.displayField(apl.mailing_address));
+
+        doc.text(col1_start, mailingAddr_start+20, "Kraj: "); doc.text(col1_text, mailingAddr_start+20, this.displayField(apl.mailing_country_id));
+        doc.text(col2_start, mailingAddr_start+20, "Država: "); doc.text(col2_text, mailingAddr_start+20, this.displayField(apl.mailing_applications_cities_id));        
+        
+        // DOSEDANJA IZOBRAZBA
+        const education_start = mailingAddr_start+40;
+        doc.text(section_start, education_start, "DOSEDANJA IZOBRAZBA");
+        doc.line(line_start,education_start+2,line_end,education_start+2);
+
+        doc.text(col1_start, education_start+10, "Najvisja dosezena izobrazba"); doc.text(col2_start, education_start+10, this.displayField(apl.education_type_id));
+
+        doc.text(col1_start, education_start+20, "Srednješolska izobrazba"); 
+        
+        doc.text(col1_start, education_start+30, "Srednja šola: ");  doc.text(col1_text, education_start+30, this.displayField(apl.middle_school_id));
+        doc.text(col2_start, education_start+30, "Nacin zakljucka: ");  doc.text(col2_text, education_start+30, this.displayField(apl.graduation_type_id));
+        
+        //doc.text(col1_start, education_start+40, "Država: ");  doc.text(col1_text, education_start+30, this.displayField(apl.middle_school_country));
+        
+        doc.addPage();
+        page_count++;
+        const wishes_start = 10;//education_start+50;
+        doc.text(section_start, wishes_start, "V SKLADU Z RAZPISOM SE PRIJAVLJAM ZA ŠTUDIJ");
+        doc.line(line_start,wishes_start+2,line_end,wishes_start+2);
+
+        let wp = wishes_start+10;
+        // Fill the wishes
+        for(let i in apl.wishes) {
+          let w = apl.wishes[i];
+
+          doc.text(col1_start-10, wp, (parseInt(i)+1)+". želja"); wp +=10;
+          doc.text(col1_start, wp, "Visokošolski zavod: "); doc.text(col1_text, wp, this.displayField(w.faculty_id));
+          wp += 10;
+
+          
+          doc.text(col1_start, wp, "Študijski program: "); doc.text(col1_text, wp, this.displayField(w.programs_id[0]));
+          wp += 10;
+
+          if(w.programs_id.length > 1) {
+            doc.text(col1_start, wp, "Študijski program: "); doc.text(col1_text, wp, this.displayField(w.programs_id[1]));
+            wp += 10;
+          }
+          doc.line(line_start+10,wp+2,line_end-10,wp+2);
+        }
+
+        doc.text(section_start, wp+50, "Datum: "); doc.text(col2_text, wp+50, "Podpis: ")
+
+        doc.setFontSize(10);
         //footer (oštevilčenje strani)
-        for(var i = 1; i <= 1; i++){
-          doc.setPage(i).text(277, 207, "Stran "+ i +"/"+ 1);
+        for(var i = 1; i <= page_count; i++){
+          doc.setPage(i).text(180, 277, "Stran "+ i +"/"+ page_count);
         }
 
         doc.output("datauri");
