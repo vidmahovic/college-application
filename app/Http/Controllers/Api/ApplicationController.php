@@ -68,7 +68,7 @@ class ApplicationController extends ApiController {
         // create pivot tables programs -> min 1 wish, max 3 wishes
 
         $faculties = Faculty::all()->pluck('id')->toArray();
-        $wishes = json_decode((string)$this->request->input('wishes'), true);
+        $wishes = json_decode(implode("",$this->request->input('wishes')), true);
 
         for($i = 0; $i < count($wishes); $i = $i + 1){
             $current = $wishes[$i];
