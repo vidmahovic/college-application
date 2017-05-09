@@ -508,22 +508,24 @@
 
       this.add_wish();
 
-      this.$http.get('/api/applications/active')
-        .then(function(res){
+      // this.$http.get('/api/applications/active')
+      //   .then(function(res){
 
-          let application = res.data.data;
-          console.log(application)
-          // new application
-          if (application.status == 'created') {
-            application = this.clearSifrants(application) 
-          }
+      //     let application = res.data.data;
+      //     console.log(application)
+      //     // new application
+      //     if (application.status == 'created') {
+      //       application = this.clearSifrants(application) 
+      //     }
 
-          if( application.wishes != null) {
-            this.wishes = wishes;
-          }
+      //     if( application.wishes != null) {
+      //       this.wishes = wishes;
+      //     }
 
-          this.apl = application;
+
+          this.apl = this.$root.studentApplication;
           this.ifApplication = true;
+          console.log(this.apl)
 
           this.$http.get('api/applications/sifranti')
             .then(function(res){
@@ -534,10 +536,11 @@
               // fill sifrants
               //this.apl.drzava_stalni_naslov = this.countries[0];
 
+              this.apl = JSON.parse
               this.doRender = true;    
             })
           
-        })
+        // })
     },
     mounted() {
 

@@ -7,23 +7,17 @@
               <div class="panel-body" >
                 <div v-if="hasApplication">
                 <h2>Imate oddano vpisnico</h2>
-                <table class="table">
-                  <thead>
-                    <th>Datum oddaje</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>datum zacetka</td>
-                      <td v-if="application.status=='filled'" v-on:click="goto_application" class="btn btn-default pull-right">
+                  
+                      <div v-if="apl.status=='filled'" v-on:click="goto_application" class="btn btn-default">
                         Izbrisi in oddaj ponovno
-                      </td>
-                      <td v-else="application.is_submited" v-on:click="goto_application" class="btn btn-default pull-right">
+                      </div>
+                      <div v-else="application.status=='created'" v-on:click="goto_application" class="btn btn-default">
                         Nadaljuj s prijavo
-                      </td>
-                      <td class="btn btn-primary pull-right" v-on:click="applicationPdf">Preglej</td>
+                      </div>
+                      <div class="btn btn-primary pull-right" v-on:click="applicationPdf">Preglej</div>
                  
                     </tr>
-                  </tbody>
+                
                 </table>
                 </div>
                 <div v-else> 
@@ -76,8 +70,14 @@
         doc.setFontSize(20);
         doc.text(100, 20, "Vpisnica", null, null, "center");
         //table header
+        
         doc.setFontSize(12);
-
+        doc.text(20,30, "RAZPIS ZA VPIS NA DODIPLOMSKE IN ENOVITE MAGISTRSKE ŠTUDIJSKE PROGRAME ")
+        doc.text(20,40, "v študijskem letu 2017/2018");
+        // - Univerza v Ljubljani, Univerza v Mariboru, Univerza na Primorskem, Univerza v Novi Gorici, javni in koncesionirani samostojni visokošolski
+         // zavodi
+        doc.text(20, 50, "Prijavni rok: Prvi prijavni rok");
+        doc.text(20, 60, "Vpis v 1. letnik");
                   
         const col1_start = 20,
           col1_text = 60,
@@ -149,7 +149,7 @@
         doc.addPage();
         page_count++;
         const wishes_start = 10;//education_start+50;
-        doc.text(section_start, wishes_start, "V SKLADU Z RAZPISOM SE PRIJAVLJAM ZA ŠTUDIJ");
+        doc.text(section_start, wishes_start, "V SKLADU Z RAZPISOM SE PRIJAVLJAM ZA ŠTUDIJ");
         doc.line(line_start,wishes_start+2,line_end,wishes_start+2);
 
         let wp = wishes_start+10;
@@ -185,21 +185,27 @@
       }
     },
     created() {
+
+      console.log(this.$parent);
+
       this.$http.get('/api/applications/active')
         .then(function(res){
 
-          let application = res.body.data;
+          let application = res.data.data;
+          console.log(application);
           if("id" in application){
-
+            console.log("HAS ACTIVE")
+            this.hasApplication = true;
           }else{
             console.log("no active application");
 
           }
           this.apl = application;
+          this.$root.studentApplication = application;
           
 
         }, function(err) {
-          this.applicationPdf(this.mock_apl);
+          //this.applicationPdf(this.mock_apl);
         });
 
 
