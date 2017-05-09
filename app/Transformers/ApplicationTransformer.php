@@ -3,6 +3,7 @@
 namespace App\Transformers;
 
 use App\Models\Application;
+use App\Models\FacultyProgram;
 use League\Fractal;
 
 /**
@@ -14,7 +15,8 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
 {
 
     protected $defaultIncludes = [
-        'applicant', 'citizen', 'interval', 'middle_school', 'education', 'profession', 'graduation'
+        'applicant', 'citizen', 'interval', 'middleSchool', 'education', 'profession', 'graduation',
+        'firstWish', 'secondWish', 'thirdWish', 'permanentAddress', 'mailingAddress'
     ];
 
     public function transform(Application $application)
@@ -27,6 +29,31 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
             'date_of_birth' => $application->date_of_birth,
             'status' => $application->status,
         ];
+    }
+
+    public function includePermanentAddress(Application $application) {
+        if(($permanentAddress = $application->permanentAddress->first()) != null)
+            return $this->item($permanentAddress, new CityTransformer)->setMetaValue('address', $permanentAddress->pivot->address);
+    }
+
+    public function includeMailingAddress(Application $application) {
+        if(($mailingAddress = $application->mailingAddress->first()) != null)
+            return $this->item($mailingAddress, new CityTransformer)->setMetaValue('address', $mailingAddress->pivot->address);
+    }
+
+    public function includeFirstWish(Application $application) {
+        if(($firstWish = $application->firstWish->first()) != null)
+            return $this->item($firstWish, new FacultyProgramTransformer)->setMetaValue('accepted', $firstWish->pivot->status);
+    }
+
+    public function includeSecondWish(Application $application) {
+        if(($secondWish = $application->secondWish->first()) != null)
+            return $this->item($secondWish, new FacultyProgramTransformer)->setMetaValue('accepted', $secondWish->pivot->status);
+    }
+
+    public function includeThirdWish(Application $application) {
+        if(($thirdWish = $application->thirdWish->first()) != null)
+            return $this->item($thirdWish, new FacultyProgramTransformer)->setMetaValue('accepted', $thirdWish->pivot->status);
     }
 
     public function includeCitizen(Application $application) {

@@ -56,12 +56,12 @@ class Application extends Model
 
     public function mailingAddress()
     {
-        return $this->cities()->wherePivot('address_type', 2);
+        return $this->cities()->wherePivot('address_type', 1);
     }
 
     public function permanentAddress()
     {
-        return $this->cities()->wherePivot('address_type', 1);
+        return $this->cities()->wherePivot('address_type', 0);
     }
 
     public function cities()
@@ -87,17 +87,17 @@ class Application extends Model
 
     public function firstWish()
     {
-        return $this->wishes()->wherePivot('choice_num', 1);
+        return $this->wishes()->wherePivot('choice_number', 1);
     }
 
     public function secondWish()
     {
-        return $this->wishes()->wherePivot('choice_num', 2);
+        return $this->wishes()->wherePivot('choice_number', 2);
     }
 
     public function thirdWish()
     {
-        return $this->wishes()->wherePivot('choice_num', 3);
+        return $this->wishes()->wherePivot('choice_number', 3);
     }
 
 //    public function applicationsPrograms()
@@ -111,11 +111,11 @@ class Application extends Model
     }
 
     public function scopeFiled($scope) {
-        return $this->where('status', 'filed');
+        return $scope->where('applications.status', 'filed');
     }
 
     public function scopeActive($scope) {
-        return $this->whereIn('status', ['created', 'saved']);
+        return $this->whereIn('applications.status', ['created', 'saved']);
     }
 
     public static function createTemplate(User $applicant)

@@ -84,6 +84,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $this->save();
     }
 
+    public function scopeStudents($query)
+    {
+        return $query->where('role_id', Role::student()->first()->id);
+    }
+
 
     public function activated(): bool
     {
@@ -100,5 +105,4 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         return [];
     }
-
 }

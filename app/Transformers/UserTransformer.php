@@ -12,6 +12,8 @@ use League\Fractal;
  */
 class UserTransformer extends Fractal\TransformerAbstract
 {
+    protected $defaultIncludes = ['faculty'];
+
     public function transform(User $user)
     {
         return [
@@ -22,5 +24,10 @@ class UserTransformer extends Fractal\TransformerAbstract
             'role' => $user->role->name,
             'last_login' => $user->last_login,
         ];
+    }
+
+    public function includeFaculty(User $user) {
+        if($user->isReferent())
+            return $this->item($user->faculty, new FacultyTransformer);
     }
 }

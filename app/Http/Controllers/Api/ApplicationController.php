@@ -17,17 +17,58 @@ use App\Models\Country;
 use App\Models\MiddleSchool;
 use App\Transformers\ApplicationTransformer;
 use App\Transformers\ApplicationTemplateTransformer;
+use CollegeApplication\Search\ApplicationSearch\ApplicationSearch;
 use Dingo\Api\Exception\ResourceException;
 use App\Validators\ApplicationValidator;
 use Dingo\Api\Http\Request;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class ApplicationController extends ApiController {
 
     protected $validator;
+    protected $search;
 
-    public function __construct(Request $request, ApplicationValidator $validator){
+    public function __construct(Request $request, ApplicationValidator $validator, ApplicationSearch $search) {
         $this->validator = $validator;
+        $this->search = $search;
         parent::__construct($request);
+    }
+
+    public function index()
+    {
+        $user = $this->request->user();
+
+        if($user->cannot('get', Application::class))
+            throw new UnauthorizedHttpException('Basic');
+
+        // If user is a referent for the faculty, allow him to view only applications that are connected to his faculty.
+        if($user->isReferent())
+            $this->request['filters'] = ['faculty_id' => $user->faculty_id];
+
+        // Send only applications with status 'filed'
+        $applications = $this->search->applyFiltersFromRequest($this->request)->filed()->get();
+
+        return $this->response->collection($applications, new ApplicationTransformer)->addMeta('count', $applications->count());
+    }
+
+    public function paginate()
+    {
+        $user = $this->request->user();
+
+        if($user->cannot('paginate', Application::class))
+            throw new UnauthorizedHttpException('Basic');
+
+        // If user is a referent for the faculty, allow him to view only applications that are connected to his faculty.
+        if($user->isReferent())
+            $this->request['filters'] = ['faculty_id' => $user->faculty_id];
+
+        // Send only applications with status 'filed'
+        $applications = $this->search
+            ->applyFiltersFromRequest($this->request)
+            ->filed()
+            ->paginate($this->request->get('perPage') ?? 30);
+
+        return $this->response->paginator($applications, new ApplicationTransformer);
     }
 
     public function create()
