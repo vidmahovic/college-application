@@ -128,6 +128,10 @@ class ApplicationController extends ApiController {
 
         $application = Application::find($id);
 
+        if($application->status != 'filed'){
+            return $this->response->errorBadRequest("Application cannot be deleted!");
+        }
+
         $application->delete();
 
         return $this->response->noContent();
