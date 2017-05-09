@@ -31,6 +31,8 @@ class ApplicationTemplateTransformer extends Fractal\TransformerAbstract
             'graduation_type_id' => $application->graduation_type_id,
             'permanent_address' => $application->permanent_address,
             'mailing_address' => $application->mailing_address,
+            'permanent_country_id' => $application->permanent_country_id,
+            'mailing_country_id' => $application->mailing_country_id,
             'permanent_applications_cities_id' => $application->permanent_applications_cities_id,
             'mailing_applications_cities_id' => $application->mailing_applications_cities_id,
             'wishes' => $application->wishes

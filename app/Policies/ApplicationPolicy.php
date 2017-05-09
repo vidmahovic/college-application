@@ -37,6 +37,11 @@ class ApplicationPolicy
         return $user->isStudent();
     }
 
+    public function create(User $user)
+    {
+        return $user->isStudent() || $user->isReferent();
+    }
+
     public function update(User $user, Application $application)
     {
         return $user->isReferent() || $application->user_id === $user->id;

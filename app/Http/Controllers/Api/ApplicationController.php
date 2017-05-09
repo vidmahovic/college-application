@@ -33,6 +33,12 @@ class ApplicationController extends ApiController {
 
     public function create()
     {
+        $user = $this->request->user();
+
+        if ($user->cannot('create', Application::class)) {
+            return $this->response->errorUnauthorized();
+        }
+
         if(! $this->validator->validate($this->request->all())){
             $errors = $this->validator->errors(); // return redirect()->back()->withErrors($this->validator->errors())->withInput();
             return $this->response->errorBadRequest($errors);
@@ -48,6 +54,9 @@ class ApplicationController extends ApiController {
         ));
 
         // status -> default -> created
+        if($this->request->input('status') == 'file'){
+            $application->status = 'filed';
+        }
         $application->application_interval_id = ApplicationInterval::latest()->first();
         $application->save();
 
@@ -111,9 +120,13 @@ class ApplicationController extends ApiController {
 
     public function archive($id)
     {
+        $user = $this->request->user();
+
+        if ($user->cannot('archive', Application::class)) {
+            return $this->response->errorUnauthorized();
+        }
+
         $application = Application::find($id);
-
-
 
         $application->delete();
 
@@ -122,7 +135,16 @@ class ApplicationController extends ApiController {
 
     public function update($id)
     {
+        $user = $this->request->user();
+
+        if ($user->cannot('update', Application::class)) {
+            return $this->response->errorUnauthorized();
+        }
+
         $application = Application::findOrFail($id);
+        if($application->status == 'filed'){
+            return $this->response->errorBadRequest("Application already filed!");
+        }
 
         if($application == null) {
             return $this->response->errorNotFound();
@@ -142,6 +164,9 @@ class ApplicationController extends ApiController {
             'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
         ));
 
+        if($this->request->input('status') == 'file'){
+            $application->status = 'filed';
+        }
         $application->application_interval_id = ApplicationInterval::latest()->first();
         $application->save();
 

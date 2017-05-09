@@ -23,7 +23,7 @@ class ApplicationValidator{
             'user_id' => 'required|exists:users,id',
             'emso' => 'required|min:12|max:13',
             'gender' => 'required',
-            'date_of_birth' => 'required|date|before:' . (string) Carbon::now()->subYears(14),
+            'date_of_birth' => 'required|date|before:' . (string) Carbon::now()->subYears(5),
             'phone' => ['required', 'regex:/^[0-9]{9}$/'],
 
             'country_id' => 'required|exists:countries,id',
@@ -63,7 +63,7 @@ class ApplicationValidator{
 
         $validator->after(function($validator)
         {
-            if($this->isFromSlovenia && $this->isBornForeign){
+            if(($this->isFromSlovenia && $this->isBornForeign) || (!$this->isFromSlovenia && !$this->isBornForeign)){
                 $validator->errors()->add('country_id', 'Please specify your origin!');
             }
 
