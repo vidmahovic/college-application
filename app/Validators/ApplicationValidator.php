@@ -63,10 +63,11 @@ class ApplicationValidator{
 
         $validator->after(function($validator)
         {
+            /*
             if(($this->isFromSlovenia && $this->isBornForeign)){
                 $validator->errors()->add('district_id', 'Please specify your origin!');
             }
-            /*
+
             if($this->isFromSlovenia){
                 if(!validateEMSO($this->input['emso'], $this->isFromSlovenia, $this->gender)){
                     $validator->errors()->add('emso', 'Please enter a valid EMSO!');
