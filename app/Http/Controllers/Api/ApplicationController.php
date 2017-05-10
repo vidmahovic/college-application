@@ -75,11 +75,13 @@ class ApplicationController extends ApiController {
 
     public function create()
     {
+        /*
         $user = $this->request->user();
 
         if ($user->cannot('create', Application::class)) {
             return $this->response->errorUnauthorized();
         }
+        */
         if(! $this->validator->validate($this->request->all())){
             $errors = $this->validator->errors();
             return $this->response->errorBadRequest($errors);
@@ -121,12 +123,23 @@ class ApplicationController extends ApiController {
             ]
         ]);
 
-        // $faculties = Faculty::all()->pluck('id')->toArray();
+        $enopredmetni = Faculty::all()->where('allow_double_degree',true)->pluck('id')->toArray();
+        $dvopredmetni = Faculty::all()->where('allow_double_degree',false)->pluck('id')->toArray();
         $wishes = $this->request->input('wishes');
+
         for($i = 0; $i < count($wishes); $i = $i + 1){
             $current = $wishes[$i];
             $num = count($current["programs_id"]);
             // validate wishes
+            if($num > 2){
+                return $this->response->errorBadRequest("Too many wishes!");
+            }
+            if(!($num == 1 && in_array($current["programs_id"][0],$enopredmetni))){
+                return $this->response->errorBadRequest("Invalid wish, needs another double degree");
+            }
+            if(!($num == 2 && in_array($current["programs_id"][0],$dvopredmetni) && in_array($current["programs_id"][1],$dvopredmetni))){
+                return $this->response->errorBadRequest("Invalid wish, one is double degree other is not!");
+            }
             for($j = 0; $j < $num; $j = $j + 1){
                 $program = $current["programs_id"][$j];
                 $ap = ApplicationsPrograms::create([
@@ -233,16 +246,27 @@ class ApplicationController extends ApiController {
             ApplicationsPrograms::destroy($curr_wishes[$i]);
         }
 
+        $enopredmetni = Faculty::all()->where('allow_double_degree',true)->pluck('id')->toArray();
+        $dvopredmetni = Faculty::all()->where('allow_double_degree',false)->pluck('id')->toArray();
         $wishes = $this->request->input('wishes');
+
         for($i = 0; $i < count($wishes); $i = $i + 1){
             $current = $wishes[$i];
             $num = count($current["programs_id"]);
-            // TODO: validate wishes (tukaj ne preverjamo, če želje izpolnjujejo pogoj allow_double_degree)
-            // TODO: validate wishes (preveri, če pod nekim indexom nimamo več kot 2 želji)
+            // validate wishes
+            if($num > 2){
+                return $this->response->errorBadRequest("Too many wishes!");
+            }
+            if(!($num == 1 && in_array($current["programs_id"][0],$enopredmetni))){
+                return $this->response->errorBadRequest("Invalid wish, needs another double degree");
+            }
+            if(!($num == 2 && in_array($current["programs_id"][0],$dvopredmetni) && in_array($current["programs_id"][1],$dvopredmetni))){
+                return $this->response->errorBadRequest("Invalid wish, one is double degree other is not!");
+            }
             for($j = 0; $j < $num; $j = $j + 1){
                 $program = $current["programs_id"][$j];
                 $ap = ApplicationsPrograms::create([
-                    'application_id' => $id,
+                    'application_id' => $application->id,
                     'faculty_program_id' => $program,
                     'status' => false,
                     'choice_number' => $i+1]);
