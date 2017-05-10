@@ -177,9 +177,9 @@ class ApplicationController extends ApiController {
     {
         $user = $this->request->user();
 
-        // if ($user->cannot('archive', Application::class)) {
-        //     return $this->response->errorUnauthorized();
-        // }
+        if ($user->cannot('archive', $user, Application::class)) {
+             return $this->response->errorUnauthorized();
+        }
 
         $application = Application::find($id);
 
