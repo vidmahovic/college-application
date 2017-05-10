@@ -83,8 +83,11 @@ class ApplicationController extends ApiController {
             $errors = $this->validator->errors();
             return $this->response->errorBadRequest($errors);
         }
-        if(! $this->request->input('wishes')){
-            return $this->response->errorBadRequest("You must insert atleast one wish!");
+
+        $wish_ids = collect(array_pluck($this->request->input('wishes'), 'programs_id'))->flatten();
+
+        if($wish_ids->isEmpty()) {
+            throw new BadRequestHttpException("At least one wish must be provided.");
         }
 
         $application = Application::create($this->request->only(
@@ -112,12 +115,6 @@ class ApplicationController extends ApiController {
                 'country_id' => $this->request->input('mailing_country_id')
             ]
         ]);
-
-        $wish_ids = collect(array_pluck($this->request->input('wishes'), 'programs_id'))->flatten();
-
-        if($wish_ids->isEmpty()) {
-            throw new BadRequestHttpException("At least one wish must be provided.");
-        }
 
         $wish_count = 0;
         $syncable_wishes = $wish_ids->mapWithKeys(function($wish_id) use(&$wish_count) {
@@ -190,52 +187,48 @@ class ApplicationController extends ApiController {
             return $this->response->errorBadRequest($errors);
         }
 
-        if(! $this->request->input('wishes')){
-            return $this->response->errorBadRequest("You must insert atleast one wish!");
+        $wish_ids = collect(array_pluck($this->request->input('wishes'), 'programs_id'))->flatten();
+
+        if($wish_ids->isEmpty()) {
+            throw new BadRequestHttpException("At least one wish must be provided.");
         }
 
         $application->update($this->request->only(
-            'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
+            'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'citizen_id', 'district_id',
             'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
         ));
 
-        if($this->request->input('status') == 'file'){
-            $application->status = 'filed';
-        }
-        $application->application_interval_id = ApplicationInterval::latest()->first();
+        $application->status = $this->request->input('status') ?? 'created';
+        $application->application_interval_id = ApplicationInterval::latest()->first()->id;
         $application->save();
 
-        $aid = $application->id;
+        // delete pivot tables
 
-        // create pivot tables cities
+        $permanent_address = City::find($this->request->input('permanent_applications_cities_id'));
+        $mailing_address = City::find($this->request->input('mailing_applications_cities_id'));
 
-        $permanent_address = ApplicationCity::create([
-                'application_id' => $aid,
-                'city_id' => $this->request->input('permanent_applications_cities_id'),
+        // Create pivot tables for addresses.
+        $application->cities()->sync([
+            $permanent_address->id => [
                 'address' => $this->request->input('permanent_address'),
-                'address_type' => 'permanent']);
-
-        $mailing_address = ApplicationCity::create([
-                'application_id' => $aid,
-                'city_id' => $this->request->input('mailing_applications_cities_id'),
+                'address_type' => 0,
+                'country_id' => $this->request->input('permanent_country_id')
+            ],
+            $mailing_address->id => [
                 'address' => $this->request->input('mailing_address'),
-                'address_type' => 'mailing']);
+                'address_type' => 1,
+                'country_id' => $this->request->input('mailing_country_id')
+            ]
+        ]);
 
-        $wishes = json_decode($this->request->input('wishes'), true);
+        $wish_count = 0;
+        $syncable_wishes = $wish_ids->mapWithKeys(function($wish_id) use(&$wish_count) {
+            $wish_count += 1;
+            return [$wish_id => ['choice_number' => $wish_count, 'status' => 0]];
+        })->toArray();
 
-        for($i = 0; $i < count($wishes); $i = $i + 1){
-            $current = $wishes[$i];
-            $num = count($current["programs_id"]);
-            // validate wishes
-            for($j = 0; $j < $num; $j = $j + 1){
-                $program = $current["programs_id"][$j];
-                $ap = ApplicationsPrograms::create([
-                    'application_id' => $id,
-                    'faculty_program_id' => $program,
-                    'status' => false,
-                    'choice_number' => $i+1]);
-            }
-        }
+        // Create pivot tables for wishes.
+        $application->wishes()->sync($syncable_wishes);
 
         return $this->response->created('Application updated');
     }
