@@ -215,7 +215,7 @@ class ApplicationController extends ApiController {
         }
 
         $application->update($this->request->only(
-            'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'citizen_id', 'district_id',
+            'user_id', 'emso', 'gender', 'date_of_birth', 'country_id', 'phone', 'citizen_id', 'district_id',
             'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
         ));
 
