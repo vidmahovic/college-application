@@ -175,12 +175,12 @@ class ApplicationController extends ApiController {
     public function archive($id)
     {
         $user = $this->request->user();
+        $application = Application::find($id);
 
-        if ($user->cannot('archive', Application::class)) {
+        if ($user->cannot('archive', $application)) {
             return $this->response->errorUnauthorized();
         }
 
-        $application = Application::find($id);
 
         if($application->status != 'filed'){
             return $this->response->errorBadRequest("Application cannot be deleted!");
