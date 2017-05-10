@@ -128,9 +128,9 @@
         doc.text(col2_start,personalData_start+20, "Spol:"); doc.text(col2_text,personalData_start+20, this.displayField(this.translate_gender(apl.gender)));
         
         doc.text(col1_start,personalData_start+30, "Datum rojstva:"); doc.text(col1_text,personalData_start+30, String(date_of_birth));
-        doc.text(col2_start,personalData_start+30, "Država rojstva:"); doc.text(col2_text,personalData_start+30, this.displayField(apl.birthCountry.data.name));
+        doc.text(col2_start,personalData_start+30, "Država rojstva:"); doc.text(col2_text,personalData_start+30, this.displayField(apl.birthCountry.name));
         
-        doc.text(col1_start,personalData_start+40, "Kraj rojstva:"); doc.text(col1_text,personalData_start+40, this.displayField(apl.birthAddress.data.name));
+        doc.text(col1_start,personalData_start+40, "Kraj rojstva:"); doc.text(col1_text,personalData_start+40, this.displayField(apl.birthAddress.name));
         doc.text(col1_start,personalData_start+50, "Državljanstvo:"); doc.text(col1_text,personalData_start+50,this.displayField(apl.citizen.data.name));
         
         doc.text(col1_start,personalData_start+60, "Kontaktni telefon:"); doc.text(col1_text,personalData_start+60, this.displayField(apl.phone));
@@ -142,10 +142,10 @@
         doc.text(section_start, permanentAddr_start, "STALNI NASLOV");
         doc.line(line_start,permanentAddr_start+2,line_end,permanentAddr_start+2);
 
-        doc.text(col1_start, permanentAddr_start+10, "Naslov: "); doc.text(col1_text, permanentAddr_start+10, this.displayField(apl.permanentAddress.meta.address));
+        doc.text(col1_start, permanentAddr_start+10, "Naslov: "); doc.text(col1_text, permanentAddr_start+10, this.displayField(apl.permanentAddress.name));
 
-        doc.text(col1_start, permanentAddr_start+20, "Kraj: "); doc.text(col1_text, permanentAddr_start+20, this.displayField(apl.permanentAddress.data.name));
-        doc.text(col2_start, permanentAddr_start+20, "Država: "); doc.text(col2_start+20, permanentAddr_start+20, this.displayField(apl.permanentCountry.data.name));
+        doc.text(col1_start, permanentAddr_start+20, "Kraj: "); doc.text(col1_text, permanentAddr_start+20, this.displayField(apl.permanentAddress.name));
+        doc.text(col2_start, permanentAddr_start+20, "Država: "); doc.text(col2_start+20, permanentAddr_start+20, this.displayField(apl.permanentCountry.name));
 
         // NASLOV STLANEGA PREBIVALIŠČA
         const mailingAddr_start = permanentAddr_start+40;
@@ -228,7 +228,7 @@
           doc.setPage(i).text(180, 277, "Stran "+ i +"/"+ page_count);
         }
 
-        debugger;
+        
         doc.output("datauri");
 
       },
