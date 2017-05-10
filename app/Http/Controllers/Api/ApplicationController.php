@@ -77,6 +77,10 @@ class ApplicationController extends ApiController {
     {
         $user = $this->request->user();
 
+        if(!($user->isStudent() && $user->applications()->count() == 0)){
+            return $this->response->errorBadRequest("Application already exists!");
+        }
+
         if ($user->cannot('create', Application::class)) {
             return $this->response->errorUnauthorized();
         }
