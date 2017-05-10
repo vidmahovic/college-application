@@ -13,35 +13,35 @@ class ApplicationTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
-        factory(App\Models\Application::class, 200)->create()->each(function($app) use($faker) {
+        // factory(App\Models\Application::class, 200)->create()->each(function($app) use($faker) {
 
 
-            $mailing_address_id = \App\Models\City::pluck('id')->shuffle()->take(1)->toArray()[0];
-            $permanent_address_id = \App\Models\City::pluck('id')->shuffle()->take(1)->toArray()[0];
-            $mailing_country_id = \App\Models\Country::pluck('id')->shuffle()->take(1)->toArray()[0];
-            $permanent_country_id = \App\Models\Country::pluck('id')->shuffle()->take(1)->toArray()[0];
-            $country_id = \App\Models\Country::pluck('id')->shuffle()->take(1)->toArray()[0];
+        //     $mailing_address_id = \App\Models\City::pluck('id')->shuffle()->take(1)->toArray()[0];
+        //     $permanent_address_id = \App\Models\City::pluck('id')->shuffle()->take(1)->toArray()[0];
+        //     $mailing_country_id = \App\Models\Country::pluck('id')->shuffle()->take(1)->toArray()[0];
+        //     $permanent_country_id = \App\Models\Country::pluck('id')->shuffle()->take(1)->toArray()[0];
+        //     $country_id = \App\Models\Country::pluck('id')->shuffle()->take(1)->toArray()[0];
 
-            // Apply random choices.
-            $wish_count = 0;
-            $wish_ids = \App\Models\FacultyProgram::pluck('id')->shuffle()->take(rand(1,3))->mapWithKeys(function($wish_id) use(&$wish_count, $faker) {
-                $wish_count += 1;
-                return [$wish_id => ['choice_number' => $wish_count, 'status' => $faker->boolean(20)]];
-            })->toArray();
+        //     // Apply random choices.
+        //     $wish_count = 0;
+        //     $wish_ids = \App\Models\FacultyProgram::pluck('id')->shuffle()->take(rand(1,3))->mapWithKeys(function($wish_id) use(&$wish_count, $faker) {
+        //         $wish_count += 1;
+        //         return [$wish_id => ['choice_number' => $wish_count, 'status' => $faker->boolean(20)]];
+        //     })->toArray();
 
-            $app->cities()->sync([
-                $mailing_address_id => [
-                    'address_type' => 1,
-                    'address' => $faker->streetAddress,
-                    'country_id' => $mailing_country_id
-                ],
-                $permanent_address_id => [
-                    'address_type' => 0,
-                    'address' => $faker->address,
-                    'country_id' => $permanent_country_id
-                ]]);
+        //     $app->cities()->sync([
+        //         $mailing_address_id => [
+        //             'address_type' => 1,
+        //             'address' => $faker->streetAddress,
+        //             'country_id' => $mailing_country_id
+        //         ],
+        //         $permanent_address_id => [
+        //             'address_type' => 0,
+        //             'address' => $faker->address,
+        //             'country_id' => $permanent_country_id
+        //         ]]);
 
-            $app->wishes()->sync($wish_ids);
-        });
+        //     $app->wishes()->sync($wish_ids);
+        // });
     }
 }

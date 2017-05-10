@@ -23,6 +23,14 @@ class Application extends Model
     protected $fillable = ['user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
         'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id', 'status'];
 
+    public function applicationCities() {
+        return $this->belongsTo(ApplicationCity::class);
+    }
+
+    public function applicationsPrograms() {
+        return $this->belongsTo(ApplicationCity::class);
+    }
+
     public function middleSchool() {
         return $this->belongsTo(MiddleSchool::class, 'middle_school_id');
     }
