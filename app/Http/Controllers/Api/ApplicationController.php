@@ -121,8 +121,8 @@ class ApplicationController extends ApiController {
             ]
         ]);
 
-        $enopredmetni = Faculty::all()->where('allow_double_degree',false)->pluck('id')->toArray();
-        $dvopredmetni = Faculty::all()->where('allow_double_degree',true)->pluck('id')->toArray();
+        $enopredmetni = FacultyProgram::all()->where('allow_double_degree',false)->pluck('id')->toArray();
+        $dvopredmetni = FacultyProgram::all()->where('allow_double_degree',true)->pluck('id')->toArray();
         $wishes = $this->request->input('wishes');
 
         for($i = 0; $i < count($wishes); $i = $i + 1){
