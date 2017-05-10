@@ -58,7 +58,7 @@ class ApplicationValidator{
         $validator = app('validator')->make($input, $rules, $messages);
 
         $this->gender = $this->input['gender'];
-        $this->isFromSlovenia = Country::where('name','SLOVENIJA')->first()->id == $this->input['permanent_country_id'];
+        $this->isFromSlovenia = Country::where('name','SLOVENIJA')->first()->id == $this->input['country_id'];
         $this->isBornForeign = District::where('name', 'TUJINA')->first()->id == $this->input['district_id'];
 
         $validator->after(function($validator)

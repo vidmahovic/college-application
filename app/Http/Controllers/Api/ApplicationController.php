@@ -128,7 +128,7 @@ class ApplicationController extends ApiController {
         for($i = 0; $i < count($wishes); $i = $i + 1){
             $current = $wishes[$i];
             $num = count($current["programs_id"]);
-
+            /*
             if($num > 2){
                 return $this->response->errorBadRequest("Too many wishes!");
             }
@@ -142,7 +142,7 @@ class ApplicationController extends ApiController {
                     return $this->response->errorBadRequest("Invalid wish, one is double degree other is not!");
                 }
             }
-
+            */
             for($j = 0; $j < $num; $j = $j + 1){
                 $program = $current["programs_id"][$j];
                 $ap = ApplicationsPrograms::create([
@@ -257,7 +257,7 @@ class ApplicationController extends ApiController {
         for($i = 0; $i < count($wishes); $i = $i + 1){
             $current = $wishes[$i];
             $num = count($current["programs_id"]);
-
+            /*
             if($num > 2){
                 return $this->response->errorBadRequest("Too many wishes!");
             }
@@ -271,7 +271,7 @@ class ApplicationController extends ApiController {
                     return $this->response->errorBadRequest("Invalid wish, one is double degree other is not!");
                 }
             }
-
+            */
             for($j = 0; $j < $num; $j = $j + 1){
                 $program = $current["programs_id"][$j];
                 $ap = ApplicationsPrograms::create([
