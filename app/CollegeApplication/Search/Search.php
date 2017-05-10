@@ -15,7 +15,7 @@ abstract class Search
 
         if ($request->has('filters')) {
 
-            foreach ($request->get('filters') as $filter_name => $filter_val) {
+            foreach ($request->input('filters') as $filter_name => $filter_val) {
 
                 $filter_class = ucfirst(camel_case($filter_name));
                 $filter = $this->getFiltersNamespace() . $filter_class;

@@ -19,7 +19,7 @@ class ApplicationPolicy
 
     public function get(User $user)
     {
-        return $user->isReferent();
+        return $user->isEnrollmentService() || $user->isReferent();
     }
 
     public function paginate(User $user)

@@ -33,7 +33,7 @@ class FacultyProgram extends Model // PROGRAM
             Application::class,
             'applications_programs',
             'faculty_program_id',
-            'application_id');
+            'application_id')->withPivot('status', 'choice_number');
     }
 
     public function enrollmentConditions(){
