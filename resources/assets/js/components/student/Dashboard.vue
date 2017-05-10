@@ -2,32 +2,23 @@
   <div class="row">
       <div class="col-md-10 col-md-offset-1">
           <div class="panel panel-default">
-              <!--<div class="panel-heading">Moja prijave</div>-->
-
-              <div v-if="doRender" class="panel-body" >
-                <div v-if="hasApplication">
-                <h2>Imate aktivno vpisnico</h2>
-                  
-                      <div v-if="apl.status=='filed'" v-on:click="remove_application" class="btn btn-default">
-                        Izbrisi in oddaj ponovno
-                      </div>
-                      <div v-else="application.status=='created'" v-on:click="goto_application" class="btn btn-default">
-                        Nadaljuj s prijavo
-                      </div>
-                      <div class="btn btn-primary pull-right" v-on:click="applicationPdf">Preglej</div>
-                 
-                    </tr>
+            <div v-if="doRender" class="panel-body" >
+              <div v-if="hasApplication">
+              <h2>Imate aktivno vpisnico</h2>
                 
-                </table>
+                <div v-if="apl.status=='filed'" v-on:click="remove_application" class="btn btn-default">
+                  Izbrisi oddano vpisnico
                 </div>
-                <div v-else> 
-                  <h2>Nimate aktivne vpisnice</h2>
-                  <span class="btn btn-default" v-on:click="goto_application">Začni vpisom</span>
-                  <!-- <td v-if="apl.status==='saved'"class="btn btn-primary pull-right" v-on:click="applicationPdf">Natisni PDF</td>-->
-                 
-                </div> 
+                <div v-else="application.status=='created'" v-on:click="goto_application" class="btn btn-default">
+                  Nadaljuj s prijavo
+                </div>
+                <div class="btn btn-primary pull-right" v-on:click="applicationPdf">Preglej</div>
               </div>
-              
+              <div v-else> 
+                <h2>Nimate aktivne vpisnice</h2>
+                <span class="btn btn-default" v-on:click="goto_application">Začni vpisom</span>
+              </div> 
+            </div>
           </div>
       </div>
   </div>
@@ -41,9 +32,7 @@
           section: 'Student',
           application: null,
           doRender: false,
-          hasApplication: false,
-          mock_apl: {"emso":1504993500099,"gender":"female","date_of_birth":"1991-05-02T22:00:00.000Z","phone":"141123456","country_id":9,"citizen_id":1,"district_id":0,"middle_school_id":9,"profession_id":50103,"education_type_id":16102,"graduation_type_id":1,"permanent_address":"Jabadu","mailing_address":"Slovenska","permanent_country_id":20,"mailing_country_id":705,"permanent_applications_cities_id":1,"mailing_applications_cities_id":1210,"wishes":[{"faculty_id":63,"programs_id":["VU00"]},{"faculty_id":18,"programs_id":["Q200","Q300"]}],"user_id":2}
-
+          hasApplication: false
         }    
     },
     methods: {
@@ -59,22 +48,17 @@
         this.$http.delete('/api/applications/'+this.apl.id)
         .then(function(res){
 
-          this.hasApplication = false;
-          
+          this.hasApplication = false;   
+          this.$http.get('/api/applications/active')
+          .then(function(res){
+            this.apl = res.data.data;
+          });
 
         }, function(err) {
-          //this.applicationPdf(this.mock_apl);
+          console.log(err);
         });
       },
       displayField: function(value) {
-
-        // console.log(value);
-        // debugger;
-        // if(!(value == null || value==='undefined')) {
-        //   value = value.data || value;
-        //   if( !(value == null || value==='undefined')) return String(value);
-        // }
-        // return '/';
 
         if(value == null || value==='undefined') return '/';
 
@@ -84,7 +68,6 @@
       applicationPdf: function() {
 
         let apl = this.originalApplication;
-        console.log(apl);
         var doc = new jsPDF();
         
         //210 je visina, 297mm sirina
@@ -128,9 +111,9 @@
         doc.text(col2_start,personalData_start+20, "Spol:"); doc.text(col2_text,personalData_start+20, this.displayField(this.translate_gender(apl.gender)));
         
         doc.text(col1_start,personalData_start+30, "Datum rojstva:"); doc.text(col1_text,personalData_start+30, String(date_of_birth));
-        doc.text(col2_start,personalData_start+30, "Država rojstva:"); doc.text(col2_text,personalData_start+30, this.displayField(apl.birthCountry.data.name));
+        doc.text(col2_start,personalData_start+30, "Država rojstva:"); doc.text(col2_text,personalData_start+30, this.displayField(apl.birthCountry.name));
         
-        doc.text(col1_start,personalData_start+40, "Kraj rojstva:"); doc.text(col1_text,personalData_start+40, this.displayField(apl.birthAddress.data.name));
+        doc.text(col1_start,personalData_start+40, "Kraj rojstva:"); doc.text(col1_text,personalData_start+40, this.displayField(apl.birthAddress.name));
         doc.text(col1_start,personalData_start+50, "Državljanstvo:"); doc.text(col1_text,personalData_start+50,this.displayField(apl.citizen.data.name));
         
         doc.text(col1_start,personalData_start+60, "Kontaktni telefon:"); doc.text(col1_text,personalData_start+60, this.displayField(apl.phone));
@@ -142,10 +125,10 @@
         doc.text(section_start, permanentAddr_start, "STALNI NASLOV");
         doc.line(line_start,permanentAddr_start+2,line_end,permanentAddr_start+2);
 
-        doc.text(col1_start, permanentAddr_start+10, "Naslov: "); doc.text(col1_text, permanentAddr_start+10, this.displayField(apl.permanentAddress.meta.address));
+        doc.text(col1_start, permanentAddr_start+10, "Naslov: "); doc.text(col1_text, permanentAddr_start+10, this.displayField(apl.permanentAddress.name));
 
-        doc.text(col1_start, permanentAddr_start+20, "Kraj: "); doc.text(col1_text, permanentAddr_start+20, this.displayField(apl.permanentAddress.data.name));
-        doc.text(col2_start, permanentAddr_start+20, "Država: "); doc.text(col2_start+20, permanentAddr_start+20, this.displayField(apl.permanentCountry.data.name));
+        doc.text(col1_start, permanentAddr_start+20, "Kraj: "); doc.text(col1_text, permanentAddr_start+20, this.displayField(apl.permanentAddress.name));
+        doc.text(col2_start, permanentAddr_start+20, "Država: "); doc.text(col2_start+20, permanentAddr_start+20, this.displayField(apl.permanentCountry.name));
 
         // NASLOV STLANEGA PREBIVALIŠČA
         const mailingAddr_start = permanentAddr_start+40;
@@ -198,9 +181,7 @@
             });
           }
         }
-        console.log(wishes)
-
-
+      
         // Fill the wishes
         for(let i in wishes) {
           let w = wishes[i];
@@ -208,8 +189,7 @@
           doc.text(col1_start-5, wp, (parseInt(i)+1)+". želja"); wp +=10;
           doc.text(col1_start, wp, "Visokošolski zavod: "); doc.text(col1_text, wp, this.displayField(w.faculty.data.name));
           wp += 10;
-
-          
+ 
           doc.text(col1_start, wp, "Študijski program: "); doc.text(col1_text, wp, this.displayField(w.programs[0]));
           wp += 10;
 
@@ -228,7 +208,7 @@
           doc.setPage(i).text(180, 277, "Stran "+ i +"/"+ page_count);
         }
 
-        debugger;
+        
         doc.output("datauri");
 
       },
@@ -334,45 +314,32 @@
       }
     },
     created() {
-
-      console.log(this.$parent);
-
       this.$http.get('/api/applications/active')
         .then(function(res){
 
           let application = res.data.data;
           this.originalApplication = application;
-          console.log(application);
           if("id" in application){
             
-            console.log("has application")
             this.hasApplication = true;
-
-            //try {
             application = this.transformActiveApplication(application);
-            //}catch(e) {
-            //  console.log(e);
-            //}
-          }else{
+   
+          }else {
             console.log("no active application");
-
           }
           this.apl = application;
           
           this.doRender = true;
           this.$root.studentApplication = application;
           
-
         }, function(err) {
-          //this.applicationPdf(this.mock_apl);
+          console.log(err);
         });
 
 
     },
     mounted() {
       console.log('Student dashboard mounted.');
-      //this.$router.push('404');
-      //console.log("should redirect")
     }
   }
 </script>

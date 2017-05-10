@@ -8,7 +8,6 @@
                 <div class="form-group col-md-6">
                   <label for="ime">Ime</label>
                   <input disabled v-model="apl.user.data.name.split(' ')[0]" placeholder="Ime" class="form-control" id="ime">
-
                 </div>
                 <div class="form-group col-md-6">
                   <label for="primmek">Priimek</label>
@@ -38,15 +37,11 @@
                   <div v-if="doRender">
                     <v-select v-model="apl.country_id" label="name" :options="sifrants.countries" :on-change="handleCountryOfBirth"></v-select>
                   </div>
-
                 </div>
               </div>
 
               <div class="row">
-                
-               
                 <div class="form-group col-md-6">
-                 
                   <label for="kraj_rojstva">Kraj rojstva</label>
                     <div v-if="doRender">
                       <div v-if="formControl.enable_district_id">
@@ -76,13 +71,9 @@
                   <input disabled type="email" v-model="apl.user.data.email" placeholder="Email" class="form-control" id="email">
                 </div>
               </div>
-              
-
 
               <hr />
               <h3>NASLOV STALNEGA PREBIVALIŠČA</h3>
-              
-              
               <div class="row">
                 <div class="form-group col-md-12">
                   <label for="naslov_stalni">Naslov</label>
@@ -99,7 +90,6 @@
                     <div v-else>
                       <input v-model="apl.permanent_applications_cities_id.name" disabled="true" class="form-control">
                     </div>
-                    <!--<v-select  v-model="apl.permanent_applications_cities_id" label="name" :options="sifrants.cities"></v-select>-->
                   </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -107,9 +97,7 @@
                   <div v-if="doRender">
                     <v-select  v-model="apl.permanent_country_id" label="name" value="id" :options="sifrants.countries" :on-change="handlePermanentAdress"></v-select>
                   </div>
-                </div>
-
-                
+                </div>               
               </div>
 
               <hr />
@@ -140,7 +128,6 @@
                     <div v-else>
                       <input v-model="apl.mailing_applications_cities_id.name" disabled="true" class="form-control">
                     </div>
-                    <!--<v-select  v-model="apl.mailing_applications_cities_id" label="name" :options="sifrants.cities"></v-select>-->
                   </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -207,12 +194,7 @@
                 <div class="form-group col-md-6">
                   <label for="srednja_sola">Pridobljeni poklic</label>
                   <div v-if="doRender">
-                    <!--<div v-if="formControl.enableMidSchools">-->
                       <v-select v-model="apl.profession_id" label="name" :options="sifrants.professions"></v-select>
-                    <!--</div>
-                    <div v-else>
-                      <input v-model="apl.middle_school_id.name" disabled="true" class="form-control">
-                    </div>-->
                   </div>
                 </div>
 
@@ -273,7 +255,6 @@
                 </div> 
                 -->
 
-
               <hr />
               </div>
               <div :disabled="wishes.length >= 3" class="btn btn-success" v-on:click="add_wish">Dodaj željo</div>
@@ -305,12 +286,6 @@
             enable_district_id: true
           },
           updating: false,
-          //apl: null,
-
-          // apl: {
-          //   drzava_srednje_sole: null
-          // }
-          
         }    
     },
     watch: {
@@ -318,11 +293,8 @@
       wishes: {
         handler: function (previousValue, currentValue) {
           
-          //|| this.doRender===false
           if(this.updating ) return;
           
-          console.log(this.doRender);
-          console.log("update programs")
           this.updating = true;
           this.updatePrograms();
 
@@ -338,17 +310,10 @@
     
       submit: function(status) {
 
-
-        //console.log(this.apl)
-        //console.log(JSON.stringify(this.apl))
-        console.log("SUBMITING");
-
         this.apl.wishes = this.wishes;
-        console.log(this.apl);
         let send_apl = this.preprocessApplication();
         send_apl['status'] = status;
 
-        console.log(send_apl);
         if("id" in this.apl) {
           this.update_aplication(send_apl);
         }else{
@@ -358,8 +323,7 @@
       submit_new: function(payload) {
         this.$http.post("api/applications", payload)
         .then(function(data) {
-          console.log(data)
-          if(status === "filed") {
+          if(payload.status === "filed") {
             this.$router.push('/student');
           }
         }, function(err) {
@@ -369,8 +333,7 @@
       update_aplication: function(payload) {
         this.$http.put("api/applications/"+payload.id, payload)
         .then(function(data) {
-          console.log(data)
-          if(status === "filed") {
+          if(payload.status === "filed") {
             this.$router.push('/student');
           }
         }, function(err) {
@@ -393,14 +356,11 @@
             };
         
         this.wishes.push(w);
-        console.log(JSON.stringify(this.wishes))
       },
       updatePrograms: function(index) {
         
         for (let w in this.wishes) {
           let ww = this.wishes[w];
-          
-          console.log(ww);
           let progrs = [] 
           // filter programs
           if (ww.faculty != null) {
@@ -416,10 +376,8 @@
           for(let i in progrs) {
             p_ids.push(progrs[i].id);
           }
-          //if( progrs.indexOf(this.wishes[w].program) == -1 && this.doRender) this.wishes[w].program = null;
           if( this.wishes[w].program != null && p_ids.indexOf(this.wishes[w].program.id) == -1 ) {
             this.wishes[w].program = null;
-            console.log("changed faculty-> clear program")
           }
 
         
@@ -519,13 +477,10 @@
               var val = apl[key];
               if(val != null)
                 apl[key] = apl[key].id
-              //console.log(val);
             }
           }
 
           apl.gender = apl.gender.value;
-
-          console.log("MAIL ADDR SAME "+this.send_address_same)
           if(this.send_address_same) {
             apl.mailing_address = apl.permanent_address;
             apl.mailing_applications_cities_id = apl.permanent_applications_cities_id;
@@ -534,8 +489,6 @@
           apl.user_id = apl.user.data.id;
 
           delete apl.user;
-          console.log("FINAL");
-          console.log(apl);
           return apl;
 
         }
@@ -544,36 +497,19 @@
     created: function(){
       
       this.apl = this.$root.studentApplication;
-      console.log(this.apl)
       this.$http.get('api/applications/sifranti')
         .then(function(res){
-          console.log(res);
           this.sifrants = res.body;
           this.countries = this.sifrants.countries;
+      
+          this.wishes = this.apl.wishes;
+          this.ifApplication = true;
           
-          // fill sifrants
-            //this.apl.drzava_stalni_naslov = this.countries[0];
-            
-      this.wishes = this.apl.wishes;
-      this.ifApplication = true;
-      console.log("application = ")
-      console.log(this.apl);
-
-      
-      //setTimeout(function(){ 
-        this.doRender = true;
-      //}.bind(this), 100);
-      
-            
-        })
-      
-        // })
+          this.doRender = true;
+        });
     },
     mounted() {
-
-      console.log('application  mounted.');
-      //this.$router.push('404');
-      //console.log("should redirect")
+      console.log("application mounted");
     }
   }
 </script>
