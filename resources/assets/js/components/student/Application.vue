@@ -346,7 +346,7 @@
         send_apl['status'] = status;
 
         if("id" in this.apl) {
-          this.update_aplication(payload);
+          this.update_aplication(send_apl);
         }else{
           this.submit_new(send_apl);
         }
@@ -363,7 +363,7 @@
         })
       },
       update_aplication: function(payload) {
-        this.$http.put("api/applications/"+paylod.id, payload)
+        this.$http.put("api/applications/"+payload.id, payload)
         .then(function(data) {
           console.log(data)
           if(status === "filed") {
@@ -413,7 +413,7 @@
             p_ids.push(progrs[i].id);
           }
           //if( progrs.indexOf(this.wishes[w].program) == -1 && this.doRender) this.wishes[w].program = null;
-          if( p_ids.indexOf(this.wishes[w].program.id) == -1 ) {
+          if( this.wishes[w].program != null && p_ids.indexOf(this.wishes[w].program.id) == -1 ) {
             this.wishes[w].program = null;
             console.log("changed faculty-> clear program")
           }

@@ -177,9 +177,9 @@ class ApplicationController extends ApiController {
     public function update($id)
     {
         $user = $this->request->user();
-        if ($user->cannot('update', Application::class)) {
-            return $this->response->errorUnauthorized();
-        }
+        // if ($user->cannot('update', Application::class)) {
+        //     return $this->response->errorUnauthorized();
+        // }
 
         $application = Application::findOrFail($id);
         if($application->status == 'filed'){
