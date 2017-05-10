@@ -75,13 +75,11 @@ class ApplicationController extends ApiController {
 
     public function create()
     {
-        /*
         $user = $this->request->user();
 
         if ($user->cannot('create', Application::class)) {
             return $this->response->errorUnauthorized();
         }
-        */
         if(! $this->validator->validate($this->request->all())){
             $errors = $this->validator->errors();
             return $this->response->errorBadRequest($errors);
