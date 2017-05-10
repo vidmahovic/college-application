@@ -5,7 +5,7 @@
               <!--<div class="panel-heading">Moja prijave</div>-->
 
               <div class="panel-body" >
-                <div v-if="hasApplication">
+                <div v-if="hasApplication & doRender">
                 <h2>Imate oddano vpisnico</h2>
                   
                       <div v-if="apl.status=='filled'" v-on:click="goto_application" class="btn btn-default">
@@ -40,6 +40,7 @@
         return {
           section: 'Student',
           application: null,
+          doRender: false,
           hasApplication: false,
           mock_apl: {"emso":1504993500099,"gender":"female","date_of_birth":"1991-05-02T22:00:00.000Z","phone":"141123456","country_id":9,"citizen_id":1,"district_id":0,"middle_school_id":9,"profession_id":50103,"education_type_id":16102,"graduation_type_id":1,"permanent_address":"Jabadu","mailing_address":"Slovenska","permanent_country_id":20,"mailing_country_id":705,"permanent_applications_cities_id":1,"mailing_applications_cities_id":1210,"wishes":[{"faculty_id":63,"programs_id":["VU00"]},{"faculty_id":18,"programs_id":["Q200","Q300"]}],"user_id":2}
 
@@ -182,6 +183,85 @@
 
         doc.output("datauri");
 
+      },
+      transformActiveApplication: function(apl) {
+
+        let application = JSON.parse(JSON.stringify(apl));
+
+        
+        application['user'] = apl.applicant; //.data;
+
+        let g = {};
+        if (apl.gender==="male") g = {label: 'Moški', value: 'male'};
+        else g = {label: 'Ženska', value: 'female'};
+        application['gender'] =  g;
+        application['citizen_id'] = apl.citizen.data;
+        application['education_type_id'] = apl.education.data;
+        application['graduation_type_id'] = apl.graduation.data;
+        application['profession_id'] = apl.profession.data;
+        application['middle_school_id'] = apl.middleSchool.data;
+
+        application['permanent_address'] = apl.permanentAddress.meta.address;
+        application['permanent_applications_cities_id'] = apl.permanentAddress.data.name;
+        application['permanent_country_id'] = null; // no data from backend
+
+        application['mailing_address'] = apl.mailingAddress.meta.address;
+        application['mailing_applications_cities_id'] = apl.mailingAddress.data.name;
+        application['mailing_country_id'] = null;
+        
+
+        let wishes = [];
+        if("firstWish" in apl) {
+          console.log(apl.firstWish.data)
+          wishes.push( 
+            {
+              "faculty": apl.firstWish.data.faculty.data,
+              "program": apl.firstWish.data,
+              "program2": null,
+              "module": null,
+              "kraj": null,
+              "regular": null,
+              "is_double": false,
+              "eligable_programs": [],
+              "eligable_programs2": []
+            
+          });
+        }
+
+        if("secondWish" in apl) {
+          wishes.push( 
+            {
+              "faculty": apl.secondWish.data.faculty.data,
+              "program": apl.secondWish.data,
+              "program2": null,
+              "module": null,
+              "kraj": null,
+              "regular": null,
+              "is_double": false,
+              "eligable_programs": [],
+              "eligable_programs2": []
+            
+          })
+        }
+
+        if("thirdWish" in apl) {
+          wishes.push( 
+            {
+              "faculty": apl.thirdWish.data.faculty.data,
+              "program": apl.secondWish.data,
+              "program2": null,
+              "module": null,
+              "kraj": null,
+              "regular": null,
+              "is_double": false,
+              "eligable_programs": [],
+              "eligable_programs2": []
+            
+          })
+        }
+
+        application['wishes'] = wishes;
+        return application;
       }
     },
     created() {
@@ -194,13 +274,18 @@
           let application = res.data.data;
           console.log(application);
           if("id" in application){
-            console.log("HAS ACTIVE")
+            
             this.hasApplication = true;
+
+            application = this.transformActiveApplication(application);
+
           }else{
             console.log("no active application");
 
           }
           this.apl = application;
+          
+          this.doRender = true;
           this.$root.studentApplication = application;
           
 

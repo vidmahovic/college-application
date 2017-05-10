@@ -105,7 +105,7 @@
                 <div class="form-group col-md-6">
                   <label for="drzava_stalni_naslov">Država</label>
                   <div v-if="doRender">
-                    <v-select  v-model="apl.drzava_stalni_naslov" label="name" value="id" :options="sifrants.countries" :on-change="handlePermanentAdress"></v-select>
+                    <v-select  v-model="apl.permanent_country_id" label="name" value="id" :options="sifrants.countries" :on-change="handlePermanentAdress"></v-select>
                   </div>
                 </div>
 
@@ -172,27 +172,7 @@
               <h3>SREDNJEŠOLSKA IZOBRAZBA</h3>
               <div class="row">
               
-                <div class="form-group col-md-6">
-                  <label for="drzava_srednje_sole">Država</label>
-                  <div v-if="doRender">
-                    <v-select v-model="apl.drzava_srednje_sole" :on-change="checkMiddSchool"  label="name" :options="sifrants.countries"></v-select>
-                  </div>
-                </div>
-
-                <div class="form-group col-md-6">
-                  <label for="nacin_srednje_sole">Način zaključka srednje šole</label>
-                  <div v-if="doRender">
-                    <div v-if="formControl.enableMidSchools">
-                    <v-select  v-model="apl.graduation_type_id" label="name" :options="sifrants.graduation_types"></v-select>
-                    </div>
-                    <div v-else>
-                      <input v-model="apl.graduation_type_id.name" disabled="true" class="form-control">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="form-group col-md-6">
+              <div class="form-group col-md-6">
                   <label for="srednja_sola">Srednja šola, ki sem jo obiskoval</label>
                   <div v-if="doRender">
                     <div v-if="formControl.enableMidSchools">
@@ -200,6 +180,27 @@
                     </div>
                     <div v-else>
                       <input v-model="apl.middle_school_id.name" disabled="true" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <!--<div class="form-group col-md-6">
+                  <label for="drzava_srednje_sole">Država</label>
+                  <div v-if="doRender">
+                    <v-select v-model="apl.drzava_srednje_sole" :on-change="checkMiddSchool"  label="name" :options="sifrants.countries"></v-select>
+                  </div>
+                </div>
+                -->
+               
+              </div>
+              <div class="row">
+                 <div class="form-group col-md-6">
+                  <label for="nacin_srednje_sole">Način zaključka srednje šole</label>
+                  <div v-if="doRender">
+                    <div v-if="formControl.enableMidSchools">
+                    <v-select  v-model="apl.graduation_type_id" label="name" :options="sifrants.graduation_types"></v-select>
+                    </div>
+                    <div v-else>
+                      <input v-model="apl.graduation_type_id.name" disabled="true" class="form-control">
                     </div>
                   </div>
                 </div>
@@ -279,8 +280,8 @@
 
               <hr />
 
-              <div class="btn btn-default">Shrani</div>
-              <div class="btn btn-success" v-on:click="submit(apl)">Potrdi</div>
+              <div class="btn btn-default" v-on:click="submit('saved')">Shrani</div>
+              <div class="btn btn-success" v-on:click="submit('filed')">Potrdi</div>
           </div>
       </div>
   </div>
@@ -304,7 +305,7 @@
             enable_district_id: true
           },
           updating: false,
-          apl: null,
+          //apl: null,
 
           // apl: {
           //   drzava_srednje_sole: null
@@ -317,9 +318,11 @@
       wishes: {
         handler: function (previousValue, currentValue) {
           
+          //|| this.doRender===false
+          if(this.updating ) return;
           
-          if(this.updating) return;
-          
+          console.log(this.doRender);
+          console.log("update programs")
           this.updating = true;
           this.updatePrograms();
 
@@ -333,20 +336,42 @@
     
     methods: {
     
-      submit: function(apl) {
+      submit: function(status) {
+
+
         //console.log(this.apl)
         //console.log(JSON.stringify(this.apl))
         this.apl.wishes = this.wishes;
         let send_apl = this.preprocessApplication();
-        send_apl['status'] = 'saved';
-        this.$http.post("api/applications", send_apl)
+        send_apl['status'] = status;
+
+        if("id" in this.apl) {
+          this.update_aplication(payload);
+        }else{
+          this.submit_new(send_apl);
+        }
+      },
+      submit_new: function(payload) {
+        this.$http.post("api/applications", payload)
         .then(function(data) {
           console.log(data)
+          if(status === "filed") {
+            this.$router.push('/student');
+          }
         }, function(err) {
           console.log(err);
         })
-
-        //console.log(this.apl);
+      },
+      update_aplication: function(payload) {
+        this.$http.put("api/applications/"+paylod.id, payload)
+        .then(function(data) {
+          console.log(data)
+          if(status === "filed") {
+            this.$router.push('/student');
+          }
+        }, function(err) {
+          console.log(err);
+        })
       },
       add_wish: function(programs) {
         if( this.wishes.length >= 3) return;
@@ -369,8 +394,9 @@
       updatePrograms: function(index) {
         
         for (let w in this.wishes) {
-          let ww = this.wishes[w]
+          let ww = this.wishes[w];
           
+          console.log(ww);
           let progrs = [] 
           // filter programs
           if (ww.faculty != null) {
@@ -381,7 +407,16 @@
             }
           }
           this.wishes[w].eligable_programs = progrs;
-          if( progrs.indexOf(this.wishes[w].program) == -1) this.wishes[w].program = null;
+
+          let p_ids = [];
+          for(let i in progrs) {
+            p_ids.push(progrs[i].id);
+          }
+          //if( progrs.indexOf(this.wishes[w].program) == -1 && this.doRender) this.wishes[w].program = null;
+          if( p_ids.indexOf(this.wishes[w].program.id) == -1 ) {
+            this.wishes[w].program = null;
+            console.log("changed faculty-> clear program")
+          }
 
         
           let program = this.wishes[w].program
@@ -504,40 +539,26 @@
     },
     created: function(){
       
-      console.log(this.$parent.apl);
-
-      this.add_wish();
-
-      // this.$http.get('/api/applications/active')
-      //   .then(function(res){
-
-      //     let application = res.data.data;
-      //     console.log(application)
-      //     // new application
-      //     if (application.status == 'created') {
-      //       application = this.clearSifrants(application) 
-      //     }
-
-      //     if( application.wishes != null) {
-      //       this.wishes = wishes;
-      //     }
-
-
-          this.apl = this.$root.studentApplication;
-          this.ifApplication = true;
-          console.log(this.apl)
-
-          this.$http.get('api/applications/sifranti')
+    this.$http.get('api/applications/sifranti')
             .then(function(res){
               console.log(res);
               this.sifrants = res.body;
               this.countries = this.sifrants.countries;
               
               // fill sifrants
-              //this.apl.drzava_stalni_naslov = this.countries[0];
+                //this.apl.drzava_stalni_naslov = this.countries[0];
+                this.apl = this.$root.studentApplication;
+          this.wishes = this.apl.wishes;
+          this.ifApplication = true;
+          console.log("application = ")
+          console.log(this.apl);
 
-              this.apl = JSON.parse
-              this.doRender = true;    
+          
+          //setTimeout(function(){ 
+            this.doRender = true;
+          //}.bind(this), 100);
+          
+                
             })
           
         // })
