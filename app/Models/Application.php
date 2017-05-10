@@ -13,6 +13,7 @@ class Application extends Model
 
     const PERMANENT_ADDRESS_TYPE = 0;
     const MAILING_ADDRESS_TYPE = 1;
+    const BIRTH_ADDRESS_TYPE = 2;
 
     protected $cascadeDeletes = ['applicationCities', 'applicationsPrograms'];
 
@@ -67,6 +68,11 @@ class Application extends Model
         return $this->cities()->wherePivot('address_type', self::PERMANENT_ADDRESS_TYPE);
     }
 
+    public function birthAddress()
+    {
+        return $this->cities()->wherePivot('address_type', self::BIRTH_ADDRESS_TYPE);
+    }
+
     public function cities()
     {
         return $this
@@ -88,6 +94,16 @@ class Application extends Model
     public function mailingCountry()
     {
         return $this->countries()->wherePivot('address_type', self::MAILING_ADDRESS_TYPE);
+    }
+
+    public function countryOfBirth()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+
+    public function districtOfBirth()
+    {
+        return $this->belongsTo(District::class, 'district_id');
     }
 
 

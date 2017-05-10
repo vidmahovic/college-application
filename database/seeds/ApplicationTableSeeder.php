@@ -20,6 +20,8 @@ class ApplicationTableSeeder extends Seeder
             $permanent_address_id = \App\Models\City::pluck('id')->shuffle()->take(1)->toArray()[0];
             $mailing_country_id = \App\Models\Country::pluck('id')->shuffle()->take(1)->toArray()[0];
             $permanent_country_id = \App\Models\Country::pluck('id')->shuffle()->take(1)->toArray()[0];
+            $country_id = \App\Models\Country::pluck('id')->shuffle()->take(1)->toArray()[0];
+
             // Apply random choices.
             $wish_count = 0;
             $wish_ids = \App\Models\FacultyProgram::pluck('id')->shuffle()->take(rand(1,3))->mapWithKeys(function($wish_id) use(&$wish_count, $faker) {

@@ -99,6 +99,10 @@ class ApplicationController extends ApiController {
 
         $application->status = $this->request->input('status') ?? 'created';
         $application->application_interval_id = ApplicationInterval::latest()->first()->id;
+        // Save birth address data
+        $application->district_id = $this->request->input('district_id');
+        $application->country_id = $this->request->input('country_id');
+
         $application->save();
 
         $permanent_address = City::find($this->request->input('permanent_applications_cities_id'));
