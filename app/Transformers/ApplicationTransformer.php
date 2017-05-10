@@ -17,19 +17,23 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
 
     protected $defaultIncludes = [
         'applicant', 'citizen', 'interval', 'middleSchool', 'education', 'profession', 'graduation',
-        'firstWish', 'secondWish', 'thirdWish', 'permanentAddress', 'mailingAddress', 'birthAddress',
-        'permanentCountry', 'mailingCountry', 'birthCountry'
+        'firstWish', 'secondWish', 'thirdWish', 'mailingAddress', 'mailingCountry'
     ];
 
     public function transform(Application $application)
     {
+        //dd($application->permanentAddress->first());
         return [
             'id' => $application->id,
             'phone' => $application->phone,
             'gender' => $application->gender,
             'emso' => $application->emso,
             'date_of_birth' => $application->date_of_birth,
+            'birthCountry' => $this->item($application->countryOfBirth, new CountryTransformer)->getData(),
+            'birthAddress' => $this->item($application->districtOfBirth, new DistrictTransformer)->getData(),
             'status' => $application->status,
+            'permanentAddress' => $this->item($application->permanentAddress()->first(), new CityTransformer)->getData(),
+            'permanentCountry' => $this->item($application->permanentCountry()->first(), new CountryTransformer)->getData()
         ];
     }
 
@@ -41,6 +45,14 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
     public function includeMailingAddress(Application $application) {
         if(($mailingAddress = $application->mailingAddress->first()) != null)
             return $this->item($mailingAddress, new CityTransformer)->setMetaValue('address', $mailingAddress->pivot->address);
+    }
+
+    public function includeBirthAddress(Application $application) {
+        return $this->item($application->districtOfBirth, new DistrictTransformer);
+    }
+
+    public function includeBirthCountry(Application $application) {
+        return $this->item($application->countryOfBirth, new CountryTransformer);
     }
 
     public function includeFirstWish(Application $application) {
@@ -83,13 +95,6 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
         return $this->item($application->applicant, new UserTransformer);
     }
 
-    public function includeBirthAddress(Application $application) {
-        return $this->item($application->districtOfBirth, new DistrictTransformer);
-    }
-
-    public function includeBirthCountry(Application $application) {
-        return $this->item($application->countryOfBirth, new CountryTransformer);
-    }
 
     public function includeGraduation(Application $application) {
         return $this->item($application->graduation, new GraduationTypeTransformer);
