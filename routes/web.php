@@ -31,7 +31,7 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-        $api->get('test_all', function() { return Application::with('wishes','cities','countries')->get(); }); // test
+        $api->get('test_all', function() { return Application::with('wishes','permanentAddress','permanentCountry')->get(); }); // test
         $api->get('test_template', 'ApplicationController@active');
         $api->post('test_create', 'ApplicationController@create');
         $api->post('test_update/{id}', 'ApplicationController@update');

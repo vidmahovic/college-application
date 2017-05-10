@@ -28,6 +28,7 @@ class ApplicationValidator{
 
             'citizen_id' => 'required|exists:citizens,id',
             'district_id' => 'required|exists:districts,id',
+            'country_id' => 'required|exists:countries,id',
             'middle_school_id' => 'required|exists:middle_schools,id',
             'profession_id' => 'required|exists:professions,id',
             'education_type_id' => 'required|exists:education_types,id',
@@ -62,15 +63,17 @@ class ApplicationValidator{
 
         $validator->after(function($validator)
         {
-            if(($this->isFromSlovenia && $this->isBornForeign) || (!$this->isFromSlovenia && !$this->isBornForeign)){
+            if(($this->isFromSlovenia && $this->isBornForeign)){
                 $validator->errors()->add('district_id', 'Please specify your origin!');
             }
 
+            /*
             if($this->isFromSlovenia){
                 if(!validateEMSO($this->input['emso'], $this->isFromSlovenia, $this->gender)){
                     $validator->errors()->add('emso', 'Please enter a valid EMSO!');
                 }
             }
+            */
 
             $interval = ApplicationInterval::all()->first();
             $start_date = strtotime($interval->starts_at);

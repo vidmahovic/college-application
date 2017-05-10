@@ -80,7 +80,6 @@ class ApplicationController extends ApiController {
         if ($user->cannot('create', Application::class)) {
             return $this->response->errorUnauthorized();
         }
-
         if(! $this->validator->validate($this->request->all())){
             $errors = $this->validator->errors();
             return $this->response->errorBadRequest($errors);
@@ -151,6 +150,7 @@ class ApplicationController extends ApiController {
         if($application == null) {
             return $this->response->item(Application::createTemplate($user), new ApplicationTemplateTransformer);
         }
+        $application = Application::all()->first()->get();
         return $this->response->item($application, new ApplicationTransformer);
     }
 
@@ -180,7 +180,6 @@ class ApplicationController extends ApiController {
         // if ($user->cannot('update', Application::class)) {
         //     return $this->response->errorUnauthorized();
         // }
-
         $application = Application::findOrFail($id);
 
         if($application->status == 'filed'){
@@ -211,22 +210,23 @@ class ApplicationController extends ApiController {
 
         $application->save();
 
-        $permanent_address = City::find($this->request->input('permanent_applications_cities_id'));
-        $mailing_address = City::find($this->request->input('mailing_applications_cities_id'));
+        $cities = (ApplicationCity::all()->where('application_id',$id)->pluck('id'))->toArray();
+        for($i = 0; $i < count($cities); $i = $i + 1){
+            ApplicationCity::destroy($cities[$i]);
+        }
 
-        // Create pivot tables for addresses.
-        $application->cities()->sync([
-            $permanent_address->id => [
-                'address' => $this->request->input('permanent_address'),
-                'address_type' => 0,
-                'country_id' => $this->request->input('permanent_country_id')
-            ],
-            $mailing_address->id => [
-                'address' => $this->request->input('mailing_address'),
-                'address_type' => 1,
-                'country_id' => $this->request->input('mailing_country_id')
-            ]
-        ]);
+        $permanent_address = ApplicationCity::create([
+            'application_id' => $id,
+            'city_id' => $this->request->input('permanent_applications_cities_id'),
+            'address' => $this->request->input('permanent_address'),
+            'country_id' => $this->request->input('permanent_country_id'),
+            'address_type' => 0]);
+        $mailing_address = ApplicationCity::create([
+            'application_id' => $id,
+            'city_id' => $this->request->input('mailing_applications_cities_id'),
+            'address' => $this->request->input('mailing_address'),
+            'country_id' => $this->request->input('mailing_country_id'),
+            'address_type' => 1]);
 
         $curr_wishes = ApplicationsPrograms::all()->where('application_id',$id)->pluck('id');
         for($i = 0; $i < count($curr_wishes); $i = $i + 1){
