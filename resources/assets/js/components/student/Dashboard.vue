@@ -67,7 +67,7 @@
 
         if(value == null || value==='undefined') return '/';
 
-        return String(value);
+        return String(value).replace("Č", "C");;
 
       },
       applicationPdf: function() {
@@ -85,7 +85,7 @@
         doc.text(100, 20, "Vpisnica", null, null, "center");
         //table header
         
-        doc.setFontSize(12);
+        doc.setFontSize(11);
         doc.text(20,30, "RAZPIS ZA VPIS NA DODIPLOMSKE IN ENOVITE MAGISTRSKE ŠTUDIJSKE PROGRAME ")
         doc.text(20,40, "v študijskem letu 2017/2018");
         // - Univerza v Ljubljani, Univerza v Mariboru, Univerza na Primorskem, Univerza v Novi Gorici, javni in koncesionirani samostojni visokošolski
@@ -93,10 +93,10 @@
         doc.text(20, 50, "Prijavni rok: Prvi prijavni rok");
         doc.text(20, 60, "Vpis v 1. letnik");
                   
-        const col1_start = 20,
-          col1_text = 60,
-          col2_start = 110,
-          col2_text = 150,
+        const col1_start = 10,
+          col1_text = 50,
+          col2_start = 100,
+          col2_text = 140,
           section_start=20,
           line_start=8,
           line_end=200;
@@ -120,10 +120,10 @@
         doc.text(col2_start,personalData_start+30, "Država rojstva:"); doc.text(col2_text,personalData_start+30, this.displayField(apl.birthCountry.data.name));
         
         doc.text(col1_start,personalData_start+40, "Kraj rojstva:"); doc.text(col1_text,personalData_start+40, this.displayField(apl.birthAddress.data.name));
-        doc.text(col2_start,personalData_start+40, "Državljanstvo:"); doc.text(col2_text,personalData_start+40,this.displayField(apl.citizen.data.name));
+        doc.text(col1_start,personalData_start+50, "Državljanstvo:"); doc.text(col1_text,personalData_start+50,this.displayField(apl.citizen.data.name));
         
-        doc.text(col1_start,personalData_start+50, "Kontaktni telefon:"); doc.text(col1_text,personalData_start+50, this.displayField(apl.phone));
-        doc.text(col2_start,personalData_start+50, "Email:"); doc.text(col2_text,personalData_start+50,this.displayField(apl.application.data.email));
+        doc.text(col1_start,personalData_start+60, "Kontaktni telefon:"); doc.text(col1_text,personalData_start+60, this.displayField(apl.phone));
+        doc.text(col2_start,personalData_start+60, "Email:"); doc.text(col2_text,personalData_start+60,this.displayField(apl.applicant.data.email));
         
     
         // NASLOV STLANEGA PREBIVALIŠČA
@@ -134,7 +134,7 @@
         doc.text(col1_start, permanentAddr_start+10, "Naslov: "); doc.text(col1_text, permanentAddr_start+10, this.displayField(apl.permanentAddress.meta.address));
 
         doc.text(col1_start, permanentAddr_start+20, "Kraj: "); doc.text(col1_text, permanentAddr_start+20, this.displayField(apl.permanentAddress.data.name));
-        doc.text(col2_start, permanentAddr_start+20, "Država: "); doc.text(col2_text, permanentAddr_start+20, this.displayField(apl.permanentCountry.data.name));
+        doc.text(col2_start, permanentAddr_start+20, "Država: "); doc.text(col2_start+20, permanentAddr_start+20, this.displayField(apl.permanentCountry.data.name));
 
         // NASLOV STLANEGA PREBIVALIŠČA
         const mailingAddr_start = permanentAddr_start+40;
@@ -144,7 +144,7 @@
         doc.text(col1_start, mailingAddr_start+10, "Naslov: "); doc.text(col1_text, mailingAddr_start+10, this.displayField(apl.mailingAddress.meta.address));
 
         doc.text(col1_start, mailingAddr_start+20, "Kraj: "); doc.text(col1_text, mailingAddr_start+20, this.displayField(apl.mailingAddress.data.name));
-        doc.text(col2_start, mailingAddr_start+20, "Država: "); doc.text(col2_text, mailingAddr_start+20, this.displayField(apl.mailingCountry.data.name));        
+        doc.text(col2_start, mailingAddr_start+20, "Država: "); doc.text(col2_start+20, mailingAddr_start+20, this.displayField(apl.mailingCountry.data.name));        
         
         // DOSEDANJA IZOBRAZBA
         const education_start = mailingAddr_start+40;
@@ -156,7 +156,7 @@
         doc.text(col1_start, education_start+20, "Srednješolska izobrazba"); 
         
         doc.text(col1_start, education_start+30, "Srednja šola: ");  doc.text(col1_text, education_start+30, this.displayField(apl.middleSchool.data.name));
-        doc.text(col2_start, education_start+30, "Nacin zakljucka: ");  doc.text(col2_text, education_start+30, this.displayField(apl.graduation.data.name));
+        doc.text(col1_start, education_start+40, "Nacin zakljucka: ");  doc.text(col1_text, education_start+40, this.displayField(apl.graduation.data.name));
         
         //doc.text(col1_start, education_start+40, "Država: ");  doc.text(col1_text, education_start+30, this.displayField(apl.middle_school_country));
         
@@ -167,20 +167,43 @@
         doc.line(line_start,wishes_start+2,line_end,wishes_start+2);
 
         let wp = wishes_start+10;
-        // Fill the wishes
-        for(let i in apl.wishes) {
-          let w = apl.wishes[i];
 
-          doc.text(col1_start-10, wp, (parseInt(i)+1)+". želja"); wp +=10;
-          doc.text(col1_start, wp, "Visokošolski zavod: "); doc.text(col1_text, wp, this.displayField(w.faculty_id));
+        //handle wishes from active application
+        let wishes = [];
+        for(let w of ["firstWish","secondWish","thirdWish"]){
+          if(w in apl) {
+
+            let faculty = apl[w].data[0].faculty;
+            let programs = [];
+            for(let i in apl[w].data) {
+              let nacin = "(redni)"
+              if(!apl[w].data[i].is_regular) nacin="(izredni)"
+              programs.push(apl[w].data[i].name+" "+nacin);
+            }
+
+            wishes.push({
+              'faculty': faculty,
+              'programs': programs
+            });
+          }
+        }
+        console.log(wishes)
+
+
+        // Fill the wishes
+        for(let i in wishes) {
+          let w = wishes[i];
+
+          doc.text(col1_start-5, wp, (parseInt(i)+1)+". želja"); wp +=10;
+          doc.text(col1_start, wp, "Visokošolski zavod: "); doc.text(col1_text, wp, this.displayField(w.faculty.data.name));
           wp += 10;
 
           
-          doc.text(col1_start, wp, "Študijski program: "); doc.text(col1_text, wp, this.displayField(w.programs_id[0]));
+          doc.text(col1_start, wp, "Študijski program: "); doc.text(col1_text, wp, this.displayField(w.programs[0]));
           wp += 10;
 
-          if(w.programs_id.length > 1) {
-            doc.text(col1_start, wp, "Študijski program: "); doc.text(col1_text, wp, this.displayField(w.programs_id[1]));
+          if(w.programs.length > 1) {
+            doc.text(col1_start, wp, "Študijski program: "); doc.text(col1_text, wp, this.displayField(w.programs[1]));
             wp += 10;
           }
           doc.line(line_start+10,wp+2,line_end-10,wp+2);
