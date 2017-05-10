@@ -29,8 +29,8 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
             'gender' => $application->gender,
             'emso' => $application->emso,
             'date_of_birth' => $application->date_of_birth,
-            'birthCountry' => $this->item($application->countryOfBirth, new CountryTransformer)->getData(),
-            'birthAddress' => $this->item($application->districtOfBirth, new DistrictTransformer)->getData(),
+            'birthCountry' => $this->item($application->countryOfBirth()->first(), new CountryTransformer)->getData(),
+            'birthAddress' => $this->item($application->districtOfBirth()->first(), new DistrictTransformer)->getData(),
             'status' => $application->status,
             'permanentAddress' => $this->item($application->permanentAddress()->first(), new CityTransformer)->getData(),
             'permanentCountry' => $this->item($application->permanentCountry()->first(), new CountryTransformer)->getData()

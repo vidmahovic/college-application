@@ -108,12 +108,15 @@ class ApplicationController extends ApiController {
         $mailing_address = City::find($this->request->input('mailing_applications_cities_id'));
 
         // Create pivot tables for addresses.
-        $application->cities()->sync([
+        $application->cities()->detach();
+        $application->cities()->attach([
             $permanent_address->id => [
                 'address' => $this->request->input('permanent_address'),
                 'address_type' => 0,
                 'country_id' => $this->request->input('permanent_country_id')
-            ],
+            ]
+        ]);
+        $application->cities()->attach([
             $mailing_address->id => [
                 'address' => $this->request->input('mailing_address'),
                 'address_type' => 1,
