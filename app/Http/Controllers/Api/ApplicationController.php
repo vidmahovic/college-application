@@ -75,8 +75,20 @@ class ApplicationController extends ApiController {
 
     public function create()
     {
+        $user = $this->request->user();
+        if ($user->cannot('create', Application::class)) {
+            return $this->response->errorUnauthorized();
+        }
+        if(! $this->validator->validate($this->request->all())){
+            $errors = $this->validator->errors();
+            return $this->response->errorBadRequest($errors);
+        }
+        if(! $this->request->input('wishes')){
+            return $this->response->errorBadRequest("You must insert atleast one wish!");
+        }
+
         $application = Application::create($this->request->only(
-            'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'country_id', 'citizen_id', 'district_id',
+            'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'citizen_id', 'district_id',
                 'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
         ));
 

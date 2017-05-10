@@ -26,7 +26,6 @@ class ApplicationValidator{
             'date_of_birth' => 'required|date|before:' . (string) Carbon::now()->subYears(5),
             'phone' => ['required', 'regex:/^[0-9]{9}$/'],
 
-            'country_id' => 'required|exists:countries,id',
             'citizen_id' => 'required|exists:citizens,id',
             'district_id' => 'required|exists:districts,id',
             'middle_school_id' => 'required|exists:middle_schools,id',
@@ -58,13 +57,13 @@ class ApplicationValidator{
         $validator = app('validator')->make($input, $rules, $messages);
 
         $this->gender = $this->input['gender'];
-        $this->isFromSlovenia = Country::where('name','SLOVENIJA')->first()->id == $this->input['country_id'];
+        $this->isFromSlovenia = Country::where('name','SLOVENIJA')->first()->id == $this->input['permanent_country_id'];
         $this->isBornForeign = District::where('name', 'TUJINA')->first()->id == $this->input['district_id'];
 
         $validator->after(function($validator)
         {
             if(($this->isFromSlovenia && $this->isBornForeign) || (!$this->isFromSlovenia && !$this->isBornForeign)){
-                $validator->errors()->add('country_id', 'Please specify your origin!');
+                $validator->errors()->add('district_id', 'Please specify your origin!');
             }
 
             if($this->isFromSlovenia){
