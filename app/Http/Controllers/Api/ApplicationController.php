@@ -158,10 +158,11 @@ class ApplicationController extends ApiController {
             return $this->response->errorUnauthorized();
         }
         $application = $user->applications()->active()->latest()->first();
+        
         if($application == null) {
             return $this->response->item(Application::createTemplate($user), new ApplicationTemplateTransformer);
         }
-        $application = Application::all()->first()->get();
+
         return $this->response->item($application, new ApplicationTransformer);
     }
 
