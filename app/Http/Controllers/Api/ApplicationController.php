@@ -98,7 +98,7 @@ class ApplicationController extends ApiController {
         ));
 
         $application->status = $this->request->input('status') ?? 'created';
-        $application->application_interval_id = ApplicationInterval::latest()->first()->id;
+        $application->application_interval_id = ApplicationInterval::current()->first()->id;
         // Save birth address data
         $application->district_id = $this->request->input('district_id');
         $application->country_id = $this->request->input('country_id');
@@ -182,12 +182,9 @@ class ApplicationController extends ApiController {
         }
 
         $application = Application::findOrFail($id);
+
         if($application->status == 'filed'){
             return $this->response->errorBadRequest("Application already filed!");
-        }
-
-        if($application == null) {
-            return $this->response->errorNotFound();
         }
 
         if(! $this->validator->validate($this->request->all())){
@@ -207,10 +204,12 @@ class ApplicationController extends ApiController {
         ));
 
         $application->status = $this->request->input('status') ?? 'created';
-        $application->application_interval_id = ApplicationInterval::latest()->first()->id;
-        $application->save();
+        $application->application_interval_id = ApplicationInterval::current()->first()->id;
+        // Save birth address data
+        $application->district_id = $this->request->input('district_id');
+        $application->country_id = $this->request->input('country_id');
 
-        // delete pivot tables
+        $application->save();
 
         $permanent_address = City::find($this->request->input('permanent_applications_cities_id'));
         $mailing_address = City::find($this->request->input('mailing_applications_cities_id'));
@@ -229,8 +228,6 @@ class ApplicationController extends ApiController {
             ]
         ]);
 
-        // delete then recreate wishes
-
         $curr_wishes = ApplicationsPrograms::all()->where('application_id',$id)->pluck('id');
         for($i = 0; $i < count($curr_wishes); $i = $i + 1){
             ApplicationsPrograms::destroy($curr_wishes[$i]);
@@ -240,7 +237,8 @@ class ApplicationController extends ApiController {
         for($i = 0; $i < count($wishes); $i = $i + 1){
             $current = $wishes[$i];
             $num = count($current["programs_id"]);
-            // validate wishes
+            // TODO: validate wishes (tukaj ne preverjamo, če želje izpolnjujejo pogoj allow_double_degree)
+            // TODO: validate wishes (preveri, če pod nekim indexom nimamo več kot 2 želji)
             for($j = 0; $j < $num; $j = $j + 1){
                 $program = $current["programs_id"][$j];
                 $ap = ApplicationsPrograms::create([
