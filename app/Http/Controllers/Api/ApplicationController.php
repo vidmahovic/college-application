@@ -162,7 +162,8 @@ class ApplicationController extends ApiController {
         if ($user->cannot('view-active', Application::class)) {
             return $this->response->errorUnauthorized();
         }
-        $application = $user->applications()->active()->latest()->first();
+                                            //->active()
+        $application = $user->applications()->latest()->first();
         
         if($application == null) {
             return $this->response->item(Application::createTemplate($user), new ApplicationTemplateTransformer);
@@ -176,9 +177,9 @@ class ApplicationController extends ApiController {
     {
         $user = $this->request->user();
 
-        if ($user->cannot('archive', Application::class)) {
-            return $this->response->errorUnauthorized();
-        }
+        // if ($user->cannot('archive', Application::class)) {
+        //     return $this->response->errorUnauthorized();
+        // }
 
         $application = Application::find($id);
 

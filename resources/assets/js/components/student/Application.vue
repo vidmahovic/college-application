@@ -50,7 +50,7 @@
                   <label for="kraj_rojstva">Kraj rojstva</label>
                     <div v-if="doRender">
                       <div v-if="formControl.enable_district_id">
-                        <v-select  v-model="apl.district_id" label="name" :options="sifrants.districts"></v-select>
+                        <v-select v-model="apl.district_id" label="name" :options="sifrants.districts"></v-select>
                       </div>
                       <div v-else>
                         <input v-model="apl.district_id.name" disabled="true" class="form-control">
@@ -341,10 +341,14 @@
 
         //console.log(this.apl)
         //console.log(JSON.stringify(this.apl))
+        console.log("SUBMITING");
+
         this.apl.wishes = this.wishes;
+        console.log(this.apl);
         let send_apl = this.preprocessApplication();
         send_apl['status'] = status;
 
+        console.log(send_apl);
         if("id" in this.apl) {
           this.update_aplication(send_apl);
         }else{
@@ -525,7 +529,7 @@
           if(this.send_address_same) {
             apl.mailing_address = apl.permanent_address;
             apl.mailing_applications_cities_id = apl.permanent_applications_cities_id;
-            //todo drzava
+            apl.mailing_country_id = apl.permanent_country_id;
           }
           apl.user_id = apl.user.data.id;
 
@@ -539,28 +543,30 @@
     },
     created: function(){
       
-    this.$http.get('api/applications/sifranti')
-            .then(function(res){
-              console.log(res);
-              this.sifrants = res.body;
-              this.countries = this.sifrants.countries;
-              
-              // fill sifrants
-                //this.apl.drzava_stalni_naslov = this.countries[0];
-                this.apl = this.$root.studentApplication;
-          this.wishes = this.apl.wishes;
-          this.ifApplication = true;
-          console.log("application = ")
-          console.log(this.apl);
+      this.apl = this.$root.studentApplication;
+      console.log(this.apl)
+      this.$http.get('api/applications/sifranti')
+        .then(function(res){
+          console.log(res);
+          this.sifrants = res.body;
+          this.countries = this.sifrants.countries;
+          
+          // fill sifrants
+            //this.apl.drzava_stalni_naslov = this.countries[0];
+            
+      this.wishes = this.apl.wishes;
+      this.ifApplication = true;
+      console.log("application = ")
+      console.log(this.apl);
 
-          
-          //setTimeout(function(){ 
-            this.doRender = true;
-          //}.bind(this), 100);
-          
-                
-            })
-          
+      
+      //setTimeout(function(){ 
+        this.doRender = true;
+      //}.bind(this), 100);
+      
+            
+        })
+      
         // })
     },
     mounted() {

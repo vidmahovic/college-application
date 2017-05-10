@@ -6,9 +6,9 @@
 
               <div v-if="doRender" class="panel-body" >
                 <div v-if="hasApplication">
-                <h2>Imate oddano vpisnico</h2>
+                <h2>Imate aktivno vpisnico</h2>
                   
-                      <div v-if="apl.status=='filled'" v-on:click="goto_application" class="btn btn-default">
+                      <div v-if="apl.status=='filed'" v-on:click="remove_application" class="btn btn-default">
                         Izbrisi in oddaj ponovno
                       </div>
                       <div v-else="application.status=='created'" v-on:click="goto_application" class="btn btn-default">
@@ -21,8 +21,8 @@
                 </table>
                 </div>
                 <div v-else> 
-                  <h2>Niste še oddali vpisnice</h2>
-                  <span class="btn btn-default" v-on:click="goto_application">Nadaljuj z vpisom</span>
+                  <h2>Nimate aktivne vpisnice</h2>
+                  <span class="btn btn-default" v-on:click="goto_application">Začni vpisom</span>
                   <!-- <td v-if="apl.status==='saved'"class="btn btn-primary pull-right" v-on:click="applicationPdf">Natisni PDF</td>-->
                  
                 </div> 
@@ -54,6 +54,17 @@
 
         if(val === "female") return "Ženski";
         return "Moški";
+      },
+      remove_application: function() {
+        this.$http.delete('/api/applications/'+this.apl.id)
+        .then(function(res){
+
+          this.hasApplication = false;
+          
+
+        }, function(err) {
+          //this.applicationPdf(this.mock_apl);
+        });
       },
       displayField: function(value) {
 
@@ -231,8 +242,8 @@
         let g = {};
         if (apl.gender==="male") g = {label: 'Moški', value: 'male'};
         else g = {label: 'Ženska', value: 'female'};
-        application['country_id'] = apl.birthCountry.data;
-        application['district_id'] = apl.birthAddress.data;
+        application['country_id'] = apl.birthCountry;
+        application['district_id'] = apl.birthAddress;
         application['gender'] =  g;
         application['citizen_id'] = apl.citizen.data;
         application['education_type_id'] = apl.education.data;
@@ -240,14 +251,16 @@
         application['profession_id'] = apl.profession.data;
         application['middle_school_id'] = apl.middleSchool.data;
 
-        application['permanent_address'] = apl.permanentAddress.meta.address;
-        application['permanent_applications_cities_id'] = apl.permanentAddress.data.name;
-        application['permanent_country_id'] = apl.permanentCountry.data;
+        application['permanent_address'] = apl.permanentAddress.pivot.address;
+        application['permanent_applications_cities_id'] = apl.permanentAddress.name;
+        application['permanent_country_id'] = apl.permanentCountry;
 
         application['mailing_address'] = apl.mailingAddress.meta.address;
         application['mailing_applications_cities_id'] = apl.mailingAddress.data.name;
         application['mailing_country_id'] = apl.mailingCountry.data;
 
+
+        // bad copy of code should be done with for of loop throug ["firstWish","secondWish","thirdWish"]
         let wishes = [];
         if("firstWish" in apl) {
           console.log(apl.firstWish.data)
@@ -336,7 +349,7 @@
             this.hasApplication = true;
 
             //try {
-            //application = this.transformActiveApplication(application);
+            application = this.transformActiveApplication(application);
             //}catch(e) {
             //  console.log(e);
             //}
