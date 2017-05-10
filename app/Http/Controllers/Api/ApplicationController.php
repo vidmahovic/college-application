@@ -216,7 +216,7 @@ class ApplicationController extends ApiController {
         }
 
         $application->update($this->request->only(
-            'user_id', 'emso', 'gender', 'date_of_birth', 'phone', 'citizen_id', 'district_id',
+            'user_id', 'emso', 'gender', 'date_of_birth', 'country_id', 'phone', 'citizen_id', 'district_id',
             'middle_school_id', 'profession_id', 'education_type_id', 'graduation_type_id'
         ));
 
@@ -251,8 +251,8 @@ class ApplicationController extends ApiController {
             ApplicationsPrograms::destroy($curr_wishes[$i]);
         }
 
-        $enopredmetni = FacultyProgram::all()->where('allow_double_degree',true)->pluck('id')->toArray();
-        $dvopredmetni = FacultyProgram::all()->where('allow_double_degree',false)->pluck('id')->toArray();
+        $enopredmetni = FacultyProgram::all()->where('allow_double_degree',false)->pluck('id')->toArray();
+        $dvopredmetni = FacultyProgram::all()->where('allow_double_degree',true)->pluck('id')->toArray();
         $wishes = $this->request->input('wishes');
 
         for($i = 0; $i < count($wishes); $i = $i + 1){
