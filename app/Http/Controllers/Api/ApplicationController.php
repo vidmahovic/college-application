@@ -76,9 +76,11 @@ class ApplicationController extends ApiController {
     public function create()
     {
         $user = $this->request->user();
+
         if ($user->cannot('create', Application::class)) {
             return $this->response->errorUnauthorized();
         }
+
         if(! $this->validator->validate($this->request->all())){
             $errors = $this->validator->errors();
             return $this->response->errorBadRequest($errors);
@@ -116,14 +118,21 @@ class ApplicationController extends ApiController {
             ]
         ]);
 
-        $wish_count = 0;
-        $syncable_wishes = $wish_ids->mapWithKeys(function($wish_id) use(&$wish_count) {
-            $wish_count += 1;
-            return [$wish_id => ['choice_number' => $wish_count, 'status' => 0]];
-        })->toArray();
-
-        // Create pivot tables for wishes.
-        $application->wishes()->sync($syncable_wishes);
+        // $faculties = Faculty::all()->pluck('id')->toArray();
+        $wishes = $this->request->input('wishes');
+        for($i = 0; $i < count($wishes); $i = $i + 1){
+            $current = $wishes[$i];
+            $num = count($current["programs_id"]);
+            // validate wishes
+            for($j = 0; $j < $num; $j = $j + 1){
+                $program = $current["programs_id"][$j];
+                $ap = ApplicationsPrograms::create([
+                    'application_id' => $application->id,
+                    'faculty_program_id' => $program,
+                    'status' => false,
+                    'choice_number' => $i+1]);
+            }
+        }
 
         return $this->response->created('Application created');
     }
@@ -131,17 +140,13 @@ class ApplicationController extends ApiController {
     public function active()
     {
         $user = $this->request->user();
-
         if ($user->cannot('view-active', Application::class)) {
             return $this->response->errorUnauthorized();
         }
-
         $application = $user->applications()->active()->latest()->first();
-
         if($application == null) {
             return $this->response->item(Application::createTemplate($user), new ApplicationTemplateTransformer);
         }
-
         return $this->response->item($application, new ApplicationTransformer);
     }
 
@@ -168,7 +173,6 @@ class ApplicationController extends ApiController {
     public function update($id)
     {
         $user = $this->request->user();
-
         if ($user->cannot('update', Application::class)) {
             return $this->response->errorUnauthorized();
         }
@@ -221,14 +225,27 @@ class ApplicationController extends ApiController {
             ]
         ]);
 
-        $wish_count = 0;
-        $syncable_wishes = $wish_ids->mapWithKeys(function($wish_id) use(&$wish_count) {
-            $wish_count += 1;
-            return [$wish_id => ['choice_number' => $wish_count, 'status' => 0]];
-        })->toArray();
+        // delete then recreate wishes
 
-        // Create pivot tables for wishes.
-        $application->wishes()->sync($syncable_wishes);
+        $curr_wishes = ApplicationsPrograms::all()->where('application_id',$id)->pluck('id');
+        for($i = 0; $i < count($curr_wishes); $i = $i + 1){
+            ApplicationsPrograms::destroy($curr_wishes[$i]);
+        }
+
+        $wishes = $this->request->input('wishes');
+        for($i = 0; $i < count($wishes); $i = $i + 1){
+            $current = $wishes[$i];
+            $num = count($current["programs_id"]);
+            // validate wishes
+            for($j = 0; $j < $num; $j = $j + 1){
+                $program = $current["programs_id"][$j];
+                $ap = ApplicationsPrograms::create([
+                    'application_id' => $id,
+                    'faculty_program_id' => $program,
+                    'status' => false,
+                    'choice_number' => $i+1]);
+            }
+        }
 
         return $this->response->created('Application updated');
     }

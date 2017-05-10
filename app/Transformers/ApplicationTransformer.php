@@ -44,18 +44,19 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
     }
 
     public function includeFirstWish(Application $application) {
-        if(($firstWish = $application->firstWish->first()) != null)
-            return $this->item($firstWish, new FacultyProgramTransformer)->setMetaValue('accepted', $firstWish->pivot->status);
+        if(($firstWish = $application->firstWish) != null)
+            // return $this->item($firstWish, new FacultyProgramTransformer)->setMetaValue('accepted', $firstWish->pivot->status);
+            return $this->collection($firstWish, new FacultyProgramTransformer);
     }
 
     public function includeSecondWish(Application $application) {
-        if(($secondWish = $application->secondWish->first()) != null)
-            return $this->item($secondWish, new FacultyProgramTransformer)->setMetaValue('accepted', $secondWish->pivot->status);
+        if(($secondWish = $application->secondWish) != null)
+            return $this->collection($secondWish, new FacultyProgramTransformer);
     }
 
     public function includeThirdWish(Application $application) {
-        if(($thirdWish = $application->thirdWish->first()) != null)
-            return $this->item($thirdWish, new FacultyProgramTransformer)->setMetaValue('accepted', $thirdWish->pivot->status);
+        if(($thirdWish = $application->thirdWish) != null)
+            return $this->collection($thirdWish, new FacultyProgramTransformer);
     }
 
     public function includeCitizen(Application $application) {
