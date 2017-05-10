@@ -39,6 +39,7 @@ class AdminController extends ApiController
         }
 
         $user = User::create($this->request->all());
+        $user->password =  bcrypt($this->request->input('password'));
         $user->activated_at = Carbon::now();
         $user->save();
 
