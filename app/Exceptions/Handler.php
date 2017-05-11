@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Dingo\Api\Auth\Auth;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -45,6 +46,18 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if($e instanceof ModelNotFoundException) {
+            return response('Resource not found', 404);
+        }
+
+        if($e instanceof ValidationException) {
+            return response('Validation failed', 400);
+        }
+
+        if($e instanceof AuthorizationException) {
+            return response('Unauthorized access', 401);
+        }
+
         return parent::render($request, $e);
     }
 }

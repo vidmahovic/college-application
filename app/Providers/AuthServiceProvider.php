@@ -2,8 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Application;
+use App\Models\FacultyProgram;
+use App\Policies\ApplicationPolicy;
+use App\Policies\FacultyProgramPolicy;
 use App\User;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -35,5 +39,10 @@ class AuthServiceProvider extends ServiceProvider
                 return User::where('api_token', $request->input('api_token'))->first();
             }
         });
+
+        // Define Policies
+        $gate = $this->app[Gate::class];
+        $gate->policy(Application::class, ApplicationPolicy::class);
+        $gate->policy(FacultyProgram::class, FacultyProgramPolicy::class);
     }
 }

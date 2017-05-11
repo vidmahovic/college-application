@@ -58,6 +58,13 @@ If you are using PhpStorm and you want to see the Schema inside it, do the follo
 2. In "General" fill in the DB_DATABASE, DB_USERNAME and DB_PASSWORD
 3. <span style="color:gray">[OPTIONAL] If you are using Homestead, go to "SSH/SSL" tab, check "Use SSH Tunnel" and fill in the fields below</span>
 
+## Other References
+
+#####[Swagger Library for API endpoint definition](http://swagger.io)
+#####[Using VueJS with Lumen](https://github.com/stoutZero/vuejs-lumen-example)
+#####[Deploying Laravel on Heroku - Official Docs](https://devcenter.heroku.com/articles/getting-started-with-laravel)
+#####[Deploying Laravel on Heroku - for MySQL](https://mattstauffer.co/blog/laravel-on-heroku-using-a-mysql-database)
+
 ## Security Vulnerabilities
 
 If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.

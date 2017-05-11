@@ -1,0 +1,1369 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "College Application API",
+        "description": "Enroll to faculty programs with ease.",
+        "version": "1.0.0"
+    },
+    "host": "college-app.dev",
+    "schemes": [
+        "http"
+    ],
+    "basePath": "/api",
+    "produces": [
+        "application/json"
+    ],
+    "tags": [
+        {
+            "name": "auth",
+            "description": "API endpoints for user authentication and auth manipulation"
+        },
+        {
+            "name": "user",
+            "description": "API endpoints concerned with authenticated user"
+        },
+        {
+            "name": "application",
+            "description": "API endpoints specific to student applications"
+        },
+        {
+            "name": "users",
+            "description": "API endpoints that manipulate with users"
+        },
+        {
+            "name": "program",
+            "description": "API endpoints that manipulate with faculty programs"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "summary": "Login a user",
+                "description": "Enpoint, ki omogoča avtentikacijo uporabnika. Če se uporabnik prijavlja s pravilnim uporabniškim imenom in geslom, prijava uspe in aplikcaija vrne objekt User. Če se uporabnik poskusi prijaviti z nepravilnim uporabniškim imenom in/ali geslom, aplikacija vrne Bad Request HTTP response (400). Če se uporabnik skuša na napačen način prijaviti več kot 3x, aplikacija vrne Locked HTTP response (423). Če uporabnik ni aktiviran, aplikacija vrne 401 HTTP Response\n",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "params",
+                        "description": "A user's username or email",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "description": "username or email of a user"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "description": "User's password"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User object in JSON",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                },
+                                "meta": {
+                                    "type": "object",
+                                    "properties": {
+                                        "api_token": {
+                                            "type": "string",
+                                            "description": "API token for authenticated user"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed validation",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "401": {
+                        "description": "User is not activated",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "423": {
+                        "description": "Lockout response",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "summary": "Register a user",
+                "description": "Endpoint, ki omogoča registracijo uporabnika v aplikacijo. Aplikacija bo podatke najprej validirala in nato poskusila registrirati uporabnika. Če validacija uspe, bo uporabnik registriran, aplikacija pa bo vrnila Created HTTP response (201). Če podatkov ne bo mogoče validirati, bo aplikacija vrnila Bad Request HTTP Response (400)\n",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "responses": {
+                    "203": {
+                        "description": "A user was validated and persisted to the database.",
+                        "schema": {
+                            "$ref": "#/definitions/Success"
+                        }
+                    },
+                    "400": {
+                        "description": "The request did not pass the validation.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/password/email": {
+            "post": {
+                "summary": "Send password reset email to the user",
+                "description": "Če uporabnik pozabi svoje geslo, mu lahko na ta način pošljemo email za ponastavitev gesla. V primeru, da je email uporabnika najden, se uporabniku pošlje email z URL-jem za ponastavitev gesla, aplikacija pa vrne Accepted HTTP response (202). V primeru, da takega uporabnika ni v bazi, aplikacija vrne Not Found HTTP Response (404)\n",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "description": "user's email"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Email sent.",
+                        "schema": {
+                            "$ref": "#/definitions/Success"
+                        }
+                    },
+                    "404": {
+                        "description": "Email not found.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/password/reset": {
+            "post": {
+                "summary": "Store user's new password",
+                "description": "Uporabnik na tem enpointu lahko ponastavi svoje geslo v primeru, da starega pozabi. Aplikacija preveri unikatni identifikator, shranjen v URL naslovu in če je ta pravi, uporabniku shrani novo geslo v podatkovno bazo. V primeru, da se identifikator ne ujema s tistim, shranjenim v bazi, aplikacija vrne Unauthorized HTTP Response (401). V primeru, da je identifikator pravilen, aplikacija shrani geslo in vrne No Content HTTP Response (204).\n",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "description": "Verification token (passed as a part of unique URL for password reset)"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "User's new password"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Passwored stored successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/Success"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid reset token.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "summary": "Get authenticated user",
+                "description": "Če želimo dobiti avtenticiranega uporabnika, ga dobimo na tem endpointu. Če je uporabnik avtenticiran, aplikacija vrne uporabnika. Sicer, klic ni mogoč in aplikacija vrne Unauthorized HTTP Response (401)\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "user"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns authenticated user",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unautorized request.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update authenticated user",
+                "description": "Endpoint, ki omogoča posodabljanje podatkov uporabnika (z izjemo vloge in gesla!). Če je validacija podatkov uspešna, aplikacija posodobi uporabnikove podatke in posodobljene podatke vrne. Sicer aplikacija sporoči Bad Request HTTP Response (400).\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/User"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "user"
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Returns updated user",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "Request validation failed",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/password": {
+            "post": {
+                "summary": "Change user's password",
+                "description": "Endpoint omogoča spreminjanje gesla uporabnika. Aplikacija prejme staro geslo in novo geslo, preveri, če se staro geslo ujema in če se, shrani novo geslo. V nasprotnem primeru aplikacija vrne Bad Request HTTP Response (400).\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "passwords",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "old_password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "User's old password"
+                                },
+                                "new_password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "User's new password"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "user"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Password stored",
+                        "schema": {
+                            "$ref": "#/definitions/Success"
+                        }
+                    },
+                    "400": {
+                        "description": "Old password is invalid",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/apllications/active": {
+            "get": {
+                "summary": "Get an active application for authenticated student.",
+                "description": "Endpoint omogoča pridobitev zadnje aktivne prijavnice študenta. Če taka prijavnica ne obstaja, aplikacija vrne prazno prijavnico. Če avtenticiran uporabnik ni študent, aplikacija vrne Unauthorized HTTP Response (401).\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Student's last active application or an empty application",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Application"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/applications": {
+            "get": {
+                "summary": "Get all applications in database, optionally filtered and sorted by attrbiutes and limited by number of records.",
+                "description": "Endpoint vrne vse prijavnice ali tiste, ki ustrezajo filtrom, ki jih uporabnik navede v telesu zahtevka. Uporabnik lahko rezultate tudi uredi po določenem atributu v določenem vrstnem redu, število rezultatov pa lahko omeji. Če v bazi ni nobene prijavnice, aplikacija vrne prazen seznam. Če uporabnik ni avtenticiran, aplikacija vrne Unauthorized HTTP Response.\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "by",
+                        "in": "query",
+                        "description": "Sort records by certain attribute",
+                        "type": "string"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Set sorting order (asc / desc). Default = asc",
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit retrieval of the records",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[gender]=male)",
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Applications in the database",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Application"
+                                    }
+                                },
+                                "meta": {
+                                    "$ref": "#/definitions/SimpleMeta"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Persist a new application to the database",
+                "description": "Endpoint validira podatke za prijavnico in v primeru, da validacija uspe, prijavnico shrani v bazo. Če validacija ne uspe, aplikcaija vrne Bad Request HTTP Response (400).\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "application",
+                        "in": "body",
+                        "description": "A new application, ready to be persisted",
+                        "schema": {
+                            "$ref": "#/definitions/Application"
+                        }
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/Success"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation failed",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/applications/paginate": {
+            "get": {
+                "summary": "Get paginated results for the applications, optionally filtered and sorted by attrbiutes and limited by number of records.",
+                "description": "Endpoint vrne paginirane prijavnice, ki ustrezajo filtrom, ki jih uporabnik navede v telesu zahtevka. Če je telo prazno, aplikacija vrne vse prijavnice. Uporabnik lahko rezultate tudi uredi po določenem atributu v določenem vrstnem redu, število rezultatov pa lahko omeji. Če v bazi ni nobene prijavnice, aplikacija vrne prazen seznam. Če uporabnik ni avtenticiran, aplikacija vrne Unauthorized HTTP Response.\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "description": "Specify how many records Paginator should return per-request",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Specify which page should the Paginator return",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "by",
+                        "in": "query",
+                        "description": "Sort records by certain attribute",
+                        "type": "string"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Set sorting order (asc / desc). Default = asc",
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit retrieval of the records",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[gender]=male)",
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated applications in the database",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/Application"
+                                    }
+                                },
+                                "meta": {
+                                    "$ref": "#/definitions/PaginatedMeta"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/applications/{id}": {
+            "get": {
+                "summary": "Get an application by ID",
+                "description": "Endpoint omogoča zajem prijavnice, opisane z ID-jem. Če taka prijavnica ne obstaja, aplikacija vrne Not Found HTTP Response (404). Če uporabnik ni prijavljen, aplikacija vrne Unauthorized HTTP Response (401).\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Application that has the specified ID",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Application"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update Application by it's ID",
+                "description": "Endpoint posodobi podatke za prijavnico, ki ustreza danemu ID-ju. Če take prijavnice ni, aplikcaija vrne Not Found HTTP Response (404). Če uporabnik ni avtenticiran, aplikacija vrne Unauthorized HTTP Response (401).\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "application",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UpdatableApplication"
+                        }
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Returns updated Application",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/definitions/Application"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Archive application by it's ID",
+                "description": "Endpoint arhivira prijavnico, ki ji ustreza podan ID. Če uporabnik nima pravic za arhiviranje prijavnice, strežnik odgovori z Unauthorized HTTP Response (401). Če prijavnica s tem ID-jem ne obstaja, strežnik vrne Not found HTTP Response (404). Sicer, strežnik arhivira prijavnico in vrne No Content HTTP Response (204).\n",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "Application ID",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "tags": [
+                    "application"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Application was archived successfully",
+                        "schema": {
+                            "$ref": "#/definitions/Success"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Resource not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/programs": {
+            "get": {
+                "summary": "Get faculty programs",
+                "description": "Endpoint vrne vse fakultetne programe ali tiste, ki ustrezajo filtrom, ki jih uporabnik navede v telesu zahtevka. Uporabnik lahko rezultate tudi uredi po določenem atributu v določenem vrstnem redu, število rezultatov pa lahko omeji. Če v bazi ni nobenega programa, aplikacija vrne prazen seznam. Če uporabnik ni avtenticiran, aplikacija vrne Unauthorized HTTP Response.        \n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "by",
+                        "in": "query",
+                        "description": "Sort records by certain attribute",
+                        "type": "string"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Set sorting order (asc / desc). Default = asc",
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit retrieval of the records",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[type]=1)",
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "program"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Faculty programs in the database",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/FacultyProgram"
+                                    }
+                                },
+                                "meta": {
+                                    "$ref": "#/definitions/SimpleMeta"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/programs/paginate": {
+            "get": {
+                "summary": "Get paginated results for faculty programs, optionally filtered and sorted by attrbiutes and limited by number of records.",
+                "description": "Endpoint vrne paginirane fakultetne programe, ki ustrezajo filtrom, ki jih uporabnik navede v telesu zahtevka. Če je telo prazno, aplikacija vrne vse fakultetne programe. Uporabnik lahko rezultate tudi uredi po določenem atributu v določenem vrstnem redu, število rezultatov pa lahko omeji. Če v bazi ni nobene prijavnice, aplikacija vrne prazen seznam. Če uporabnik ni avtenticiran, aplikacija vrne Unauthorized HTTP Response.\n",
+                "parameters": [
+                    {
+                        "name": "api_key",
+                        "in": "header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "description": "Specify how many records Paginator should return per-request",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Specify which page should the Paginator return",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "by",
+                        "in": "query",
+                        "description": "Sort records by certain attribute",
+                        "type": "string"
+                    },
+                    {
+                        "name": "order",
+                        "in": "query",
+                        "description": "Set sorting order (asc / desc). Default = asc",
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit retrieval of the records",
+                        "type": "integer"
+                    },
+                    {
+                        "name": "filters[attr]",
+                        "in": "query",
+                        "description": "Request filters (ex. filters[id][]=1&filters[id][]=10&filters[type]=1)",
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "program"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated faculty programs in the database",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "data": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/FacultyProgram"
+                                    }
+                                },
+                                "meta": {
+                                    "$ref": "#/definitions/PaginatedMeta"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "User ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of the user."
+                },
+                "username": {
+                    "type": "string",
+                    "description": "A username needed for logging in the user."
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Email of the user."
+                },
+                "api_token": {
+                    "type": "string",
+                    "description": "API token which has to be provided for every request in order to authenticate the user."
+                },
+                "activated_at": {
+                    "type": "string",
+                    "format": "timestamp",
+                    "description": "Image URL representing the product."
+                },
+                "last_login": {
+                    "type": "string",
+                    "format": "timestamp",
+                    "description": "A timestamp representing when the user has last logged in."
+                },
+                "role": {
+                    "type": "string",
+                    "description": "User's role (can be student, admin or staff)"
+                }
+            }
+        },
+        "Application": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Application ID"
+                },
+                "applicant": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                },
+                "interval": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Interval"
+                        }
+                    }
+                },
+                "middle_school": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/MiddleSchool"
+                        }
+                    }
+                },
+                "education": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/EducationType"
+                        }
+                    }
+                },
+                "graduation": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/GraduationType"
+                        }
+                    }
+                },
+                "profession": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Profession"
+                        }
+                    }
+                },
+                "nationality": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Nationality"
+                        }
+                    }
+                },
+                "citizen": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Citizen"
+                        }
+                    }
+                },
+                "country": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Country"
+                        }
+                    }
+                },
+                "middle_name": {
+                    "type": "string",
+                    "description": "Student's middle name"
+                },
+                "gender": {
+                    "type": "string",
+                    "description": "Student's gender"
+                },
+                "emso": {
+                    "type": "string",
+                    "description": "Student's EMSO identification number"
+                },
+                "date_of_birth": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Stundet's date of birth"
+                },
+                "status": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Status of the application"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "timestamp",
+                    "description": "Application's creation date"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "timestamp",
+                    "description": "DT when the Apllication was updated"
+                },
+                "deleted_at": {
+                    "type": "string",
+                    "format": "timestamp",
+                    "description": "DT when the Application was archived"
+                }
+            }
+        },
+        "UpdatableApplication": {
+            "type": "object",
+            "properties": {
+                "interval_id": {
+                    "type": "integer",
+                    "description": "Interval ID"
+                },
+                "education_type_id": {
+                    "type": "integer",
+                    "description": "Education-type ID"
+                },
+                "middle_school_id": {
+                    "type": "integer",
+                    "description": "Education-type ID"
+                },
+                "profession_id": {
+                    "type": "integer",
+                    "description": "Education-type ID"
+                },
+                "nationality_id": {
+                    "type": "integer",
+                    "description": "Education-type ID"
+                },
+                "middle_name": {
+                    "type": "string",
+                    "description": "Student's middle name"
+                },
+                "gender": {
+                    "type": "string",
+                    "description": "Student's gender"
+                },
+                "emso": {
+                    "type": "string",
+                    "description": "Student's EMSO identification number"
+                },
+                "date_of_birth": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Stundet's date of birth"
+                },
+                "status": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Status of the application"
+                }
+            }
+        },
+        "Interval": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Interval ID"
+                },
+                "starts_at": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Interval starting date"
+                },
+                "ends_at": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Interval ending date"
+                },
+                "deleted_at": {
+                    "type": "string",
+                    "format": "datetime",
+                    "description": "DT when the interval was archived"
+                }
+            }
+        },
+        "Citizen": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Citizen ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Citizen name"
+                }
+            }
+        },
+        "Profession": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Profession ID"
+                },
+                "descriptio": {
+                    "type": "string",
+                    "description": "Profession description"
+                }
+            }
+        },
+        "MiddleSchool": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Middle-school ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Middle-school name"
+                }
+            }
+        },
+        "EducationType": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Education-type ID"
+                },
+                "typ": {
+                    "type": "string",
+                    "description": "Education type"
+                }
+            }
+        },
+        "GraduationType": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Graduation type ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Graduation type name"
+                }
+            }
+        },
+        "Nationality": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Nationality ID"
+                },
+                "typ": {
+                    "type": "string",
+                    "description": "Nationality type"
+                },
+                "descriptio": {
+                    "type": "string",
+                    "description": "Nationality description"
+                }
+            }
+        },
+        "Country": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Country ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Country name"
+                },
+                "eu": {
+                    "type": "boolean",
+                    "description": "Flag showing if country is from EU"
+                }
+            }
+        },
+        "FacultyProgram": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "FacultyProgram ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of the program"
+                },
+                "is_regular": {
+                    "type": "boolean",
+                    "description": "Flag that identifies if a program is regular"
+                },
+                "min_points": {
+                    "type": "integer",
+                    "description": "Minimum amount of points required to enroll to the program"
+                },
+                "typ": {
+                    "type": "integer",
+                    "description": "Flag describing the type of the program (0 = uni, 1 = bvs, 2 = mag)"
+                },
+                "allow_double_degree": {
+                    "type": "boolean",
+                    "description": "Flag describing if a program allows double degree study"
+                },
+                "max_accepted": {
+                    "type": "integer",
+                    "description": "Maximum number of students that can enroll to the program"
+                },
+                "count_accepted": {
+                    "type": "integer",
+                    "description": "Number of students that filed the application for this program"
+                },
+                "faculty": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/Faculty"
+                        }
+                    }
+                }
+            }
+        },
+        "Faculty": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Faculty ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of the faculty"
+                },
+                "acronym": {
+                    "type": "string",
+                    "description": "Faculty's acronym"
+                },
+                "university": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/University"
+                        }
+                    }
+                },
+                "district": {
+                    "type": "object",
+                    "properties": {
+                        "data": {
+                            "$ref": "#/definitions/District"
+                        }
+                    }
+                }
+            }
+        },
+        "University": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "University ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "University name"
+                }
+            }
+        },
+        "District": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "District ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "District name"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "http_code": {
+                    "type": "integer",
+                    "description": "An HTTP status code"
+                },
+                "message": {
+                    "type": "string",
+                    "description": "An explanation of the reason behind this response"
+                }
+            }
+        },
+        "Success": {
+            "type": "object",
+            "properties": {
+                "http_code": {
+                    "type": "integer",
+                    "description": "An HTTP status code"
+                },
+                "message": {
+                    "type": "string",
+                    "description": "Default HTTP response based on the status code"
+                }
+            }
+        },
+        "SimpleMeta": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer",
+                    "description": "Number of retrieved records"
+                }
+            }
+        },
+        "PaginatedMeta": {
+            "type": "object",
+            "properties": {
+                "pagination": {
+                    "type": "object",
+                    "properties": {
+                        "total": {
+                            "type": "integer",
+                            "description": "Number of all records that match the query"
+                        },
+                        "count": {
+                            "type": "integer",
+                            "description": "Number of retrieved records"
+                        },
+                        "per_page": {
+                            "type": "integer",
+                            "description": "Records per-page"
+                        },
+                        "current_page": {
+                            "type": "integer",
+                            "description": "Current paginator page"
+                        },
+                        "total_pages": {
+                            "type": "integer",
+                            "description": "Total paginator pages"
+                        },
+                        "links": {
+                            "type": "object",
+                            "properties": {
+                                "next": {
+                                    "type": "string",
+                                    "description": "URL for next page (if next page exists), disappears on last page"
+                                },
+                                "previous": {
+                                    "type": "string",
+                                    "description": "URL for previous page (if previous page exists), disappears of first page"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
