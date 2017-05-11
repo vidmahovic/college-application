@@ -29,7 +29,11 @@ class FacultyProgramController extends ApiController
             throw new AuthorizationException('Unauthorized access');
         }
 
-        $programs = $this->search->applyFiltersFromRequest($this->request)->get();
+        $programs = $this->search->applyFiltersFromRequest($this->request)->get()
+            ->load('faculty')->sortBy(function($program) {
+                return $program->faculty->name;
+            });
+
 
 //        $programs = $this->setFilters(new FacultyProgram);
 //        $programs = $this->setSorting($programs);
