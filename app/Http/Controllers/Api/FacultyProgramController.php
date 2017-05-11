@@ -30,8 +30,14 @@ class FacultyProgramController extends ApiController
         }
 
         $programs = $this->search->applyFiltersFromRequest($this->request)->get()
-            ->load('faculty')->sortBy(function($program) {
-                return $program->faculty->name;
+            ->load('faculty')->sort(function($programA, $programB) {
+                if($programA->faculty->name === $programB->faculty->name) {
+                    if($programA->type === $programB->type) {
+                        return $programA->is_regular <=> $programB->is_regular;
+                    }
+                    return $programA->type <=> $programB->type;
+                }
+                return $programA->faculty->name <=> $programB->faculty->name;
             });
 
 
