@@ -39,7 +39,8 @@
       <div class="col-md-12">
           <div class="panel panel-default">
               <div class="panel-body">
-                <button class="btn btn-primary" v-on:click="savePdf">Shrani PDF</button>
+                <button class="btn btn-primary" v-on:click="savePdf"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> PDF</button>
+                <button class="btn btn-primary" v-on:click="newProgram"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nov program</button>
                 <h2 style="text-align: center;" class="programs-header">Tabela študijskih programov</h2>
                 <datatable id="datatable" :columns="table_columns" :data="params" :data-store="ajax_store" class="programs-datatable" filterable paginate></datatable>
               </div>
@@ -330,7 +331,9 @@ function programPdf(data){
               console.log(err);
           });
       },
-
+      newProgram: function() {
+        this.$router.push("/vpisna_sluzba/programi/ustvari");
+      },
       poenostavi: function(){
         this.params = {
           type: '',

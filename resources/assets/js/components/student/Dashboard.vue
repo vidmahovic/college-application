@@ -125,6 +125,7 @@
         doc.text(section_start, permanentAddr_start, "STALNI NASLOV");
         doc.line(line_start,permanentAddr_start+2,line_end,permanentAddr_start+2);
 
+
         doc.text(col1_start, permanentAddr_start+10, "Naslov: "); doc.text(col1_text, permanentAddr_start+10, this.displayField(apl.permanentAddress.name));
 
         doc.text(col1_start, permanentAddr_start+20, "Kraj: "); doc.text(col1_text, permanentAddr_start+20, this.displayField(apl.permanentAddress.name));
@@ -146,6 +147,7 @@
         doc.line(line_start,education_start+2,line_end,education_start+2);
 
         doc.text(col1_start, education_start+10, "Najvisja dosezena izobrazba"); doc.text(col2_start, education_start+10, this.displayField(apl.education.data.name));
+
 
         doc.text(col1_start, education_start+20, "Srednješolska izobrazba"); 
         
