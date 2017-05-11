@@ -40,6 +40,11 @@ class FacultyProgram extends Model // PROGRAM
         return $this->hasMany(EnrollmentCondition::class);
     }
 
+    public function getNameAttribute()
+    {
+        return $this->attributes['name'] . " " . ($this->is_regular ? "(REDNI)" : "(IZREDNI)");
+    }
+
 //    public function countAll() {
 //       return $this->hasMany(ApplicationsPrograms::class)->selectRaw('faculty_program_id, count(*) as count');
 //    }
