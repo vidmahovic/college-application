@@ -31,12 +31,9 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-        $api->get('test_all', function() { return Application::with('wishes','permanentAddress','permanentCountry')->get(); }); // test
-        $api->get('test', function() { return FacultyProgram::all()->where('allow_double_degree',true)->pluck('id')->toArray(); }); // test
-        $api->get('test_template', 'ApplicationController@active');
-        $api->post('test_create', 'ApplicationController@create');
-        $api->post('test_update/{id}', 'ApplicationController@update');
-        $api->delete('test_delete/{id}', 'ApplicationController@archive');
+        // test
+        $api->get('program_test', function(){ return FacultyProgram::with('enrollmentConditions')->get(); });
+        $api->post('program/{id}/conditions', 'ConditionController@create');
 
         // Authentication routes
         $api->post('register', 'AuthController@register');
