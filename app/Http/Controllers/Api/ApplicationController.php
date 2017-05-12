@@ -75,6 +75,7 @@ class ApplicationController extends ApiController {
 
     public function create()
     {
+        /*
         $user = $this->request->user();
 
         if(!($user->isStudent() && $user->applications()->count() == 0)){
@@ -84,6 +85,7 @@ class ApplicationController extends ApiController {
         if ($user->cannot('create', Application::class)) {
             return $this->response->errorUnauthorized();
         }
+        */
         if(! $this->validator->validate($this->request->all())){
             $errors = $this->validator->errors();
             return $this->response->errorBadRequest($errors);
@@ -135,7 +137,7 @@ class ApplicationController extends ApiController {
         for($i = 0; $i < count($wishes); $i = $i + 1){
             $current = $wishes[$i];
             $num = count($current["programs_id"]);
-            /*
+
             if($num > 2){
                 return $this->response->errorBadRequest("Too many wishes!");
             }
@@ -149,7 +151,6 @@ class ApplicationController extends ApiController {
                     return $this->response->errorBadRequest("Invalid wish, one is double degree other is not!");
                 }
             }
-            */
             for($j = 0; $j < $num; $j = $j + 1){
                 $program = $current["programs_id"][$j];
                 $ap = ApplicationsPrograms::create([
@@ -169,7 +170,7 @@ class ApplicationController extends ApiController {
         if ($user->cannot('view-active', Application::class)) {
             return $this->response->errorUnauthorized();
         }
-        //->active()
+
         $application = $user->applications()->latest()->first();
         if($application == null) {
             return $this->response->item(Application::createTemplate($user), new ApplicationTemplateTransformer);
@@ -188,7 +189,6 @@ class ApplicationController extends ApiController {
             return $this->response->errorUnauthorized();
         }
 
-
         if($application->status != 'filed'){
             return $this->response->errorBadRequest("Application cannot be deleted!");
         }
@@ -201,10 +201,11 @@ class ApplicationController extends ApiController {
     public function update($id)
     {
         $user = $this->request->user();
-        // if ($user->cannot('update', Application::class)) {
-        //     return $this->response->errorUnauthorized();
-        // }
         $application = Application::findOrFail($id);
+
+        if ($user->cannot('update', $application)) {
+            return $this->response->errorUnauthorized();
+        }
 
         if($application->status == 'filed'){
             return $this->response->errorBadRequest("Application already filed!");
@@ -264,7 +265,7 @@ class ApplicationController extends ApiController {
         for($i = 0; $i < count($wishes); $i = $i + 1){
             $current = $wishes[$i];
             $num = count($current["programs_id"]);
-            /*
+
             if($num > 2){
                 return $this->response->errorBadRequest("Too many wishes!");
             }
@@ -278,7 +279,7 @@ class ApplicationController extends ApiController {
                     return $this->response->errorBadRequest("Invalid wish, one is double degree other is not!");
                 }
             }
-            */
+
             for($j = 0; $j < $num; $j = $j + 1){
                 $program = $current["programs_id"][$j];
                 $ap = ApplicationsPrograms::create([

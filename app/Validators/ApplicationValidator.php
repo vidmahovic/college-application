@@ -63,16 +63,59 @@ class ApplicationValidator{
 
         $validator->after(function($validator)
         {
-            /*
-            if(($this->isFromSlovenia && $this->isBornForeign)){
+            if(!($this->isFromSlovenia && !$this->isBornForeign) || !(!$this->isFromSlovenia && $this->isBornForeign)){
                 $validator->errors()->add('district_id', 'Please specify your origin!');
             }
 
             if($this->isFromSlovenia){
-                if(!validateEMSO($this->input['emso'], $this->isFromSlovenia, $this->gender)){
-                    $validator->errors()->add('emso', 'Please enter a valid EMSO!');
+                // validate emso
+                $emso = $this->input["emso"];
+                $gender = $this->gender;
+                $isFromSlovenia = $this->isFromSlovenia;
+
+                // 29 02 932 50 552 6
+                if(strlen($emso) != 13){
+                    return false;
                 }
-            }*/
+                $day = intval(substr($emso,0,2));
+                $month = intval(substr($emso,2,4));
+                $year = intval(substr($emso,4,7)) + 1000; // 1900 - 1999
+                if(!checkdate($month, $day, $year)){
+                    return false;
+                }
+                // slovenija - register = 50
+                // tujci != 50
+                if(!($isFromSlovenia && intval(substr($emso,7,9)) == 50)){
+                    return false;
+                }
+                // zaporedna številka; moski imajo med 000-499, zenske 500-999
+                $gnumber = intval(substr($emso,10,13));
+                if(!($gender == 'male' && $gnumber <= 499)){
+                    return false;
+                }
+                if(!($gender == 'female' && $gnumber >= 500 && $gnumber <= 999)){
+                    return false;
+                }
+                $factors = [];
+                $factors[0] = $emso[0] * 7;
+                $factors[1] = $emso[1] * 6;
+                $factors[2] = $emso[2] * 5;
+                $factors[3] = $emso[3] * 4;
+                $factors[4] = $emso[4] * 3;
+                $factors[5] = $emso[5] * 2;
+                $factors[6] = $emso[6] * 7;
+                $factors[7] = $emso[7] * 6;
+                $factors[8] = $emso[8] * 5;
+                $factors[9] = $emso[9] * 4;
+                $factors[10] = $emso[10] * 3;
+                $factors[11] = $emso[11] * 2;
+                $sum = array_sum($factors);
+                $control = 11 - ($sum % 11);
+
+                if($control != $emso[12]){
+                    $validator->errors()->add('emso', 'Invalid emso!');
+                }
+            }
 
             $interval = ApplicationInterval::all()->first();
             $start_date = strtotime($interval->starts_at);
@@ -94,51 +137,5 @@ class ApplicationValidator{
 
     public function errors(){
         return $this->errors;
-    }
-
-    public function validateEMSO($emso,  $isFromSlovenia, $gender){
-        // 29 02 932 50 552 6
-        if(strlen($emso) != 13){
-            return false;
-        }
-        $day = intval(substr($emso,0,2));
-        $month = intval(substr($emso,2,4));
-        $year = intval(substr($emso,4,7)) + 1000; // 1900 - 1999
-        if(!checkdate($month, $day, $year)){
-            return false;
-        }
-        // slovenija - register = 50
-        // tujci != 50
-        if(!($isFromSlovenia && intval(substr($emso,7,9)) == 50)){
-            return false;
-        }
-         // zaporedna številka; moski imajo med 000-499, zenske 500-999
-        $gnumber = intval(substr($emso,10,13));
-        if(!($gender == 'male' && $gnumber <= 499)){
-            return false;
-        }
-        if(!($gender == 'female' && $gnumber >= 500 && $gnumber <= 999)){
-            return false;
-        }
-        $factors = [];
-        $factors[0] = $emso[0] * 7;
-        $factors[1] = $emso[1] * 6;
-        $factors[2] = $emso[2] * 5;
-        $factors[3] = $emso[3] * 4;
-        $factors[4] = $emso[4] * 3;
-        $factors[5] = $emso[5] * 2;
-        $factors[6] = $emso[6] * 7;
-        $factors[7] = $emso[7] * 6;
-        $factors[8] = $emso[8] * 5;
-        $factors[9] = $emso[9] * 4;
-        $factors[10] = $emso[10] * 3;
-        $factors[11] = $emso[11] * 2;
-        $sum = array_sum($factors);  
-        $control = 11 - ($sum % 11);
-        if($control != $emso[12]){
-            return false;
-        }
-
-        return true;
     }
 }
