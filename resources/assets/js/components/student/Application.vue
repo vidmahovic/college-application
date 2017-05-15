@@ -234,16 +234,17 @@
             <div v-for="(wish, index) in wishes">
               <div class="row">
                 <div class="col-md-12">
-                <div class="pull-left" style="cursor:pointer" >
-                <div class="dropup" v-on:click=moveWishUp(index)>
-                  <span class="caret"></span>
-                </div>
-                <div class="dropdown" v-on:click=moveWishDown(index)>
-                    <span class="caret"></span>
-                </div>
-                </div>
-                <h4 >{{ index+1}}. želja</h4>
-                  <label class="btn btn-danger col-md-offset-7 col-md-2" v-on:click="wishes.splice(index, 1)">Odstrani željo</label>
+                  <label class="btn btn-danger pull-right" v-on:click="wishes.splice(index, 1)">Odstrani željo</label>
+                  <div class="pull-left" style="cursor:pointer">
+                    <div class="dropup" v-on:click="moveWishUp(index)">
+                     <span class="caret"></span>
+                    </div>
+                    <div class="dropdown" v-on:click="moveWishDown(index)">
+                        <span class="caret"></span>
+                    </div>
+                  </div>
+                  <h4 >&nbsp;{{ index+1}}. želja</h4>
+                  
                 </div>
               </div>
               <div class="row">
@@ -597,13 +598,13 @@
           let apl = JSON.parse(JSON.stringify(this.apl));
 
           if( this.needsEmso && this.hasEmso){
-            
+
             let dob = String(apl.date_of_birth);
-            console.log(dob);
-            console.log("date was not of instance date")
             apl.date_of_birth = new Date(parseInt(dob.substring(6,8)), parseInt(dob.substring(3,5)), parseInt(dob.substring(0,2)));
-            console.log(apl.date_of_birth)
+          } else {
+            apl.emso = "412345678901"
           }
+
           for(let w in apl.wishes) {
             let ww = apl.wishes[w];
             let prgs = [ww.program.id];
