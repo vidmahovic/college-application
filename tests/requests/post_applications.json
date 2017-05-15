@@ -1,0 +1,31 @@
+{
+  "emso":1504993500099,
+  "gender":"female",
+  "date_of_birth":"1991-05-02T22:00:00.000Z",
+  "phone":"141123456",
+  "citizen_id":1,
+  "district_id":1,
+  "country_id": 705,
+  "middle_school_id":9,
+  "profession_id":50103,
+  "education_type_id":16102,
+  "graduation_type_id":1,
+  "permanent_address":"Jabadu",
+  "mailing_address":"Slovenska",
+  "permanent_country_id":20,
+  "mailing_country_id":705,
+  "permanent_applications_cities_id":1,
+  "mailing_applications_cities_id":1210,
+  "wishes":[
+    {
+      "faculty_id":63,
+      "programs_id":["VU00"]
+    },
+    {
+      "faculty_id":18,
+      "programs_id":["Q200","Q300"]
+    }
+  ],
+  "user_id":2,
+  "status":"saved"
+}

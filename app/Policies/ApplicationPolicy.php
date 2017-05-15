@@ -19,7 +19,7 @@ class ApplicationPolicy
 
     public function get(User $user)
     {
-        return $user->isReferent();
+        return $user->isEnrollmentService() || $user->isReferent();
     }
 
     public function paginate(User $user)
@@ -35,6 +35,11 @@ class ApplicationPolicy
     public function viewActive(User $user)
     {
         return $user->isStudent();
+    }
+
+    public function create(User $user)
+    {
+        return $user->isStudent() || $user->isReferent();
     }
 
     public function update(User $user, Application $application)

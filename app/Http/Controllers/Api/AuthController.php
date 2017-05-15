@@ -9,9 +9,7 @@ use App\User;
 use Carbon\Carbon;
 use CollegeApplication\Authentication\AuthenticatesUsers;
 use CollegeApplication\Authentication\ThrottlesLogins;
-use Dingo\Api\Exception\StoreResourceFailedException;
 use Dingo\Api\Exception\ValidationHttpException;
-use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 /**

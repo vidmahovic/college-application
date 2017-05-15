@@ -40,6 +40,7 @@
         </div>
       </div>
       <button class="btn btn-danger" @click="deleteProgram">Brisanje programa</button>
+      <p v-show="showResponseDel" v-bind:class="{'bg-danger': !resDelSucc, 'bg-success': resDelSucc}" style="padding: 10px; width: 30%; margin-top: 15px;"> {{ msgDel }} </p>
     </div>
 
   </div>
@@ -79,7 +80,10 @@ export default {
     return {
       programDetails: {},
       msg: '',
+      msgDel: '',
       showResponse: false,
+      showResponseDel: false,
+      resDelSucc: false,
       resSucc: true,
 
     }
@@ -98,7 +102,21 @@ export default {
         })
     },
     deleteProgram: function(){
-      //this.$http.delete("api/programs/"+this.programDetails.id)
+      this.$http.delete("api/programs/"+this.programDetails.id)
+        .then(function(res){
+          this.msgDel = "Program je uspešno izbrisan.";
+          this.resDelSucc = true;
+          this.showResponseDel = true;
+          var that = this;
+          setTimeout(function() {
+            that.$router.push("/vpisna_sluzba/programi");
+          }, 1000);
+
+        }, function(err) {
+          this.msgDel = "Prišlo je do napake. Prosimo poskusite znova.";
+          this.resDelSucc = false;
+          this.showResponseDel = true;
+        })
     }
   },
   created: function() {

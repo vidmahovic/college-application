@@ -2,13 +2,12 @@
   <div class="row">
       <div class="col-md-12">
           <div v-if="ifApplication" class="panel panel-default" style="padding: 10px">
-            
+
               <h3>OSEBNI PODATKI</h3>
               <div class="row">
                 <div class="form-group col-md-6">
                   <label for="ime">Ime</label>
                   <input disabled v-model="apl.user.data.name.split(' ')[0]" placeholder="Ime" class="form-control" id="ime">
-
                 </div>
                 <div class="form-group col-md-6">
                   <label for="primmek">Priimek</label>
@@ -38,19 +37,15 @@
                   <div v-if="doRender">
                     <v-select v-model="apl.country_id" label="name" :options="sifrants.countries" :on-change="handleCountryOfBirth"></v-select>
                   </div>
-
                 </div>
               </div>
 
               <div class="row">
-                
-               
                 <div class="form-group col-md-6">
-                 
                   <label for="kraj_rojstva">Kraj rojstva</label>
                     <div v-if="doRender">
                       <div v-if="formControl.enable_district_id">
-                        <v-select  v-model="apl.district_id" label="name" :options="sifrants.districts"></v-select>
+                        <v-select v-model="apl.district_id" label="name" :options="sifrants.districts"></v-select>
                       </div>
                       <div v-else>
                         <input v-model="apl.district_id.name" disabled="true" class="form-control">
@@ -76,13 +71,10 @@
                   <input disabled type="email" v-model="apl.user.data.email" placeholder="Email" class="form-control" id="email">
                 </div>
               </div>
-              
-
 
               <hr />
               <h3>NASLOV STALNEGA PREBIVALIŠČA</h3>
-              
-              
+
               <div class="row">
                 <div class="form-group col-md-12">
                   <label for="naslov_stalni">Naslov</label>
@@ -99,17 +91,15 @@
                     <div v-else>
                       <input v-model="apl.permanent_applications_cities_id.name" disabled="true" class="form-control">
                     </div>
-                    <!--<v-select  v-model="apl.permanent_applications_cities_id" label="name" :options="sifrants.cities"></v-select>-->
                   </div>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="drzava_stalni_naslov">Država</label>
                   <div v-if="doRender">
-                    <v-select  v-model="apl.drzava_stalni_naslov" label="name" value="id" :options="sifrants.countries" :on-change="handlePermanentAdress"></v-select>
+
+                    <v-select  v-model="apl.permanent_country_id" label="name" value="id" :options="sifrants.countries" :on-change="handlePermanentAdress"></v-select>
                   </div>
                 </div>
-
-                
               </div>
 
               <hr />
@@ -130,7 +120,9 @@
                 </div>
               </div>
                 <div class="row">
-                  <div class="form-group col-md-6">
+
+                   <div class="form-group col-md-6">
+
                   <label for="drzava_stalni_naslov">Mesto</label>
                   <div v-if="doRender">
                     <div v-if="formControl.enable_mailing_city">
@@ -139,26 +131,24 @@
                     <div v-else>
                       <input v-model="apl.mailing_applications_cities_id.name" disabled="true" class="form-control">
                     </div>
-                    <!--<v-select  v-model="apl.mailing_applications_cities_id" label="name" :options="sifrants.cities"></v-select>-->
                   </div>
                 </div>
                 <div class="form-group col-md-6">
                   <label for="drzava_stalni_naslov">Država</label>
                   <div v-if="doRender">
-                    <v-select  v-model="apl.drzava_send_naslov" label="name" :options="sifrants.countries" :on-change="handleMailingAdress"></v-select>
+                    <v-select  v-model="apl.mailing_country_id" label="name" :options="sifrants.countries" :on-change="handleMailingAdress"></v-select>
                   </div>
                 </div>
-              
-                
+
               </div>
-            
+
               </div>
-              
-              
+
+
               <hr />
               <h3>DOSEDANJA IZOBRAZBA</h3>
               <div class="row">
-                
+
                 <div class="form-group col-md-12">
                   <label for="dosedanja_izobrazba">KLASIUS SRV</label>
                   <div v-if="doRender">
@@ -170,28 +160,8 @@
               <hr />
               <h3>SREDNJEŠOLSKA IZOBRAZBA</h3>
               <div class="row">
-              
-                <div class="form-group col-md-6">
-                  <label for="drzava_srednje_sole">Država</label>
-                  <div v-if="doRender">
-                    <v-select v-model="apl.drzava_srednje_sole" :on-change="checkMiddSchool"  label="name" :options="sifrants.countries"></v-select>
-                  </div>
-                </div>
 
-                <div class="form-group col-md-6">
-                  <label for="nacin_srednje_sole">Način zaključka srednje šole</label>
-                  <div v-if="doRender">
-                    <div v-if="formControl.enableMidSchools">
-                    <v-select  v-model="apl.graduation_type_id" label="name" :options="sifrants.graduation_types"></v-select>
-                    </div>
-                    <div v-else>
-                      <input v-model="apl.graduation_type_id.name" disabled="true" class="form-control">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="form-group col-md-6">
+              <div class="form-group col-md-6">
                   <label for="srednja_sola">Srednja šola, ki sem jo obiskoval</label>
                   <div v-if="doRender">
                     <div v-if="formControl.enableMidSchools">
@@ -202,15 +172,31 @@
                     </div>
                   </div>
                 </div>
+                <!--<div class="form-group col-md-6">
+                  <label for="drzava_srednje_sole">Država</label>
+                  <div v-if="doRender">
+                    <v-select v-model="apl.drzava_srednje_sole" :on-change="checkMiddSchool"  label="name" :options="sifrants.countries"></v-select>
+                  </div>
+                </div>
+                -->
+
+              </div>
+              <div class="row">
+                 <div class="form-group col-md-6">
+                  <label for="nacin_srednje_sole">Način zaključka srednje šole</label>
+                  <div v-if="doRender">
+                    <div v-if="formControl.enableMidSchools">
+                    <v-select  v-model="apl.graduation_type_id" label="name" :options="sifrants.graduation_types"></v-select>
+                    </div>
+                    <div v-else>
+                      <input v-model="apl.graduation_type_id.name" disabled="true" class="form-control">
+                    </div>
+                  </div>
+                </div>
                 <div class="form-group col-md-6">
                   <label for="srednja_sola">Pridobljeni poklic</label>
                   <div v-if="doRender">
-                    <!--<div v-if="formControl.enableMidSchools">-->
                       <v-select v-model="apl.profession_id" label="name" :options="sifrants.professions"></v-select>
-                    <!--</div>
-                    <div v-else>
-                      <input v-model="apl.middle_school_id.name" disabled="true" class="form-control">
-                    </div>-->
                   </div>
                 </div>
 
@@ -233,7 +219,7 @@
                       <v-select v-model="wishes[index].faculty"  label="name" :options="sifrants.faculties"></v-select>
                     </div>
                   </div>
-                </div> 
+                </div>
 
                 <div class="row">
                   <div class="form-group" v-bind:class="{'col-md-12': !wishes[index].is_double,
@@ -249,7 +235,7 @@
                       <v-select v-model="wishes[index].program2" label="name" :options="wishes[index].eligable_programs2"></v-select>
                     </div>
                   </div>
-                </div> 
+                </div>
 
                 <!--
                 <div class="row">
@@ -259,8 +245,8 @@
                       <v-select  v-model="wishes[index].faks_kraj" label="name" :options="sifrants.cities"></v-select>
                     </div>
                   </div>
-                </div> 
-                
+                </div>
+
                 <div class="row">
                   <div class="form-group col-md-6">
                     <label for="nacin_studija">Način študija</label>
@@ -268,9 +254,8 @@
                       <v-select  v-model="wishes[index].regular" :options="[{label: 'Redni', value: 1},{label: 'Izredni', value: 0}]"></v-select>
                     </div>
                   </div>
-                </div> 
+                </div>
                 -->
-
 
               <hr />
               </div>
@@ -278,8 +263,8 @@
 
               <hr />
 
-              <div class="btn btn-default">Shrani</div>
-              <div class="btn btn-success" v-on:click="submit(apl)">Potrdi</div>
+              <div class="btn btn-default" v-on:click="submit('saved')">Shrani</div>
+              <div class="btn btn-success" v-on:click="submit('filed')">Potrdi</div>
           </div>
       </div>
   </div>
@@ -303,49 +288,59 @@
             enable_district_id: true
           },
           updating: false,
-          apl: null,
-
-          // apl: {
-          //   drzava_srednje_sole: null
-          // }
-          
-        }    
+        }
     },
     watch: {
-      
+
       wishes: {
         handler: function (previousValue, currentValue) {
-          
-          
-          if(this.updating) return;
-          
+
+          if(this.updating ) return;
+
           this.updating = true;
           this.updatePrograms();
 
           // prevent "infinite loop" cause of changes triggers watch again..
           setTimeout(function(){ this.updating=false; }.bind(this), 100);
-          
+
         },
         deep: true
-      } 
+      }
     },
-    
+
     methods: {
-    
-      submit: function(apl) {
-        //console.log(this.apl)
-        //console.log(JSON.stringify(this.apl))
+
+      submit: function(status) {
+
         this.apl.wishes = this.wishes;
         let send_apl = this.preprocessApplication();
-        send_apl['status'] = 'saved';
-        this.$http.post("api/applications", send_apl)
+        send_apl['status'] = status;
+
+        if("id" in this.apl) {
+          this.update_aplication(send_apl);
+        }else{
+          this.submit_new(send_apl);
+        }
+      },
+      submit_new: function(payload) {
+        this.$http.post("api/applications", payload)
         .then(function(data) {
-          console.log(data)
+          if(payload.status === "filed") {
+            this.$router.push('/student');
+          }
         }, function(err) {
           console.log(err);
         })
-
-        //console.log(this.apl);
+      },
+      update_aplication: function(payload) {
+        this.$http.put("api/applications/"+payload.id, payload)
+        .then(function(data) {
+          if(payload.status === "filed") {
+            this.$router.push('/student');
+          }
+        }, function(err) {
+          console.log(err);
+        })
       },
       add_wish: function(programs) {
         if( this.wishes.length >= 3) return;
@@ -361,28 +356,33 @@
               "eligable_programs": [],
               "eligable_programs2": []
             };
-        
+
         this.wishes.push(w);
-        console.log(JSON.stringify(this.wishes))
       },
       updatePrograms: function(index) {
-        
+
         for (let w in this.wishes) {
-          let ww = this.wishes[w]
-          
-          let progrs = [] 
+          let ww = this.wishes[w];
+          let progrs = []
           // filter programs
           if (ww.faculty != null) {
-            
+
             for (let p in this.sifrants.facultyPrograms) {
               if (this.sifrants.facultyPrograms[p].faculty_id == ww.faculty.id)
                 progrs.push(this.sifrants.facultyPrograms[p]);
             }
           }
           this.wishes[w].eligable_programs = progrs;
-          if( progrs.indexOf(this.wishes[w].program) == -1) this.wishes[w].program = null;
 
-        
+          let p_ids = [];
+          for(let i in progrs) {
+            p_ids.push(progrs[i].id);
+          }
+          if( this.wishes[w].program != null && p_ids.indexOf(this.wishes[w].program.id) == -1 ) {
+            this.wishes[w].program = null;
+          }
+
+
           let program = this.wishes[w].program
           if( program !== null){
             this.wishes[w].is_double = program.allow_double_degree;
@@ -421,29 +421,33 @@
         },
         handlePermanentAdress: function(currentValue) {
 
+          this.apl.permanent_country_id = currentValue;
           if(parseInt(currentValue.id) != 705) {
             this.apl.permanent_applications_cities_id = {id:1, name:"NEZNANA POŠTA"}; // cities[0]
             this.formControl.enable_permanent_city = false;
           }else {
-            this.apl.permanent_applications_cities_id = null;
+
+            if(this.apl.permanent_applications_cities_id.id == 1) this.apl.permanent_applications_cities_id = null;
             this.formControl.enable_permanent_city = true;
           }
 
         },
         handleMailingAdress: function(currentValue) {
 
+          this.apl.mailing_country_id = currentValue;
           if(parseInt(currentValue.id) != 705) {
             this.apl.mailing_applications_cities_id = {id:1, name:"NEZNANA POŠTA"}; // cities[0]
             this.formControl.enable_mailing_city = false;
           }else {
-            this.apl.mailing_applications_cities_id = null;
+             if(this.apl.mailing_applications_cities_id.id == 1) this.apl.mailing_applications_cities_id = null;
+
+            //this.apl.mailing_applications_cities_id = null;
             this.formControl.enable_mailing_city = true;
           }
 
         },
         handleCountryOfBirth: function(currentValue) {
 
-          console.log(currentValue);
           this.apl.country_id = currentValue;
           if(parseInt(currentValue.id) != 705) {
             this.apl.district_id = {id: 0, name: "TUJINA"}; // cities[0]
@@ -463,7 +467,7 @@
             let prgs = [ww.program.id];
             if(ww.program2 != null) prgs.push(ww.program2.id);
 
-            apl.wishes[w] = { 'faculty_id': ww.faculty.id, 
+            apl.wishes[w] = { 'faculty_id': ww.faculty.id,
                   'programs_id': prgs
                 };
           }
@@ -471,74 +475,43 @@
           // extract ids
           for (var key in apl) {
             if (apl.hasOwnProperty(key) && key.indexOf('_id') > 0) {
-              
+
               var val = apl[key];
               if(val != null)
                 apl[key] = apl[key].id
-              //console.log(val);
             }
           }
 
           apl.gender = apl.gender.value;
-
-          console.log("MAIL ADDR SAME "+this.send_address_same)
           if(this.send_address_same) {
             apl.mailing_address = apl.permanent_address;
             apl.mailing_applications_cities_id = apl.permanent_applications_cities_id;
-            //todo drzava
+            apl.mailing_country_id = apl.permanent_country_id;
           }
           apl.user_id = apl.user.data.id;
 
           delete apl.user;
-          console.log("FINAL");
-          console.log(apl);
           return apl;
 
         }
 
     },
     created: function(){
-      
-      console.log(this.$parent.apl);
 
-      this.add_wish();
-
-      this.$http.get('/api/applications/active')
+      this.apl = this.$root.studentApplication;
+      this.$http.get('api/applications/sifranti')
         .then(function(res){
+          this.sifrants = res.body;
+          this.countries = this.sifrants.countries;
 
-          let application = res.data.data;
-          console.log(application)
-          // new application
-          if (application.status == 'created') {
-            application = this.clearSifrants(application) 
-          }
-
-          if( application.wishes != null) {
-            this.wishes = wishes;
-          }
-
-          this.apl = application;
+          this.wishes = this.apl.wishes;
           this.ifApplication = true;
 
-          this.$http.get('api/applications/sifranti')
-            .then(function(res){
-              console.log(res);
-              this.sifrants = res.body;
-              this.countries = this.sifrants.countries;
-              
-              // fill sifrants
-              //this.apl.drzava_stalni_naslov = this.countries[0];
-
-              this.doRender = true;    
-            })
-          
-        })
+          this.doRender = true;
+        });
     },
     mounted() {
-
-      console.log('application  mounted.');
-      //this.$router.push('404');
-      //console.log("should redirect")
+      console.log("application mounted");
     }
   }
 </script>

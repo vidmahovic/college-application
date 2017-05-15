@@ -23,12 +23,12 @@ class ApplicationValidator{
             'user_id' => 'required|exists:users,id',
             'emso' => 'required|min:12|max:13',
             'gender' => 'required',
-            'date_of_birth' => 'required|date|before:' . (string) Carbon::now()->subYears(14),
+            'date_of_birth' => 'required|date|before:' . (string) Carbon::now()->subYears(5),
             'phone' => ['required', 'regex:/^[0-9]{9}$/'],
 
-            'country_id' => 'required|exists:countries,id',
             'citizen_id' => 'required|exists:citizens,id',
             'district_id' => 'required|exists:districts,id',
+            'country_id' => 'required|exists:countries,id',
             'middle_school_id' => 'required|exists:middle_schools,id',
             'profession_id' => 'required|exists:professions,id',
             'education_type_id' => 'required|exists:education_types,id',
@@ -63,15 +63,16 @@ class ApplicationValidator{
 
         $validator->after(function($validator)
         {
-            if($this->isFromSlovenia && $this->isBornForeign){
-                $validator->errors()->add('country_id', 'Please specify your origin!');
+            /*
+            if(($this->isFromSlovenia && $this->isBornForeign)){
+                $validator->errors()->add('district_id', 'Please specify your origin!');
             }
 
             if($this->isFromSlovenia){
                 if(!validateEMSO($this->input['emso'], $this->isFromSlovenia, $this->gender)){
                     $validator->errors()->add('emso', 'Please enter a valid EMSO!');
                 }
-            }
+            }*/
 
             $interval = ApplicationInterval::all()->first();
             $start_date = strtotime($interval->starts_at);
