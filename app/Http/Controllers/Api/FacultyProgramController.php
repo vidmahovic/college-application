@@ -9,6 +9,7 @@ use CollegeApplication\Search\FacultyProgramSearch\FacultyProgramSearch;
 use Dingo\Api\Exception\ResourceException;
 use Dingo\Api\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class FacultyProgramController extends ApiController
 {
@@ -29,7 +30,17 @@ class FacultyProgramController extends ApiController
             throw new AuthorizationException('Unauthorized access');
         }
 
-        $programs = $this->search->applyFiltersFromRequest($this->request)->get();
+        $programs = $this->search->applyFiltersFromRequest($this->request)->get()
+            ->load('faculty')->sort(function($programA, $programB) {
+                if($programA->faculty->name === $programB->faculty->name) {
+                    if($programA->type === $programB->type) {
+                        return $programA->is_regular <=> $programB->is_regular;
+                    }
+                    return $programA->type <=> $programB->type;
+                }
+                return $programA->faculty->name <=> $programB->faculty->name;
+            });
+
 
 //        $programs = $this->setFilters(new FacultyProgram);
 //        $programs = $this->setSorting($programs);
@@ -91,14 +102,27 @@ class FacultyProgramController extends ApiController
             return $this->response->errorUnauthorized('Unauthorized access.');
         }
 
-        $programs = $this->search->applyFiltersFromRequest($this->request);
+        $programs = $this->search->applyFiltersFromRequest($this->request)->get()
+            ->load('faculty')->sort(function($programA, $programB) {
+                if($programA->faculty->name === $programB->faculty->name) {
+                    if($programA->type === $programB->type) {
+                        return $programA->is_regular <=> $programB->is_regular;
+                    }
+                    return $programA->type <=> $programB->type;
+                }
+                return $programA->faculty->name <=> $programB->faculty->name;
+            });
+
+        $page = $this->request->get('page') ?? 1;
+        $perPage = $this->request->get('perPage') ?? 30;
+
+        $paginator = new LengthAwarePaginator($programs->forPage($page, $perPage), $programs->count(), $perPage, $page, [
+            'path' => $this->request->url()
+        ]);
 
         // $programs = $this->setSorting($programs);
         // $programs = $this->setLimit($programs);
 
-        return $this->response->paginator(
-            $programs->paginate($this->request->get('perPage') ?? 30),
-            new FacultyProgramTransformer
-        );
+        return $this->response->paginator($paginator, new FacultyProgramTransformer);
     }
 }
