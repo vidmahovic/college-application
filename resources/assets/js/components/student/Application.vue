@@ -16,7 +16,7 @@
               <hr />
           <div v-show="hasCitizenship">
             <h3>OSEBNI PODATKI</h3>
-            <div class="row" v-if="needsEmso">
+            <div class="row" v-show="needsEmso">
               <div class="form-group col-md-6" >
                 <label for="emso">EMŠO</label>
                 <div class="input-group">
@@ -44,7 +44,7 @@
 
             <div class="row">
               <div class="form-group col-md-6">
-                <label for="spol">Spol</label>
+                <label for="spol">Spol {{ hasEmso }} {{ needsEmso }}</label>
                 <input v-if="hasEmso && needsEmso" v-model="apl.gender.label" disabled="true" class="form-control">
                 <v-select v-if="!needsEmso" v-model="apl.gender" :options="[{label: 'Moški', value: 'male'},{label: 'Ženska', value: 'female'}]"></v-select>
               </div>
@@ -234,7 +234,15 @@
             <div v-for="(wish, index) in wishes">
               <div class="row">
                 <div class="col-md-12">
-                  <h4 class="col-md-3">{{ index+1}}. želja</h4>
+                <div class="pull-left" style="cursor:pointer" >
+                <div class="dropup" v-on:click=moveWishUp(index)>
+                  <span class="caret"></span>
+                </div>
+                <div class="dropdown" v-on:click=moveWishDown(index)>
+                    <span class="caret"></span>
+                </div>
+                </div>
+                <h4 >{{ index+1}}. želja</h4>
                   <label class="btn btn-danger col-md-offset-7 col-md-2" v-on:click="wishes.splice(index, 1)">Odstrani željo</label>
                 </div>
               </div>
@@ -452,28 +460,41 @@
 
         }
       },
-      clearSifrants: function(apl) {
-        apl.citizen = null;
-        apl.education = null;
-        apl.graduation = null;
-        apl.nationality = null;
-        apl.middle_school = null;
-        apl.profession = null;
-        apl.gender = null;
-        return apl;
+      moveWishUp: function(index) {
+
+        if(index==0) return;
+ 
+        let tmp = this.wishes[index-1];
+        this.wishes.splice(index-1, 1);
+        this.wishes.splice(index, 0, tmp);
+
+
+      },
+      moveWishDown: function(index) {
+
+        if(index==this.wishes.length) return;
+
+        let tmp = this.wishes[index+1];
+        this.wishes.splice(index+1, 1);
+        this.wishes.splice(index, 0, tmp);
+
       },
       handleCitizenship: function(currentValue) {
         
         this.apl.citizen_id = currentValue;
 
         this.hasCitizenship = true;
+        console.log("DRZAVLJANSTVO SPREMEMBA")
         console.log(currentValue);
+
         if(currentValue.id == 1) {
           this.needsEmso = true;
+          //this.hasEmso = false;
         }else{
+          console.log("ni slovenia")
           this.needsEmso = false;
-          this.apl.gender = null;
-          this.apl.date_of_birth = null;
+          //this.apl.gender = null;
+          //this.apl.date_of_birth = null;
         }
 
 
@@ -510,7 +531,8 @@
           year_ob = "20"+emso.substring(5,7)
         }
         
-        this.apl.date_of_birth= day_ob+"."+month_ob+"."+year_ob;//year_ob+"-"+month_ob+"-"+day_ob;
+        this.apl.date_of_birth= String(day_ob+"."+month_ob+"."+year_ob);//year_ob+"-"+month_ob+"-"+day_ob;
+        console.log(this.apl.date_of_birth)
         this.displayEmsoError=false;
         this.hasEmso = true;
       },
@@ -561,18 +583,26 @@
             this.apl.district_id = {id: 0, name: "TUJINA"}; // cities[0]
             this.formControl.enable_district_id = false;
           }else {
-            this.apl.district_id = null;
+            
+            if(this.apl.district_id.id == 0) this.apl.district_id = null;
+            
             this.formControl.enable_district_id = true;
           }
         },
         preprocessApplication: function() {
 
+          console.log("preprocessApplication")
+          console.log(this.apl.date_of_birth)
           // ugly way to copy object
           let apl = JSON.parse(JSON.stringify(this.apl));
 
-          if( !(apl.date_of_birth instanceof Date)){
+          if( this.needsEmso && this.hasEmso){
+            
+            let dob = String(apl.date_of_birth);
+            console.log(dob);
             console.log("date was not of instance date")
-            apl.date_of_birth = new Date(apl.date_of_birth);
+            apl.date_of_birth = new Date(parseInt(dob.substring(6,8)), parseInt(dob.substring(3,5)), parseInt(dob.substring(0,2)));
+            console.log(apl.date_of_birth)
           }
           for(let w in apl.wishes) {
             let ww = apl.wishes[w];
@@ -625,8 +655,14 @@
         if(this.apl.citizen_id.id == 1) this.needsEmso = true;
         if(this.apl.emso != null) this.hasEmso = true;
          
-        console.log(this.needsEmso);
-        console.log(this.hasEmso);
+        console.log("needsEmso= "+this.needsEmso);
+        console.log("hasEmso= "+this.hasEmso);
+
+        if(this.needsEmso && this.hasEmso) {
+          let dob = String(this.apl.date_of_birth)
+
+          this.apl.date_of_birth=dob.substring(8,10)+"."+dob.substring(5,7)+"."+dob.substring(0,4);
+        }
       }
       
 
