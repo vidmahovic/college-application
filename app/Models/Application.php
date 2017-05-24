@@ -110,7 +110,7 @@ class Application extends Model
 
     public function applicationAbilityTests()
     {
-        return $this->hasMany(ApplicationAbilityTest::class, 'district_id');
+        return $this->hasMany(ApplicationAbilityTest::class, 'id');
     }
 
 

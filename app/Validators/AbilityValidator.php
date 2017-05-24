@@ -14,7 +14,6 @@ class AbilityValidator{
         $rules = [
             'min_points' => 'required|integer',
             'max_points' => 'required|integer',
-            'applicants' => 'required'
         ];
 
         $messages = [

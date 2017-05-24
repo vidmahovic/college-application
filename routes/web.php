@@ -34,6 +34,7 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
         // test
         $api->get('program/{id}/ability', 'ConditionController@applied');
         $api->post('program/{id}/ability', 'ConditionController@create');
+        $api->post('program/{id}/ability/insert', 'ConditionController@insert');
 
         // Authentication routes
         $api->post('register', 'AuthController@register');

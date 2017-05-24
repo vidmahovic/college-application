@@ -41,15 +41,15 @@ class AbilityController extends ApiController
             'max_points' => $this->request["max_points"]
         ]);
 
-        $ability_test_id = $ability_test->id;
+        return $this->response->created();
+    }
 
-        // TODO: parse, foreach
+    public function insert($id){
+        // TODO: validate, parse -> foreach, delete & insert
         $app_ability_test = ApplicationAbilityTest::create([
             'application_id' => 1,
-            'ability_test_id' => $ability_test_id,
+            'ability_test_id' => 1,
             'points' => 0
         ]);
-
-        return $this->response->created();
     }
 }
