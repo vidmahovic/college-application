@@ -108,6 +108,11 @@ class Application extends Model
         return $this->belongsTo(District::class, 'district_id');
     }
 
+    public function applicationAbilityTests()
+    {
+        return $this->hasMany(ApplicationAbilityTest::class, 'district_id');
+    }
+
 
 //    public function applicationCities()
 //    {
