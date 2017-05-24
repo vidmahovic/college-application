@@ -5,17 +5,17 @@ use CollegeApplication\Search\Filter;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * Class Regular
+ * Class ProgramId
  *
  * @package \CollegeApplication\Search\ApplicationSearch\Filters
  */
-class Regular implements Filter
+class ProgramId implements Filter
 {
 
     public static function apply(Builder $builder, $value): Builder
     {
         return $builder->whereHas('wishes', function($q) use($value) {
-            return $q->where('is_regular', $value);
+            return $q->where('faculty_program_id', $value);
         });
     }
 }
