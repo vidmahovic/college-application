@@ -25,4 +25,23 @@ class Country extends Model // DRŽAVA
     {
         return $this->hasMany(ApplicationCity::class);
     }
+
+    public function scopeEuropean($query)
+    {
+        return $query->where('eu', true);
+    }
+
+    public function scopeForeign($query)
+    {
+        return $query->whereNotLike('name', '%SLOVENIJA%');
+    }
+
+    public function scopeLocal($query)
+    {
+        return $query->whereLike('name', '%SLOVENIJA%');
+    }
+
+    public function isEuropean() {
+        return !! $this->eu;
+    }
 }
