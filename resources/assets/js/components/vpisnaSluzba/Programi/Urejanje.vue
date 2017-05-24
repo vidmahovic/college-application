@@ -12,6 +12,7 @@
           <p>{{ programDetails.faculty.data.name }}</p>
           <p class="program-text">{{ programDetails.type == 0 ?  "Univerzitetni program" : (programDetails.type == 1 ? "Visokošolski program" : (programDetails.type == 2 ? "Enovitni magisterski program" : "Ni podatka")) }}</p>
           <p class="program-text">{{ programDetails.is_regular == 0 ? "Izredni študij" : "Redni študij" }} </p>
+          <button style="padding-left: 0px; padding-right: 0px;" type="button" @click="sezPrijavljenih" class="btn btn-link">Preglej prijavljene</button>
         </div>
       </div>
       <div class="row marginB20">
@@ -117,6 +118,9 @@ export default {
           this.resDelSucc = false;
           this.showResponseDel = true;
         })
+    },
+    sezPrijavljenih: function(){
+      this.$router.push("/vpisna_sluzba/"+this.programDetails.id+"/prijavljeni");
     }
   },
   created: function() {
@@ -126,7 +130,6 @@ export default {
     //   this.program_details = data;
     // });
     this.programDetails = this.$root.programData;
-    console.log(this.programDetails)
     //console.log(this.$route.params);
   }
 }

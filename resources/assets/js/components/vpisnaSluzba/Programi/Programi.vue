@@ -1,11 +1,13 @@
 <template>
-  <div class="enroll-container">
+  <div class="enroll-container programi">
     <div class="row">
       <div class="col-md-offset-2 col-md-8">
         <div class="panel panel-body">
           <h2 class="programs-header">Kriteriji za študijske programe</h2>
           <h4>Iskanje fakultete:</h4>
           <v-select v-model="params.selectedFaculty" label="name" :on-change="changeFaculty" :options="faculties"></v-select>
+          <h4>Iskanje programa:</h4>
+          <v-select v-model="params.selectedProgram" label="name" :on-change="changeProgram" :options="programs"></v-select>
           <div class="row marginB10">
             <div class="col-md-5">
               <h4>Način študija</h4>
@@ -248,9 +250,11 @@ function programPdf(data){
         params: {
           regular: '',
           type: '',
-          selectedFaculty: ''
+          selectedFaculty: '',
+          selectedProgram: ''
         },
         faculties: [],
+        programs: [],
         table_columns: [
           {label: 'Fakulteta', field: 'faculty.data.name'},
           {label: 'Program', field: 'name'},
@@ -303,14 +307,16 @@ function programPdf(data){
         this.params = {
           regular: param,
           type: this.params.type,
-          selectedFaculty: this.params.selectedFaculty
+          selectedFaculty: this.params.selectedFaculty,
+          selectedProgram: this.params.selectedProgram
         };
       },
       type1: function(param){
         this.params = {
           regular: this.params.regular,
           type: param,
-          selectedFaculty: this.params.selectedFaculty
+          selectedFaculty: this.params.selectedFaculty,
+          selectedProgram: this.params.selectedProgram
         };
       },
 
@@ -318,9 +324,18 @@ function programPdf(data){
         this.params = {
           regular: this.params.regular,
           type: this.params.type,
-          selectedFaculty: val
+          selectedFaculty: val,
+          selectedProgram: this.params.selectedProgram
         };
-        console.log(this.params);
+      },
+
+      changeProgram: function(val){
+        this.params = {
+          regular: this.params.regular,
+          type: this.params.type,
+          selectedFaculty: this.params.selectedFaculty,
+          selectedProgram: val
+        };
       },
 
       savePdf: function(){
@@ -346,6 +361,11 @@ function programPdf(data){
       this.$http.get('/api/faculties')
         .then(function(res){
           this.faculties = res.data.data;
+        });
+
+      this.$http.get('/api/programs')
+        .then(function(res){
+          this.programs = res.data.data;
         })
     }
   }

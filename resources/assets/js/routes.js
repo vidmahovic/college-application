@@ -18,6 +18,7 @@ import VpisnaSluzbaDashboard from './components/vpisnaSluzba/Dashboard.vue'
 import VpisnaSluzbaProgrami from './components/vpisnaSluzba/Programi/Programi.vue'
 import VpisnaSluzbaProgramiUrejanje from './components/vpisnaSluzba/Programi/Urejanje.vue'
 import VpisnaSluzbaProgramiUstvari from './components/vpisnaSluzba/Programi/Ustvari.vue'
+import PregledVpisanih from './components/vpisnaSluzba/Programi/PregledVpisanih.vue'
 
 const routes = [
 	{
@@ -92,6 +93,11 @@ const routes = [
 				path: '/vpisna_sluzba/programi/:id',
 				component: VpisnaSluzbaProgramiUrejanje,
 				name: 'VpisnaSluzbaProgramiUrejanje'
+			},
+			{
+				path: '/vpisna_sluzba/:id/prijavljeni',
+				component: PregledVpisanih,
+				name: 'PregledVpisanih'
 			}
 		]
 	},

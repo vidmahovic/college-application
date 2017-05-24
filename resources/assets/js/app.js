@@ -40,7 +40,7 @@ Vue.component('datepicker', Datepicker)
 //export const eventBus = new Vue();
 
 Vue.component('edit-program', {
-    template: '<button class="btn btn-xs btn-warning" @click="goToUpdatePage">Uredi</button>',
+    template: '<button class="btn btn-xs btn-warning" @click="goToUpdatePage">Podrobno</button>',
     props: ['row'],
 		methods: {
 			goToUpdatePage: function(row){
