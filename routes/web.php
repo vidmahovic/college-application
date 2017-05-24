@@ -32,9 +32,9 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
         // test
-        $api->get('program/{id}/ability', 'ConditionController@applied');
-        $api->post('program/{id}/ability', 'ConditionController@create');
-        $api->post('program/{id}/ability/insert', 'ConditionController@insert');
+        $api->get('program/{id}/ability', 'AbilityController@applied');
+        $api->post('program/{id}/ability', 'AbilityController@create');
+        $api->post('program/{id}/ability/{aid}', 'AbilityController@insert');
 
         // Authentication routes
         $api->post('register', 'AuthController@register');

@@ -35,6 +35,11 @@ class AbilityController extends ApiController
             return $this->response->errorBadRequest($errors);
         }
 
+        $exists = AbilityTest::where('faculty_program_id', $id)->first();
+        if($exists != null){
+            AbilityTest::destroy($exists->id);
+        }
+
         AbilityTest::create([
             'faculty_program_id' => $id,
             'min_points' => $this->request["min_points"],
@@ -44,7 +49,7 @@ class AbilityController extends ApiController
         return $this->response->created();
     }
 
-    public function insert($id){
+    public function insert($id, $aid){
         // TODO: validate, parse -> foreach, delete & insert
         $app_ability_test = ApplicationAbilityTest::create([
             'application_id' => 1,
