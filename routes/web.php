@@ -32,8 +32,8 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
         // test
-        $api->get('program_test', function(){ return FacultyProgram::with('enrollmentConditions')->get(); });
-        $api->post('program/{id}/conditions', 'ConditionController@create');
+        $api->get('program/{id}/ability', 'ConditionController@applied');
+        $api->post('program/{id}/ability', 'ConditionController@create');
 
         // Authentication routes
         $api->post('register', 'AuthController@register');
