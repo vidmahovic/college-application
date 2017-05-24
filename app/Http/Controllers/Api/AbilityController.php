@@ -35,7 +35,7 @@ class AbilityController extends ApiController
             return $this->response->errorBadRequest($errors);
         }
 
-        $ability_test = AbilityTest::create([
+        AbilityTest::create([
             'faculty_program_id' => $id,
             'min_points' => $this->request["min_points"],
             'max_points' => $this->request["max_points"]

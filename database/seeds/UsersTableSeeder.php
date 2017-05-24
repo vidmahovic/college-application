@@ -89,6 +89,15 @@ class UsersTableSeeder extends Seeder
             'activated_at' => Carbon::now(),
             'role_id' => 3
         ]);
+
+        // --- id = 9
+        User::create([
+            'email' => 'rok.zidarn@gmail.com',
+            'username' => 'rokzidarn',
+            'password' => bcrypt('rokzidarn1'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
     }
 
 }

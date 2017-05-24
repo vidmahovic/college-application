@@ -18,6 +18,7 @@ class CreateApplicationsAbilityTestTable extends Migration
             $table->integer('ability_test_id');
             $table->integer('application_id');
             $table->integer('points');
+            $table->timestamps();
         });
     }
 

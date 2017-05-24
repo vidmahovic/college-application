@@ -18,6 +18,7 @@ class CreateAbilitiesTestTable extends Migration
             $table->string('faculty_program_id');
             $table->integer('max_points');
             $table->integer('min_points');
+            $table->timestamps();
         });
     }
 
