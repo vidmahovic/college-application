@@ -94,7 +94,16 @@ class UsersTableSeeder extends Seeder
         User::create([
             'email' => 'rok.zidarn@gmail.com',
             'username' => 'rokzidarn',
-            'password' => bcrypt('rokzidarn1'),
+            'password' => bcrypt('rokzidarn9'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        // --- id = 10
+        User::create([
+            'email' => 'luka.zidarn@gmail.com',
+            'username' => 'lukazidarn',
+            'password' => bcrypt('lukazidarn10'),
             'activated_at' => Carbon::now(),
             'role_id' => 4
         ]);

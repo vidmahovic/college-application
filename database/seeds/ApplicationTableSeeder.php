@@ -100,5 +100,50 @@ class ApplicationTableSeeder extends Seeder
             'status' => 0,
             'choice_number' => 3
         ]);
+
+        $application = Application::create([ // user -> luka.zidarn@gmail.com
+            'user_id' => 10,
+            'application_interval_id' => 1,
+            'middle_school_id' => 9,
+            'education_type_id' => 16102,
+            'profession_id' => 50103,
+            'gender' => "male",
+            'date_of_birth' => "1992-04-25T22:00:00.000Z",
+            'emso' => 2504992500017,
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => null,
+            'deleted_at' => null,
+            'citizen_id' => 1,
+            'graduation_type_id' => 1,
+            'status' => "filed",
+            'district_id' => 61,
+            'country_id' => 705,
+            'phone' => 051257357
+        ]);
+
+        $permanent = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 1",
+            'address_type' => 0,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+
+        $mailing = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 2",
+            'address_type' => 1,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+
+        $wish1 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "ZE10",
+            'status' => 0,
+            'choice_number' => 1
+        ]);
     }
 }
