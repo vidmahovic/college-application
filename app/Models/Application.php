@@ -27,8 +27,8 @@ class Application extends Model
         return $this->belongsTo(ApplicationCity::class);
     }
 
-    public function applicationsPrograms() {
-        return $this->belongsTo(ApplicationCity::class);
+    public function applicationsPrograms($id) {
+        return $this->belongsTo(ApplicationsPrograms::class)->where('faculty_program_id',$id);
     }
 
     public function middleSchool() {
@@ -125,7 +125,7 @@ class Application extends Model
     {
         return $this
             ->belongsToMany(FacultyProgram::class, 'applications_programs', 'application_id', 'faculty_program_id')
-            ->withPivot('status', 'choice_number', 'faculty_program_id');
+            ->withPivot('status', 'choice_number');
     }
 
     public function firstWish()
@@ -143,7 +143,7 @@ class Application extends Model
         return $this->wishes()->wherePivot('choice_number', 3);
     }
 
-    public function applicationWish($id)
+    public function specificWish($id)
     {
         return $this->wishes()->wherePivot('faculty_program_id', $id);
     }

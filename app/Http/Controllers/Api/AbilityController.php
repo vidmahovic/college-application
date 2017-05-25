@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\AbilityTest;
 use App\Models\Application;
 use App\Models\ApplicationAbilityTest;
+use App\Models\ApplicationsPrograms;
 use Dingo\Api\Http\Request;
 use App\Validators\AbilityValidator;
 use Dingo\Api\Exception\ResourceException;
@@ -22,7 +23,7 @@ class AbilityController extends ApiController
     public function applied($id){
         // TODO: policy
 
-        $applied = Application::all()->applicationWish($id);
+        $applied = ApplicationsPrograms::with('application')->where('faculty_program_id',$id)->get();
 
         $ability = AbilityTest::where('faculty_program_id', $id)->first();
 
