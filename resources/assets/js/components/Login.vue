@@ -130,6 +130,12 @@ module.exports = {
         this.$http.post('api/login', {email: this.login.username, password: this.login.password})
           .then(function(res){
             let user = res.body.data
+            // modify enrollment service => enrollment_service for url handeling
+            if(user.role === 'enrollment service') {
+              user.role = 'enrollment_service',
+              console.log("enrollment service logged in")
+            }
+
             this.$parent.user = user;
 
             
