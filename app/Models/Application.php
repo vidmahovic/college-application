@@ -113,7 +113,6 @@ class Application extends Model
         return $this->hasMany(ApplicationAbilityTest::class, 'id');
     }
 
-
 //    public function applicationCities()
 //    {
 //        return $this
