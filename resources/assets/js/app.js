@@ -47,7 +47,7 @@ Vue.component('edit-program', {
 				this.$root.programData = this.row;
 				//ker ne delata $emit $on sem uproabil $root
 				//this.$emit('programdata', this.row);
-				this.$router.push("/vpisna_sluzba/programi/"+this.row.id);
+				this.$router.push("/enrollment_service/programi/"+this.row.id);
 	    }
 		}
 })

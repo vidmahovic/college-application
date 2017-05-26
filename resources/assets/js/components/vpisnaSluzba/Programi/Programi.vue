@@ -332,7 +332,7 @@ function programPdf(data){
           });
       },
       newProgram: function() {
-        this.$router.push("/vpisna_sluzba/programi/ustvari");
+        this.$router.push("/enrollment_service/programi/ustvari");
       },
       poenostavi: function(){
         this.params = {

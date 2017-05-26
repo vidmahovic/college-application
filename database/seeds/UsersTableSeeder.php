@@ -84,7 +84,7 @@ class UsersTableSeeder extends Seeder
 
         User::create([
             'email' => 'vpisna@sluzba.com',
-            'username' => 'vpisna_sluzba',
+            'username' => 'enrollment_service',
             'password' => bcrypt('vpisna12'),
             'activated_at' => Carbon::now(),
             'role_id' => 3
