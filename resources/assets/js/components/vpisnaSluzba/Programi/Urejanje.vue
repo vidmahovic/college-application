@@ -110,7 +110,7 @@ export default {
           this.showResponseDel = true;
           var that = this;
           setTimeout(function() {
-            that.$router.push("/vpisna_sluzba/programi");
+            that.$router.push("/enrollment_service/programi");
           }, 1000);
 
         }, function(err) {

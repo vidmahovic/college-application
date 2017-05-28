@@ -67,7 +67,7 @@ const routes = [
 		]
 	},
 	{
-		path: '/vpisna_sluzba',
+		path: '/enrollment_service',
 		component: VpisnaSluzbaView,
 		/*name: 'vpisnaSluzba',*/
 		meta: {description: 'Vpisna sluzba /'},
@@ -79,18 +79,18 @@ const routes = [
 				meta: {description: 'VpisnaSluzbaDashboard'}
       },
 			{
-				path: '/vpisna_sluzba/programi',
+				path: '/enrollment_service/programi',
 				component: VpisnaSluzbaProgrami,
 				name: 'VpisnaSluzbaProgrami',
 				meta: {description: 'VpisnaSluzbaProgrami'}
 			},
 			{
-				path: '/vpisna_sluzba/programi/ustvari',
+				path: '/enrollment_service/programi/ustvari',
 				component: VpisnaSluzbaProgramiUstvari,
 				name: 'VpisnaSluzbaProgramiUstvari'
 			},
 			{
-				path: '/vpisna_sluzba/programi/:id',
+				path: '/enrollment_service/programi/:id',
 				component: VpisnaSluzbaProgramiUrejanje,
 				name: 'VpisnaSluzbaProgramiUrejanje'
 			},

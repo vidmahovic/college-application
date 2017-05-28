@@ -75,7 +75,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->role->name === 'student';
     }
     public function isEnrollmentService() {
-        return $this->role->name === 'enrollment service';
+        return $this->role->name === 'enrollment_service';
     }
 
     public function saveToken(string $token)

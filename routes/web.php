@@ -31,10 +31,6 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-        // test
-        $api->get('program_test', function(){ return FacultyProgram::with('enrollmentConditions')->get(); });
-        $api->post('program/{id}/conditions', 'ConditionController@create');
-
         // Authentication routes
         $api->post('register', 'AuthController@register');
         $api->post('login', 'AuthController@login');
@@ -55,6 +51,7 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             $api->post('programs/create', 'FacultyProgramController@create');
             $api->post('programs/update/{id}', 'FacultyProgramController@update');
             $api->delete('programs/{id}', 'FacultyProgramController@destroy');
+            $api->post('program/{id}/conditions', 'ConditionController@create');
 
             // APPLICATION
             $api->get('applications/active', 'ApplicationController@active');
