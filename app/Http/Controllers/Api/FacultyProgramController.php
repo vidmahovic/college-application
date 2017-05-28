@@ -96,16 +96,6 @@ class FacultyProgramController extends ApiController
         return $this->response->item($program, new FacultyProgramTransformer);
     }
 
-    public function show2($id)
-    {
-        $program = FacultyProgram::find($id);
-
-        if($program == null)
-            throw new ResourceException('Resource not found');
-
-        return $this->response->item($program, new FacultyProgramTransformer);
-    }
-
     public function paginate()
     {
         if($this->request->user()->cannot('paginate', FacultyProgram::class)) {

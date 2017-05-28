@@ -11,7 +11,7 @@ use League\Fractal;
 class FacultyProgramTransformer extends Fractal\TransformerAbstract
 {
 
-    protected $defaultIncludes = ['faculty'];
+    protected $defaultIncludes = ['faculty', 'enrollmentConditions'];
 
     public function transform(FacultyProgram $program) {
         return [
@@ -34,5 +34,10 @@ class FacultyProgramTransformer extends Fractal\TransformerAbstract
     public function includeFaculty(FacultyProgram $program)
     {
         return $this->item($program->faculty, new FacultyTransformer);
+    }
+
+    public function includeEnrollmentConditions(FacultyProgram $program)
+    {
+        return $this->collection($program->enrollmentConditions, new EnrollmentConditionTransformer);
     }
 }
