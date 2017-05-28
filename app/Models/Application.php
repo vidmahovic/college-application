@@ -28,7 +28,15 @@ class Application extends Model
     }
 
     public function applicationsPrograms() {
-        return $this->belongsTo(ApplicationCity::class);
+        return $this->hasMany(ApplicationsPrograms::class);
+    }
+
+    public function applicationsProgramsId($id) {
+        return $this->hasMany(ApplicationsPrograms::class)->where('faculty_program_id', $id);
+    }
+
+    public function applicationsAbilityTests() {
+        return $this->hasMany(ApplicationAbilityTest::class);
     }
 
     public function middleSchool() {
@@ -108,6 +116,10 @@ class Application extends Model
         return $this->belongsTo(District::class, 'district_id');
     }
 
+    public function applicationAbilityTests()
+    {
+        return $this->hasMany(ApplicationAbilityTest::class, 'id');
+    }
 
 //    public function applicationCities()
 //    {
@@ -136,6 +148,11 @@ class Application extends Model
     public function thirdWish()
     {
         return $this->wishes()->wherePivot('choice_number', 3);
+    }
+
+    public function specificWish($id)
+    {
+        return $this->wishes()->wherePivot('faculty_program_id', $id);
     }
 
 //    public function applicationsPrograms()
