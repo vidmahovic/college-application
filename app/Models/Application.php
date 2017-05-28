@@ -27,8 +27,16 @@ class Application extends Model
         return $this->belongsTo(ApplicationCity::class);
     }
 
-    public function applicationsPrograms($id) {
-        return $this->belongsTo(ApplicationsPrograms::class)->where('faculty_program_id',$id);
+    public function applicationsPrograms() {
+        return $this->hasMany(ApplicationsPrograms::class);
+    }
+
+    public function applicationsProgramsId($id) {
+        return $this->hasMany(ApplicationsPrograms::class)->where('faculty_program_id', $id);
+    }
+
+    public function applicationsAbilityTests() {
+        return $this->hasMany(ApplicationAbilityTest::class);
     }
 
     public function middleSchool() {

@@ -23,12 +23,8 @@ class AbilityController extends ApiController
     public function applied($id){
         // TODO: policy
 
-        $applied = ApplicationsPrograms::with('application')->where('faculty_program_id', $id)->get();
-
-        // $applied = Application::with('applicationsPrograms', $id, 'applicationAbilityTest')->where('status', 'filed')->get();
-
-        //$applied = Application::with(array('applicationsPrograms'=>function($query, $id){
-             //$query->where('faculty_program_id', $id);}))->with('applicationAbilityTest')->where('status', 'filed')->get();
+        $applied = Application::with(['applicationsPrograms' => function($query) use ($id){
+             $query->where('faculty_program_id', $id);}, 'applicationsAbilityTests'])->filed()->get();
 
         $ability = AbilityTest::where('faculty_program_id', $id)->first();
 

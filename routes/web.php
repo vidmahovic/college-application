@@ -31,11 +31,6 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-        // test
-        $api->get('program/{id}/ability', 'AbilityController@applied');
-        $api->post('program/{id}/ability', 'AbilityController@create');
-        $api->post('ability/{pid}', 'AbilityController@insert');
-
         // Authentication routes
         $api->post('register', 'AuthController@register');
         $api->post('login', 'AuthController@login');
@@ -56,6 +51,9 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             $api->post('programs/create', 'FacultyProgramController@create');
             $api->post('programs/update/{id}', 'FacultyProgramController@update');
             $api->delete('programs/{id}', 'FacultyProgramController@destroy');
+            $api->get('program/{id}/ability', 'AbilityController@applied');
+            $api->post('program/{id}/ability', 'AbilityController@create');
+            $api->post('ability/{pid}', 'AbilityController@insert');
 
             // APPLICATION
             $api->get('applications/active', 'ApplicationController@active');
