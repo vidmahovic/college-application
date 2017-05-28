@@ -353,7 +353,8 @@ function programPdf(data){
         this.params = {
           type: '',
           regular: '',
-          selectedFaculty: ''
+          selectedFaculty: '',
+          selectedProgram: ''
         };
       }
     },

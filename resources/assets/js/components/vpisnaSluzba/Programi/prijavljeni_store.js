@@ -17,7 +17,7 @@ export default {
 		params: {
 			program_id: ''
 		},
-		apiUrl: '/api/applications'
+		apiUrl: '/api/applications/paginate'
 	}),
 	computed: {
 		last_page(){
