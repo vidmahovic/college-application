@@ -27,7 +27,6 @@ class EnrollmentConditionSeeder extends Seeder
             'weight' => 60
         ]);
 
-
         $faculty_program_id = 'ZE20';
         EnrollmentCondition::create([ // splosna matura
             'faculty_program_id' => $faculty_program_id,
@@ -86,5 +85,261 @@ class EnrollmentConditionSeeder extends Seeder
             'conditions_profession_id' => 57311,
             'weight' => null
         ]);
+
+        // - prosojnice: FRI, FMF, FU, BF, FA, FF
+
+        // FRI
+
+        $faculty_program_id = 'VT00'; // FRI UNI, splošna matura
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 1,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 1,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 60
+        ]);
+
+        EnrollmentCondition::create([ // FRU UNI, poklicna matura
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 2,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh pri dodatnem predmetu',
+            'type' => 2,
+            'conditions_subject_id' => 'M781',
+            'conditions_profession_id' => null,
+            'weight' => 20
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 2,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+
+        $faculty_program_id = 'VU00'; // FRI VS
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 60
+        ]);
+
+        $faculty_program_id = 'VV00'; // FRI + FMF
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 60
+        ]);
+
+        // FMF
+
+        $faculty_program_id = 'SZ00'; // FMF Matematika UN
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 20
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 30
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh pri dodatnem predmetu',
+            'type' => 0,
+            'conditions_subject_id' => 'M401',
+            'conditions_profession_id' => null,
+            'weight' => 50
+        ]);
+
+        $faculty_program_id = 'TH00'; // FMF Praktična Matematika
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 20
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 30
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh pri dodatnem predmetu',
+            'type' => 0,
+            'conditions_subject_id' => 'M401',
+            'conditions_profession_id' => null,
+            'weight' => 50
+        ]);
+
+        // FU
+
+        $faculty_program_id = 'R400'; // FU, splošna matura
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 1,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 1,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 60
+        ]);
+
+        EnrollmentCondition::create([ // FU poklicna matura
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 2,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh pri dodatnem predmetu',
+            'type' => 2,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 20
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 2,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+
+        // BF
+
+        $faculty_program_id = 'SD00'; // BF Gozdarstvo UN, splošna matura
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 1,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 1,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 60
+        ]);
+
+        EnrollmentCondition::create([  // BF Gozdarstvo UN, poklica matura
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 2,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh pri dodatnem predmetu',
+            'type' => 2,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 20
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 2,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+
+        // FA
+
+        $faculty_program_id = 'SU00'; // FA Arhitektura MAG
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh v 3. in 4. letniku',
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 10
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 10
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 'Uspeh na maturi',
+            'type' => 0,
+            'conditions_subject_id' => 'S251',
+            'conditions_profession_id' => null,
+            'weight' => 80
+        ]);
+
     }
 }

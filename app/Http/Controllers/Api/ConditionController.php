@@ -32,6 +32,10 @@ class ConditionController extends ApiController
         ]);
     }
 
+    public function show($id){
+        return EnrollmentCondition::all()->where('faculty_program_id', $id);
+    }
+
     public function create($id)
     {
 

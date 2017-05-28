@@ -31,6 +31,9 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
+        $api->get('conditions/{id}', 'ConditionController@show');
+        $api->get('programs2/{id}','FacultyProgramController@show2');
+
         // Authentication routes
         $api->post('register', 'AuthController@register');
         $api->post('login', 'AuthController@login');
