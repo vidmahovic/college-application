@@ -2,8 +2,8 @@
 <template>
 
 
-  <div class="container">
-    <div class="panel panel-body">
+  <div v-if="doRender" class="container">
+    <div class="panel panel-body" >
       <h1>{{ programDetails.name }}</h1>
       <div class="row marginB20">
         <div class="col-md-12">
@@ -36,10 +36,28 @@
       <div class="row marginB20">
         <div class="col-md-12">
           <h4 class="programSection">Vpisni pogoji in izračun točk</h4>
-          <h1>TODO</h1>
+          
+          <div class="row" v-for="(cond, index) in programDetails.enrollmentConditions.data" style="margin-bottom:10px;">
+            <div class="col-md-3">
+            
+            {{ cond.faculty_program_id}}
+            </div>
+            <div class="col-md-3">
+            <div class="input-group">
+              <input v-model.number="cond.weight" name="weight" type="number" placeholder="Utež" class="form-control" id="weight" >
+              <span class="input-group-addon" id="basic-addon2" style="padding:0px;">
+                <div class="btn btn-danger" v-on:click="programDetails.enrollmentConditions.data.splice(index, 1)">Odstrani</div>
+              </span>
+            </div>
+            </div>
+          </div>
+          <div class="row">
+            <button class="btn btn-default" @click="addCondition">Dodaj pogoj</button>
+          </div>
         </div>
       </div>
-      <button class="btn btn-danger" @click="deleteProgram">Brisanje programa</button>
+      <button class="btn btn-primary" @click="updateConditions">Shrani pogoje</button>
+      <button class="btn btn-danger pull-right" @click="deleteProgram">Brisanje programa</button>
       <p v-show="showResponseDel" v-bind:class="{'bg-danger': !resDelSucc, 'bg-success': resDelSucc}" style="padding: 10px; width: 30%; margin-top: 15px;"> {{ msgDel }} </p>
     </div>
 
@@ -85,6 +103,7 @@ export default {
       showResponseDel: false,
       resDelSucc: false,
       resSucc: true,
+      doRender: false
 
     }
   },
@@ -117,6 +136,18 @@ export default {
           this.resDelSucc = false;
           this.showResponseDel = true;
         })
+    },
+    updateConditions: function() {
+      console.log(this.programDetails);
+    },
+    addCondition: function() {
+
+      let cond = {
+        weight: 80,
+        faculty_program_id: "nov program"
+      };
+
+      this.programDetails.enrollmentConditions.data.push(cond);
     }
   },
   created: function() {
@@ -126,8 +157,20 @@ export default {
     //   this.program_details = data;
     // });
     this.programDetails = this.$root.programData;
-    console.log(this.programDetails)
-    //console.log(this.$route.params);
+    
+    if(typeof this.$root.programData == 'undefined') {
+      console.log("no data")
+      this.$http.get("api/programs/"+this.$route.params.id)
+        .then(function(data) {
+          this.programDetails = data.body.data;
+          this.doRender = true;
+        }, function(err) {
+          console.log(err);
+        })
+    }else{
+      this.doRender = true;
+    }
+    
   }
 }
 
