@@ -12,7 +12,7 @@ class EnrollmentConditionSeeder extends Seeder
         $faculty_program_id = 'ZE10'; // splosna in poklicna matura
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -20,7 +20,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 0,    // splosna in poklicna matura
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -30,7 +30,7 @@ class EnrollmentConditionSeeder extends Seeder
         $faculty_program_id = 'ZE20';
         EnrollmentCondition::create([ // splosna matura
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -38,15 +38,15 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh pri predpisanem predmetu',
+            'name' => 3,
             'type' => 1,
-            'conditions_subject_id' => 'M411',
+            'conditions_subject_id' => null,
             'conditions_profession_id' => null,
             'weight' => 20
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -55,7 +55,7 @@ class EnrollmentConditionSeeder extends Seeder
 
         EnrollmentCondition::create([ // poklicna matura
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -63,15 +63,15 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh pri dodatnem predmetu',
+            'name' => 2,
             'type' => 2,
-            'conditions_subject_id' => 'M411',
+            'conditions_subject_id' => null,
             'conditions_profession_id' => null,
             'weight' => 30
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -79,7 +79,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Poklic',
+            'name' => 5,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => 57311,
@@ -93,7 +93,7 @@ class EnrollmentConditionSeeder extends Seeder
         $faculty_program_id = 'VT00'; // FRI UNI, splošna matura
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -101,7 +101,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -110,7 +110,7 @@ class EnrollmentConditionSeeder extends Seeder
 
         EnrollmentCondition::create([ // FRU UNI, poklicna matura
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -118,15 +118,15 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh pri dodatnem predmetu',
+            'name' => 2,
             'type' => 2,
-            'conditions_subject_id' => 'M781',
+            'conditions_subject_id' => null,
             'conditions_profession_id' => null,
             'weight' => 20
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -136,7 +136,7 @@ class EnrollmentConditionSeeder extends Seeder
         $faculty_program_id = 'VU00'; // FRI VS
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -144,7 +144,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -154,7 +154,7 @@ class EnrollmentConditionSeeder extends Seeder
         $faculty_program_id = 'VV00'; // FRI + FMF
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -162,7 +162,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -174,7 +174,7 @@ class EnrollmentConditionSeeder extends Seeder
         $faculty_program_id = 'SZ00'; // FMF Matematika UN
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -182,7 +182,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -190,9 +190,9 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh pri dodatnem predmetu',
+            'name' => 2,
             'type' => 0,
-            'conditions_subject_id' => 'M401',
+            'conditions_subject_id' => null,
             'conditions_profession_id' => null,
             'weight' => 50
         ]);
@@ -200,7 +200,7 @@ class EnrollmentConditionSeeder extends Seeder
         $faculty_program_id = 'TH00'; // FMF Praktična Matematika
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -208,7 +208,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -216,9 +216,9 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh pri dodatnem predmetu',
+            'name' => 2,
             'type' => 0,
-            'conditions_subject_id' => 'M401',
+            'conditions_subject_id' => null,
             'conditions_profession_id' => null,
             'weight' => 50
         ]);
@@ -228,7 +228,7 @@ class EnrollmentConditionSeeder extends Seeder
         $faculty_program_id = 'R400'; // FU, splošna matura
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -236,7 +236,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -245,7 +245,7 @@ class EnrollmentConditionSeeder extends Seeder
 
         EnrollmentCondition::create([ // FU poklicna matura
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -253,7 +253,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh pri dodatnem predmetu',
+            'name' => 2,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -261,7 +261,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -273,7 +273,7 @@ class EnrollmentConditionSeeder extends Seeder
         $faculty_program_id = 'SD00'; // BF Gozdarstvo UN, splošna matura
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -281,7 +281,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -290,7 +290,7 @@ class EnrollmentConditionSeeder extends Seeder
 
         EnrollmentCondition::create([  // BF Gozdarstvo UN, poklica matura
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -298,7 +298,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh pri dodatnem predmetu',
+            'name' => 2,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -306,7 +306,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -318,7 +318,7 @@ class EnrollmentConditionSeeder extends Seeder
         $faculty_program_id = 'SU00'; // FA Arhitektura MAG
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh v 3. in 4. letniku',
+            'name' => 1,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -326,7 +326,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 0,
             'type' => 0,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -334,7 +334,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 'Uspeh na maturi',
+            'name' => 4,
             'type' => 0,
             'conditions_subject_id' => 'S251',
             'conditions_profession_id' => null,

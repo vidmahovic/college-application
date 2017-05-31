@@ -38,6 +38,7 @@ class ConditionController extends ApiController
 
     public function create($id)
     {
+        // TODO: policy
 
         $conditions = (EnrollmentCondition::all()->where('faculty_program_id',$id)->pluck('id'))->toArray();
         for($i = 0; $i < count($conditions); $i = $i + 1){
@@ -51,9 +52,6 @@ class ConditionController extends ApiController
 
         $conditions = json_decode($this->request->input('conditions'), true);
 
-        $names = [0 =>'Uspeh na maturi', 1 => 'Uspeh v 3. in 4. letniku', 2 => 'Uspeh pri dodatnem predmetu',
-            3 => 'Uspeh pri predpisanem predmetu', 4 => 'Uspeh pri preizkusu nadarjenosti', 5 => 'Poklic'];
-
         for($i = 0; $i < count($conditions); $i = $i + 1){
             $type = $conditions[$i]["type"];
             $data = $conditions[$i]["data"];
@@ -62,7 +60,7 @@ class ConditionController extends ApiController
 
                 EnrollmentCondition::create([
                     'faculty_program_id' => $id,
-                    'name' => $names[$current["name"]],
+                    'name' => $current["name"],
                     'type' => $type,
                     'conditions_subject_id' => $current["conditions_subject_id"],
                     'conditions_profession_id' => $current["conditions_profession_id"],

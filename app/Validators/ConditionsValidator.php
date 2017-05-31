@@ -59,7 +59,7 @@ class ConditionsValidator
                         case 2:
                         case 3:
                         case 4:
-                            if (in_array($current["conditions_subject_id"], $this->subjects) && $current["conditions_profession_id"] == null && $current["weight"] > 0) {
+                            if ((in_array($current["conditions_subject_id"], $this->subjects) || $this->subjects == null) && $current["conditions_profession_id"] == null && $current["weight"] > 0) {
                                 $weights = $weights + $current['weight'];
                             } else {
                                 $validator->errors()->add('conditions', 'Invalid data, add subject!');
