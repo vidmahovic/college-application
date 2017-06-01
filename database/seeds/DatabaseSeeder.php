@@ -31,5 +31,6 @@ class DatabaseSeeder extends Seeder
         $this->call('EnrollmentConditionSeeder');
         $this->call('ApplicationTableSeeder');
         $this->call('AbilityTestTableSeeder');
+        $this->call('GradesTableSeeder');
     }
 }

@@ -68,11 +68,6 @@ class Application extends Model
         return $this->belongsTo(Citizen::class);
     }
 
-//    public function country(){
-//        return $this->belongsTo(Country::class);
-//    }
-
-
     public function mailingAddress()
     {
         return $this->cities()->wherePivot('address_type', self::MAILING_ADDRESS_TYPE);
@@ -121,13 +116,6 @@ class Application extends Model
         return $this->hasMany(ApplicationAbilityTest::class, 'id');
     }
 
-//    public function applicationCities()
-//    {
-//        return $this
-//            ->belongsToMany(ApplicationCity::class, 'application_cities', 'application_id', 'city_id')
-//            ->withPivot('address', 'address_type');
-//    }
-
     public function wishes()
     {
         return $this
@@ -155,10 +143,9 @@ class Application extends Model
         return $this->wishes()->wherePivot('faculty_program_id', $id);
     }
 
-//    public function applicationsPrograms()
-//    {
-//        return $this->hasMany(ApplicationsPrograms::class);
-//    }
+    public function grades() {
+        return $this->hasMany(Grade::class);
+    }
 
     public function district()
     {

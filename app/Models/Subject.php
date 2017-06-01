@@ -21,4 +21,8 @@ class Subject extends Model // PREDMET
     {
         return $this->hasMany(ConditionsSubject::class);
     }
+
+    public function grades() {
+        return $this->hasMany(Grade::class);
+    }
 }
