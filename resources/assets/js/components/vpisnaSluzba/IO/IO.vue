@@ -10,21 +10,22 @@
                 <div>
                    
                   <div class="input-group">
-                    <!--<input name="splosna" type="file" placeholder="Uvoz podatkov splosne mature" class="form-control" id="splosna" v-model="splosna" >-->
-                    <input type="file" @change="onFileChange">
+                    <input type="file" @change="splosnaChange">
                     <span class="input-group-addon" id="basic-addon2" style="padding:0px;">
                     <div class="btn btn-success" v-on:click="submitSplosna">Uvoz</div>
                     </span>
                   </div>
-                   <!--<file-upload title="Add upload files"></file-upload>-->
-                   
-
                 </div>
 
                 <hr />
                 <h3>Uvoz podatkoz za poklicno maturo</h3>
                 <div>
-                  fileschooser
+                  <div class="input-group">
+                    <input type="file" @change="poklicnaChange">
+                    <span class="input-group-addon" id="basic-addon2" style="padding:0px;">
+                    <div class="btn btn-success" v-on:click="submitPoklicna">Uvoz</div>
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -38,36 +39,42 @@
     name: 'vpisnaSluzbaIO',
     data: function(router) {
       return {
-        image: ''
+        files: {
+          splosna: null,
+          poklica: null
+        }
       }
     },
     methods: {
-      onFileChange(e) {
+      splosnaChange(e) {
         var files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
-        this.createFile(files[0]);
+        this.createFile(files[0], 'splosna');
       },
-    createFile(file) {
-      var image = new Image();
-      var reader = new FileReader();
-      var vm = this;
+      poklicnaChange(e) {
+        var files = e.target.files || e.dataTransfer.files;
+        if (!files.length)
+          return;
+        this.createFile(files[0], 'poklicna');
+      },
+      createFile(file, type) {
+        var image = new Image();
+        var reader = new FileReader();
+        var vm = this;
 
-      reader.onload = (e) => {
-        vm.image = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },
-    removeImage: function (e) {
-      this.image = '';
-    },
-  
-
+        reader.onload = (e) => {
+          vm.files[type] = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      },
       submitSplosna: function(status) {
-
-        //todo post this.image?
-        
+        console.log(this.files.splosna);
       },
+      submitPoklicna: function(status) {
+         console.log(this.files.poklicna);
+
+      }
      
     },
     mounted() {
