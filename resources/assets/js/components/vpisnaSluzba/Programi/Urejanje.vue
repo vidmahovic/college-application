@@ -38,9 +38,19 @@
           <h4 class="programSection">Vpisni pogoji in izračun točk</h4>
           
           <div class="row" v-for="(cond, index) in programDetails.enrollmentConditions.data" style="margin-bottom:10px;">
-            <div class="col-md-3">
+            <div v-bind:class="{ 'col-md-3': 'id' in cond, 'col-md-8': !('id' in cond)}">
             
-            {{ cond.faculty_program_id}}
+            <div v-if="'id' in cond">
+              {{ sap.types[cond.type]}} <br /> {{ sap.names[cond.name]}}
+            </div>
+            <div v-else class="row">
+              <div class="col-md-6">
+              <v-select v-model="cond.type" :options="sap.types"></v-select>
+              </div>
+              <div class="col-md-6">
+               <v-select v-model="cond.name" :options="sap.names"></v-select>
+               </div>
+            </div>
             </div>
             <div class="col-md-3">
             <div class="input-group">
@@ -103,7 +113,8 @@ export default {
       showResponseDel: false,
       resDelSucc: false,
       resSucc: true,
-      doRender: false
+      doRender: false,
+      sap: {}
 
     }
   },
@@ -138,13 +149,41 @@ export default {
         })
     },
     updateConditions: function() {
-      console.log(this.programDetails);
+
+      let updateProgram = JSON.parse(JSON.stringify(this.programDetails));
+
+      for(let c of updateProgram.enrollmentConditions.data){
+
+        if(!('id' in c)) {
+          c.name = this.sap.names.indexOf(c.name)
+          c.type = this.sap.types.indexOf(c.type)
+        }
+      }
+
+      // ker dobim enrolmentConditions, poslat je treba pa conditions -.-
+      updateProgram.conditions = updateProgram.enrollmentConditions;
+      delete updateProgram.enrollmentConditions;
+
+      console.log(updateProgram);
+
+      this.$http.post("api/programs/"+this.programDetails.id+"/conditions", updateProgram)
+        .then(function(data) {
+          console.log(data)
+        }, function(err) {
+            console.log(err);
+        });
+
+      
     },
     addCondition: function() {
 
       let cond = {
-        weight: 80,
-        faculty_program_id: "nov program"
+        conditions_subject_id: null,
+        faculty_program_id: null,
+        name: "",
+        type: "",
+        weight: 0,
+        faculty_program_id: this.programDetails.id
       };
 
       this.programDetails.enrollmentConditions.data.push(cond);
@@ -160,16 +199,35 @@ export default {
     
     if(typeof this.$root.programData == 'undefined') {
       console.log("no data")
-      this.$http.get("api/programs/"+this.$route.params.id)
+      
+      this.$http.get("api/subjectsAndProfessions/")
         .then(function(data) {
-          this.programDetails = data.body.data;
-          this.doRender = true;
+          
+          console.log(data);
+          this.sap = data.body;
+          this.$http.get("api/programs/"+this.$route.params.id)
+            .then(function(data) {
+
+              this.programDetails = data.body.data;
+            
+              this.doRender = true;
+              console.log(this.programDetails);
+            }, function(err) {
+              console.log(err);
+            });
         }, function(err) {
           console.log(err);
         })
+    
+
+
+    
     }else{
       this.doRender = true;
+      console.log(this.programDetails);
     }
+
+    
     
   }
 }

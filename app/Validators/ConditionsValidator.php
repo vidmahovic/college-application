@@ -36,7 +36,7 @@ class ConditionsValidator
 
         $validator->after(function($validator)
         {
-            $conditions = json_decode($this->input['conditions'], true);
+            $conditions = $this->input['conditions'];
 
             for($i = 0; $i < count($conditions); $i = $i + 1){
                 $type = $conditions[$i]["type"];
