@@ -194,7 +194,7 @@ export default {
 
       let cond = {
         conditions_subject_id: null,
-        faculty_program_id: null,
+        conditions_profession_id: null,
         name: "",
         type: "",
         weight: 0,
@@ -212,7 +212,7 @@ export default {
     // });
     this.programDetails = this.$root.programData;
     
-    if(typeof this.$root.programData == 'undefined') {
+    //if(typeof this.$root.programData == 'undefined') {
       console.log("no data")
       
       this.$http.get("api/subjectsAndProfessions/")
@@ -237,10 +237,10 @@ export default {
 
 
     
-    }else{
-      this.doRender = true;
+    //}else{
+      //this.doRender = true;
       console.log(this.programDetails);
-    }
+    //}
 
     
     
