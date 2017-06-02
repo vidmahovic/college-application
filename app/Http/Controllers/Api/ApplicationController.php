@@ -45,7 +45,7 @@ class ApplicationController extends ApiController {
 
         // If user is a referent for the faculty, allow him to view only applications that are connected to his faculty.
         if($user->isReferent())
-            $this->request['filters'] = ['faculty_id' => $user->faculty_id];
+            $this->request['filters'] = array_merge($this->request['filters'], ['faculty_id' => $user->faculty_id]);
 
         // Send only applications with status 'filed'
         $applications = $this->search->applyFiltersFromRequest($this->request)->filed()->get();
@@ -62,7 +62,7 @@ class ApplicationController extends ApiController {
 
         // If user is a referent for the faculty, allow him to view only applications that are connected to his faculty.
         if($user->isReferent())
-            $this->request['filters'] = ['faculty_id' => $user->faculty_id];
+            $this->request['filters'] = array_merge($this->request['filters'], ['faculty_id' => $user->faculty_id]);
 
         // Send only applications with status 'filed'
         $applications = $this->search
