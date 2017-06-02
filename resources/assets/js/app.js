@@ -36,6 +36,7 @@ Vue.component('v-select', vSelect)
 Vue.component('datatable',require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
 Vue.component('datepicker', Datepicker)
 
+
 //za $emit in $on
 //export const eventBus = new Vue();
 
@@ -51,6 +52,15 @@ Vue.component('edit-program', {
 	    }
 		}
 })
+
+var FileUpload = require('vue-upload-component');
+console.log(FileUpload)
+new Vue({
+        template: '<file-upload post-action="/post.method" put-action="/put.method"></file-upload>',
+        components: {
+            FileUpload: FileUpload
+        }
+    })
 
 
 

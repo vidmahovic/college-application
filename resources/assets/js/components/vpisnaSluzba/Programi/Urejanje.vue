@@ -68,6 +68,9 @@
       </div>
       <button class="btn btn-primary" @click="updateConditions">Shrani pogoje</button>
       <button class="btn btn-danger pull-right" @click="deleteProgram">Brisanje programa</button>
+      <p v-show="showConditionsResponse" v-bind:class="{'bg-danger': conditionsError, 'bg-success': !conditionsError}" style="padding: 10px; width: 30%; margin-top: 15px;">
+        {{ conditionMsg }}
+      </p>
       <p v-show="showResponseDel" v-bind:class="{'bg-danger': !resDelSucc, 'bg-success': resDelSucc}" style="padding: 10px; width: 30%; margin-top: 15px;"> {{ msgDel }} </p>
     </div>
 
@@ -114,7 +117,9 @@ export default {
       resDelSucc: false,
       resSucc: true,
       doRender: false,
-      sap: {}
+      sap: {},
+
+      showConditionsResponse: false
 
     }
   },
@@ -164,13 +169,23 @@ export default {
       updateProgram.conditions = updateProgram.enrollmentConditions;
       delete updateProgram.enrollmentConditions;
 
-      console.log(updateProgram);
+      
 
       this.$http.post("api/programs/"+this.programDetails.id+"/conditions", updateProgram)
         .then(function(data) {
+          this.conditions = false;
+          this.conditionMsg = "Pogoji uspešno shranjeni";
+          this.showConditionsResponse = true;
           console.log(data)
         }, function(err) {
+          
             console.log(err);
+            this.conditionsError = true;
+            //this.conditionsErrors = JSON.parse(err.body.message).conditions;
+            this.conditionMsg = JSON.parse(err.body.message);
+            this.showConditionsResponse = true;
+          
+            
         });
 
       
