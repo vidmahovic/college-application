@@ -118,8 +118,8 @@ export default {
       resSucc: true,
       doRender: false,
       sap: {},
-
-      showConditionsResponse: false
+      showConditionsResponse: false,
+      conditionMsg: ""
 
     }
   },
