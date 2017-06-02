@@ -84,7 +84,7 @@ function programPdf(data){
       doc.text(x, 40, res[1]+" "+res[2]);
     }
     else if(i == 7 || i == 8 || i == 9 || i == 10){
-      doc.text(x, 30, res[0])
+      doc.text(x, 30, res[0]);
       doc.text(x, 35, res[1]);
       doc.text(x, 40, res[2]);
     }

@@ -63,7 +63,12 @@ const routes = [
 				component: ReferentDashboard,
 				name: 'ReferentDashboard',
 				meta: {description: 'ReferentDashboard'}
-      		}
+      },
+			{
+				path: '/referent/pregled_vpisanih',
+				component: PregledVpisanih,
+				name: 'PregledVpisanih'
+			}
 		]
 	},
 	{
@@ -95,7 +100,7 @@ const routes = [
 				name: 'VpisnaSluzbaProgramiUrejanje'
 			},
 			{
-				path: '/vpisna_sluzba/:id/prijavljeni',
+				path: '/enrollment_service/:id/prijavljeni',
 				component: PregledVpisanih,
 				name: 'PregledVpisanih'
 			}

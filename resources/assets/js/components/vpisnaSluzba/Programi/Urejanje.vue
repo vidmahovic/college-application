@@ -120,7 +120,7 @@ export default {
         })
     },
     sezPrijavljenih: function(){
-      this.$router.push("/vpisna_sluzba/"+this.programDetails.id+"/prijavljeni");
+      this.$router.push("/enrollment_service/"+this.programDetails.id+"/prijavljeni");
     }
   },
   created: function() {
