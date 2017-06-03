@@ -6,6 +6,8 @@ use App\Models\AbilityTest;
 use App\Models\Application;
 use App\Models\ApplicationAbilityTest;
 use App\Models\ApplicationsPrograms;
+use App\Models\EnrollmentCondition;
+use App\Models\FacultyProgram;
 use Dingo\Api\Http\Request;
 use App\Validators\AbilityValidator;
 use Dingo\Api\Exception\ResourceException;
@@ -23,14 +25,23 @@ class AbilityController extends ApiController
     public function applied($id){
         // TODO: policy
 
-        $applied = Application::with(['applicationsPrograms' => function($query) use ($id){
-             $query->where('faculty_program_id', $id);}, 'applicationsAbilityTests'])->filed()->get();
+        $conditions = EnrollmentCondition::where('faculty_program_id', $id)->get();
+        $ability = false;
+        $applied = null;
 
-        $ability = AbilityTest::where('faculty_program_id', $id)->first();
+        for($i = 0; $i < count($conditions); $i = $i + 1){
+            if($conditions[$i]["name"] == 4){
+                $ability = AbilityTest::where('faculty_program_id', $id)->first();
+                if($ability == null){
+                    $ability = true;
+                }
+                $applied = ApplicationAbilityTest::where('ability_test_id', $ability->id)->get();
+            }
+        }
 
         return $this->response->array([
-            'applied'=> $applied,
-            'ability_test'=> $ability
+            'ability_test'=> $ability,
+            'applied' => $applied
         ]);
     }
 
@@ -51,11 +62,20 @@ class AbilityController extends ApiController
             AbilityTest::destroy($exists->id);
         }
 
-        AbilityTest::create([
+        $ability = AbilityTest::create([
             'faculty_program_id' => $id,
             'min_points' => $this->request["min_points"],
             'max_points' => $this->request["max_points"]
         ]);
+
+        $applications = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('id')->toArray();
+        for($i = 0; $i < count($applications); $i = $i + 1){
+            ApplicationAbilityTest::create([
+                'application_id' => $i,
+                'ability_test_id' => $ability->id,
+                'points' => -1
+            ]);
+        }
 
         return $this->response->created();
     }
