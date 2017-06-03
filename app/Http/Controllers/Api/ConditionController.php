@@ -24,11 +24,12 @@ class ConditionController extends ApiController
         $types = [0 => 'Splošna in poklicna matura', 1 => 'Splošna matura', 2 => 'Poklicna matura'];
         $names = [0 =>'Uspeh na maturi', 1 => 'Uspeh v 3. in 4. letniku', 2 => 'Uspeh pri dodatnem predmetu',
             3 => 'Uspeh pri predpisanem predmetu', 4 => 'Uspeh pri preizkusu nadarjenosti', 5 => 'Poklic'];
+        $rules = [0 => $names, 1 => $names, 2 => $names];
         return $this->response->array([
             'subjects'=> $subjects,
             'professions'=> $professions,
             'types'=> $types,
-            'names'=> $names
+            'rules'=> $rules
         ]);
     }
 
