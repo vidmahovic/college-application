@@ -49,6 +49,7 @@ class AbilityController extends ApiController
         // TODO: policy
 
         $exists = AbilityTest::where('faculty_program_id', $id)->first();
+        $applications = null;
 
         if(! $this->validator->validate($this->request->all())){
             $errors = $this->validator->errors();
@@ -60,6 +61,8 @@ class AbilityController extends ApiController
         }
         else{
             AbilityTest::destroy($exists->id);
+            $applications = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('id')->toArray();
+            ApplicationAbilityTest::destroy($applications);
         }
 
         $ability = AbilityTest::create([
@@ -68,7 +71,7 @@ class AbilityController extends ApiController
             'max_points' => $this->request["max_points"]
         ]);
 
-        $applications = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('id')->toArray();
+        //$applications = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('id')->toArray();
         for($i = 0; $i < count($applications); $i = $i + 1){
             ApplicationAbilityTest::create([
                 'application_id' => $i,
