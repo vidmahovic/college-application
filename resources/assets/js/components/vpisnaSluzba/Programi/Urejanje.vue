@@ -120,7 +120,8 @@ export default {
       doRender: false,
       sap: {},
       showConditionsResponse: false,
-      conditionMsg: ""
+      conditionMsg: "",
+      conditionsError: false
 
     }
   },

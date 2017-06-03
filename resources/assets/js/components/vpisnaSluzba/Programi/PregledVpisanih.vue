@@ -138,6 +138,10 @@ function prijavljeniPdf(data) {
       else {
         this.params.programData = this.$root.programData;
         this.faculty_id = this.params.programData.faculty_id;
+        this.$http.get('/api/program/'+this.params.programData.id+'/ability')
+          .then(function(res){
+            debugger;
+          })
       }
 
       this.$http.get('/api/programs', {params: {filters: {faculty_id: this.faculty_id}}})
