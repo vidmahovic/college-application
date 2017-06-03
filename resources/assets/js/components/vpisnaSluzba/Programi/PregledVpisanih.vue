@@ -43,9 +43,9 @@
 <script>
 import prijavljeni_store from './prijavljeni_store.js';
 
-function prijavljeniPdf(seznam) {
+function prijavljeniPdf(data) {
   var doc = new jsPDF('landscape');
-  var header = ["#", "Ime in priimek", "Naslov", "Mesto", "Državljanstvo", "Način zaključka srednje šole"];
+  var header = ["#", "Ime in priimek", "Naslov", "Mesto", "Državljanstvo", "Nacin zakljucka srednje sole"];
 
   //210 je visina, 297mm sirina
   doc.setLineWidth(0.1);
@@ -60,14 +60,8 @@ function prijavljeniPdf(seznam) {
   var x = 8;
 
   for(var i in header){
-    var res = header[i].split(" ");
-    if(i == 5){
-      doc.text(x, 35, res[0]);
-      doc.text(x, 40, res[1]);
-    }
-    else{
-      doc.text(x, 40, header[i]);
-    }
+
+    doc.text(x, 40, header[i]);
 
     if(i == 0){
       x += 6;
@@ -79,9 +73,19 @@ function prijavljeniPdf(seznam) {
       x += 60;
     }
     else if(i == 4 || i == 5){
-      x += 30;
+      x += 60;
     }
   }
+
+  //začetek vsebine
+  var counter = 1;
+  var totalPages = 1;
+
+  for(var i in data.data){
+
+  }
+
+  doc.output("datauri");
 }
 
   export default {
@@ -110,7 +114,7 @@ function prijavljeniPdf(seznam) {
     },
     methods: {
       savePdf1: function(){
-        prijavljeniPdf([]);
+        prijavljeniPdf();
       },
       regular1: function(param){
         this.params = {
@@ -127,7 +131,6 @@ function prijavljeniPdf(seznam) {
     },
     created: function() {
       var user = JSON.parse(window.localStorage.getItem('user'));
-      debugger;
       this.role = user.role;
       if(user.role == 'referent'){
         this.faculty_id = user.faculty.data.id;
@@ -140,7 +143,7 @@ function prijavljeniPdf(seznam) {
       this.$http.get('/api/programs', {params: {filters: {faculty_id: this.faculty_id}}})
         .then(function(res){
           this.referentPrograms = res.data.data;
-        })
+        });
       //ker ne dela $on sem uporabil $root
     }
   }
