@@ -36,6 +36,21 @@
       </div>
       <div class="row marginB20">
         <div class="col-md-12">
+          <h4 class="programSection">Kreiraj oziroma popravi dodatno preizkus</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <label for="minP">Min točk</label>
+              <input class="form-control" type="text" name="minP" id="minP" />
+            </div>
+            <div class="col-offset-md-6 col-md-6">
+              <label for="maxP">Max točk</label>
+              <input class="form-control" type="text" name="maxP" id="maxP" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row marginB20">
+        <div class="col-md-12">
           <h4 class="programSection">Vpisni pogoji in izračun točk</h4>
 
           <div class="row" v-for="(cond, index) in programDetails.enrollmentConditions.data" style="margin-bottom:10px;">
@@ -80,7 +95,9 @@
             </div>
           </div>
           <div class="row">
-            <button class="btn btn-default" @click="addCondition">Dodaj pogoj</button>
+            <div class="col-md-12">
+              <button class="btn btn-default" @click="addCondition">Dodaj pogoj</button>
+            </div>
           </div>
         </div>
       </div>
@@ -95,7 +112,6 @@
   </div>
 
 </template>
-
 
 <style>
   .programSection {
@@ -138,7 +154,8 @@ export default {
       sap: {},
       showConditionsResponse: false,
       conditionMsg: "",
-      conditionsError: false
+      conditionsError: false,
+      ability_test: ''
 
     }
   },
@@ -265,6 +282,11 @@ export default {
         }, function(err) {
           console.log(err);
         })
+
+        this.$http.get('/api/program/'+this.programDetails.id+'/ability')
+          .then(function(res){
+            this.ability_test = res.data.ability_test;
+          })
 
 
 

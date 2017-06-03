@@ -96,6 +96,7 @@ function prijavljeniPdf(data) {
         referentPrograms: [],
         role: '',
         faculty_id: '',
+        ability_test: '',
         params: {
           regular: '',
           programData: ''
@@ -140,7 +141,8 @@ function prijavljeniPdf(data) {
         this.faculty_id = this.params.programData.faculty_id;
         this.$http.get('/api/program/'+this.params.programData.id+'/ability')
           .then(function(res){
-            debugger;
+            this.ability_test = res.data.ability_test;
+            this.applied = res.data.aplied;
           })
       }
 
