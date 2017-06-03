@@ -31,6 +31,8 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
+        $api->get('applications/{id}/calculate', 'CalculationController@calculate');
+
         // Authentication routes
         $api->post('register', 'AuthController@register');
         $api->post('login', 'AuthController@login');
