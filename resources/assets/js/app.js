@@ -36,6 +36,7 @@ Vue.component('v-select', vSelect)
 Vue.component('datatable',require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
 Vue.component('datepicker', Datepicker)
 
+
 //za $emit in $on
 //export const eventBus = new Vue();
 
@@ -51,9 +52,6 @@ Vue.component('edit-program', {
 	    }
 		}
 })
-
-
-
 
 
 Vue.http.interceptors.push(function(request, next) {

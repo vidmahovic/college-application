@@ -15,7 +15,7 @@ class ProgramId implements Filter
     public static function apply(Builder $builder, $value): Builder
     {
         return $builder->whereHas('wishes', function($q) use($value) {
-            return $q->where('faculty_program_id', $value);
+            return $q->where('faculty_programs.id', $value);
         });
     }
 }

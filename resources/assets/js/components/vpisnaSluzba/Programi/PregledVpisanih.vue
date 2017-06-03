@@ -24,7 +24,7 @@
           <h6>Iskanje programa:</h6>
           <v-select v-model="params.programData" label="name" :options="referentPrograms" :on-change="spremeniProgram"></v-select>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-12 marginT20">
           <button v-on:click="savePdf1" class="btn btn-primary">Prenesi PDF</button>
         </div>
       </div>

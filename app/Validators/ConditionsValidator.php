@@ -36,48 +36,52 @@ class ConditionsValidator
 
         $validator->after(function($validator)
         {
-            $conditions = json_decode($this->input['conditions'], true);
+            $conditions = $this->input['conditions']['data'];
 
+            $prev = 0;
+            $weights = 0;
             for($i = 0; $i < count($conditions); $i = $i + 1){
-                $type = $conditions[$i]["type"];
+                $current = $conditions[$i];
+                $type = $current["type"];
+
                 if($type > 2 || $type < 0){
                     $validator->errors()->add('conditions', 'Type must be valid!');
                 }
-                $data = $conditions[$i]["data"];
-                $weights = 0;
-                for($j = 0; $j < count($data); $j = $j + 1) {
-                    $current = $data[$j];
-                    switch ($current["name"]) {
-                        case 0:
-                        case 1:
-                            if ($current["conditions_subject_id"] == null && $current["conditions_profession_id"] == null && $current["weight"] > 0) {
-                                $weights = $weights + $current["weight"];
-                            } else {
-                                $validator->errors()->add('conditions', 'Invalid data, both null!');
-                            }
-                            break;
-                        case 2:
-                        case 3:
-                        case 4:
-                            if (in_array($current["conditions_subject_id"], $this->subjects) && $current["conditions_profession_id"] == null && $current["weight"] > 0) {
-                                $weights = $weights + $current['weight'];
-                            } else {
-                                $validator->errors()->add('conditions', 'Invalid data, add subject!');
-                            }
-                            break;
-                        case 5:
-                            if ($current["conditions_subject_id"] == null && in_array($current["conditions_profession_id"], $this->professions) && $current["weight"] == null) {
-                            } else {
-                                $validator->errors()->add('conditions', 'Invalid data, add profession!');
-                            }
-                            break;
-                        default:
-                            $validator->errors()->add('conditions', 'Invalid condition name!');
-                    }
+
+                if($prev != $type){
+                    $prev = $type;
+                    $weights = 0;
                 }
-                if($weights != 100){
-                    $validator->errors()->add('conditions', "Sum of weights must be 100!");
+                switch ($current["name"]) {
+                    case 0:
+                    case 1:
+                        if ($current["conditions_subject_id"] == null && $current["weight"] > 0) {
+                            $weights = $weights + $current["weight"];
+                        } else {
+                            $validator->errors()->add('conditions', 'Invalid data, both null!');
+                        }
+                        break;
+                    case 2:
+                    case 3:
+                    case 4:
+                        if ((in_array($current["conditions_subject_id"], $this->subjects) || $this->subjects == null) && $current["conditions_profession_id"] == null && $current["weight"] > 0) {
+                            $weights = $weights + $current['weight'];
+                        } else {
+                            $validator->errors()->add('conditions', 'Invalid data, add subject!');
+                        }
+                        break;
+                    case 5:
+                        if ($current["conditions_subject_id"] == null && in_array($current["conditions_profession_id"], $this->professions) && $current["weight"] == null) {
+                        } else {
+                            $validator->errors()->add('conditions', 'Invalid data, add profession!');
+                        }
+                        break;
+                    default:
+                        $validator->errors()->add('conditions', 'Invalid condition name!');
                 }
+            }
+            if($weights != 100){
+                $validator->errors()->add('conditions', "Sum of weights must be 100!");
             }
         });
 

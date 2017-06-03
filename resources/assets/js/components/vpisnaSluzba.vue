@@ -1,7 +1,26 @@
 <template>
+  <div>
+    <!-- Define side navigation for Admin -->
+    <div class="navbar-default sidebar" role="navigation">
+      <div class="sidebar-nav navbar-collapse">
+          <ul class="nav in" id="side-menu">
+              <li>
+                  <router-link to="/enrollment_service/programi">Programi</router-link>
 
-  <router-view></router-view>
+              </li>
+              <li>
+                  <router-link to="/enrollment_service/io">Uvoz podatkov</router-link>
+              </li>
+             
+          </ul>
+      </div>
 
+    </div>
+    <div class="container">
+        <router-view></router-view>
+    </div>
+  </div>
+  
 </template>
 
 <script>

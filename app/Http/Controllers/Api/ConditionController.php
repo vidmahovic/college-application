@@ -32,39 +32,36 @@ class ConditionController extends ApiController
         ]);
     }
 
+    public function show($id){
+        return EnrollmentCondition::all()->where('faculty_program_id', $id);
+    }
+
     public function create($id)
     {
-
-        $conditions = (EnrollmentCondition::all()->where('faculty_program_id',$id)->pluck('id'))->toArray();
-        for($i = 0; $i < count($conditions); $i = $i + 1){
-            EnrollmentCondition::destroy($conditions[$i]);
-        }
+        // TODO: policy
 
         if (!$this->validator->validate($this->request->all())) {
             $errors = $this->validator->errors();
             return $this->response->errorBadRequest($errors);
         }
 
-        $conditions = json_decode($this->request->input('conditions'), true);
+        $conditions = (EnrollmentCondition::all()->where('faculty_program_id',$id)->pluck('id'))->toArray();
+        for($i = 0; $i < count($conditions); $i = $i + 1){
+            EnrollmentCondition::destroy($conditions[$i]);
+        }
 
-        $names = [0 =>'Uspeh na maturi', 1 => 'Uspeh v 3. in 4. letniku', 2 => 'Uspeh pri dodatnem predmetu',
-            3 => 'Uspeh pri predpisanem predmetu', 4 => 'Uspeh pri preizkusu nadarjenosti', 5 => 'Poklic'];
+        $conditions = $this->request['conditions']['data'];
 
         for($i = 0; $i < count($conditions); $i = $i + 1){
-            $type = $conditions[$i]["type"];
-            $data = $conditions[$i]["data"];
-            for($j = 0; $j < count($data); $j = $j + 1) {
-                $current = $data[$j];
-
-                EnrollmentCondition::create([
-                    'faculty_program_id' => $id,
-                    'name' => $names[$current["name"]],
-                    'type' => $type,
-                    'conditions_subject_id' => $current["conditions_subject_id"],
-                    'conditions_profession_id' => $current["conditions_profession_id"],
-                    'weight' => $current["weight"]
-                ]);
-            }
+            $current = $conditions[$i];
+            EnrollmentCondition::create([
+                'faculty_program_id' => $id,
+                'name' => $current["name"],
+                'type' => $current["type"],
+                'conditions_subject_id' => $current["conditions_subject_id"],
+                'conditions_profession_id' => $current["conditions_profession_id"],
+                'weight' => $current["weight"]
+            ]);
         }
 
         return $this->response->created();

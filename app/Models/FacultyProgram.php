@@ -27,6 +27,10 @@ class FacultyProgram extends Model // PROGRAM
         return $this->belongsTo(Faculty::class);
     }
 
+    public function abilityTest(){
+        return $this->hasOne(AbilityTest::class);
+    }
+
     public function applications()
     {
         return $this->belongsToMany(

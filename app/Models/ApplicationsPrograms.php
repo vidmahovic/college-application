@@ -23,6 +23,6 @@ class ApplicationsPrograms extends Model // PIVOT MED VPISNIM LISTOM IN PROGRAMO
     }
 
     public function application() {
-        return $this->belongsTo(Application::class);
+        return $this->belongsTo(Application::class, 'application_id');
     }
 }

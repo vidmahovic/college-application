@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
         $this->call('EducationTypeTableSeeder');
         $this->call('SubjectTableSeeder');
         $this->call('EnrollmentConditionSeeder');
-        //$this->call('ApplicationTableSeeder');
+        $this->call('ApplicationTableSeeder');
+        $this->call('AbilityTestTableSeeder');
+        $this->call('GradesTableSeeder');
     }
 }
