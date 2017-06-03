@@ -40,24 +40,41 @@
           <div class="row" v-for="(cond, index) in programDetails.enrollmentConditions.data" style="margin-bottom:10px;">
             <div v-bind:class="{ 'col-md-3': 'id' in cond, 'col-md-8': !('id' in cond)}">
             
-            <div v-if="'id' in cond">
-              {{ sap.types[cond.type]}} <br /> {{ sap.names[cond.name]}}
-            </div>
-            <div v-else class="row">
-              <div class="col-md-6">
-              <v-select v-model="cond.type" :options="sap.types"></v-select>
+              <div v-if="'id' in cond">
+                {{ sap.types[cond.type]}} <br /> {{ sap.names[cond.name]}}
               </div>
-              <div class="col-md-6">
-               <v-select v-model="cond.name" :options="sap.names"></v-select>
-               </div>
-            </div>
+              <div v-else class="row">
+                <div class="col-md-6">
+                <v-select v-model="cond.type" :options="sap.types"></v-select>
+                </div>
+                <div class="col-md-6">
+                 <v-select v-model="cond.name" :options="sap.names"></v-select>
+                 </div>
+              </div>
             </div>
             <div class="col-md-3">
-            <div class="input-group">
-              <input v-model.number="cond.weight" name="weight" type="number" placeholder="Utež" class="form-control" id="weight" >
-              <span class="input-group-addon" id="basic-addon2" style="padding:0px;">
-                <div class="btn btn-danger" v-on:click="programDetails.enrollmentConditions.data.splice(index, 1)">Odstrani</div>
-              </span>
+              <div class="input-group">
+                <input v-model.number="cond.weight" name="weight" type="number" placeholder="Utež" class="form-control" id="weight" >
+                <span class="input-group-addon" id="basic-addon2" style="padding:0px;">
+                  <div class="btn btn-danger" v-on:click="programDetails.enrollmentConditions.data.splice(index, 1)">Odstrani</div>
+                </span>
+              </div>
+            </div>
+          
+          <!-- add profesion or subject if needed -->
+          <div class="row" v-show="!('id' in cond)">
+          <div class="col-md-12">
+            <div v-show="cond.name == 'Poklic'">
+              <div class="col-md-offset-4 col-md-6">
+                
+                <v-select v-model="cond.conditions_profession_id" label="name" :options="sap.professions"></v-select>
+                </div>
+            </div>
+            <div v-show="String(cond.name).indexOf('predmetu') > -1">
+              <div class="col-md-offset-4 col-md-6">
+                <v-select v-model="cond.conditions_subject_id" label="name" :options="sap.subjects"></v-select>
+                </div>
+            </div>
             </div>
             </div>
           </div>
@@ -119,7 +136,8 @@ export default {
       doRender: false,
       sap: {},
       showConditionsResponse: false,
-      conditionMsg: ""
+      conditionMsg: "",
+      conditionsError: false
 
     }
   },
@@ -159,10 +177,19 @@ export default {
 
       for(let c of updateProgram.enrollmentConditions.data){
 
+        // new added condition
         if(!('id' in c)) {
           c.name = this.sap.names.indexOf(c.name)
           c.type = this.sap.types.indexOf(c.type)
+          
+          if(c.conditions_subject_id != null){
+            c.conditions_subject_id = c.conditions_subject_id.id;
+          }
+          if(c.conditions_profession_id != null) {
+            c.conditions_profession_id = c.conditions_profession_id.id;
+          }
         }
+
       }
 
       // ker dobim enrolmentConditions, poslat je treba pa conditions -.-
