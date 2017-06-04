@@ -48,39 +48,40 @@ class AbilityController extends ApiController
     }
 
     public function create($id){
-        // TODO: policy
+    // TODO: policy
 
-        $exists = AbilityTest::where('faculty_program_id', $id)->first();
-        $applications = null;
+    $exists = AbilityTest::where('faculty_program_id', $id)->first();
+    $applications = null;
 
-        if(! $this->validator->validate($this->request->all())){
-            $errors = $this->validator->errors();
-            return $this->response->errorBadRequest($errors);
-        }
+    if(! $this->validator->validate($this->request->all())){
+        $errors = $this->validator->errors();
+        return $this->response->errorBadRequest($errors);
+    }
 
-        if($exists != null){
-            AbilityTest::destroy($exists->id);
-            $applications = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('id')->toArray();
-            ApplicationAbilityTest::destroy($applications);
-        }
+    if($exists != null){
+        AbilityTest::destroy($exists->id);
+        $applications = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('id')->toArray();
+        ApplicationAbilityTest::destroy($applications);
+    }
 
-        $ability = AbilityTest::create([
-            'faculty_program_id' => $id,
-            'min_points' => $this->request["min_points"],
-            'max_points' => $this->request["max_points"]
-        ]);
+    $ability = AbilityTest::create([
+        'faculty_program_id' => $id,
+        'min_points' => $this->request["min_points"],
+        'max_points' => $this->request["max_points"]
+    ]);
 
-        //$applications = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('id')->toArray();
-        for($i = 0; $i < count($applications); $i = $i + 1){
+    if($applications != null) {
+        for ($i = 0; $i < count($applications); $i = $i + 1) {
             ApplicationAbilityTest::create([
-                'application_id' => $i,
+                'application_id' => $applications[$i],
                 'ability_test_id' => $ability->id,
                 'points' => -1
             ]);
         }
-
-        return $this->response->created();
     }
+
+    return $this->response->created();
+}
 
     public function insert($pid){
         // TODO: policy
