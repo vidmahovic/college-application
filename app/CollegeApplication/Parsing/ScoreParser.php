@@ -17,23 +17,30 @@ abstract class ScoreParser implements FileParser
     protected $edited = 0;
 
 
-    public function parse(UploadedFile $file)
+    public function parse(UploadedFile $file): Collection
     {
+        $lines = collect();
+
         foreach (file($file) as $line) {
             $line_attrs = $this->parseLine($line);
             $validator = $this->getValidationFactory()->make($line_attrs, $this->rules());
 
-            if($validator->fails())
-                $this->errors[] = $line_attrs;
+            if($validator->fails()) {
+                array_push($this->errors, $line_attrs);
+            }
 
             $this->new += 1;
             $this->lines += 1;
+
+            $lines->push($line_attrs);
         }
+
+        return $lines;
     }
 
-    public function getErrors(): Collection
+    public function getErrors(): array
     {
-        return collect($this->errors);
+        return $this->errors;
     }
 
     public function getAllLines(): int
