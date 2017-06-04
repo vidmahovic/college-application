@@ -31,7 +31,10 @@ class CalculationController extends ApiController
         $grades = $application->grades; // M - matura, L - poklicna matura, S - preizkus sposobnosti
         $graduation_type = $application->graduation_type_id; // 1 - splošna matura,  2 - poklicna matura
         $profession = $application->profession_id;
-        $ability_test = $application->applicationAbilityTests[0];
+        $ability_test = $application->applicationAbilityTests;
+        if(empty($ability_test)){
+            $ability_test = null;
+        }
 
         if(!($graduation_type == 1 || $graduation_type == 2)){
             $failedGraduation = true;
@@ -61,24 +64,26 @@ class CalculationController extends ApiController
         $names = [0 =>'Uspeh na maturi', 1 => 'Uspeh v 3. in 4. letniku', 2 => 'Uspeh pri dodatnem predmetu',
             3 => 'Uspeh pri predpisanem predmetu', 4 => 'Uspeh pri preizkusu nadarjenosti', 5 => 'Poklic'];
 
-        $uspeh3L = 3;
+        $uspeh3L = 4;
         $uspeh4L = 4;
         $grade_table = self::gradeTable();
 
-        for($i = 0; $i < count($programConditions); $i = $i + 1){ // wish
+        for($wish_index = 0; $wish_index < count($wishIds); $wish_index = $wish_index + 1){ // wish
+            $wish = $wishIds[$wish_index];
             $points = 0;
             $failedCondition = false;
-            for($j = 0; $j < count($programConditions[$i]); $j = $j + 1){ // condition of certain wish
-                $condition = $programConditions[$i][$j];
+            for($j = 0; $j < count($programConditions[$wish_index]); $j = $j + 1){ // condition of certain wish
+                $condition = $programConditions[$wish_index][$j];
                 switch($condition["name"]) {
                     case 0:
                         $sum = 0;
                         for($i = 0; $i < count($grades); $i = $i + 1){
-                            $sid = $grades[$i]["id"];
+                            $sid = $grades[$i]["subject_id"];
                             if($sid[0] == 'M' || $sid[0] == 'L'){
                                 $sum = $sum + $grades[$i]["grade"];
                             }
                         }
+
                         if($graduation_type == 1) {
                             $index = array_search($sum, $grade_table["splosnaMatura"]);
                             $points = $points + ($grade_table["koncna"][$index] * ($condition["weight"] / 100));
@@ -98,10 +103,17 @@ class CalculationController extends ApiController
                         }
                         break;
                     case 2:
-
+                        $grade = self::gradePoint(max($grades->toArray())["grade"]);
+                        $points = $points + ($grade * ($condition["weight"] / 100));
                         break;
                     case 3:
-
+                        for($i = 0; $i < count($grades); $i = $i + 1){
+                            $sid = $grades[$i]["id"];
+                            if($sid == $condition["conditions_subject_id"]){
+                                $grade = self::gradePoint($grades[$i]["grade"]);
+                                $points = $points + ($grade * ($condition["weight"] / 100));
+                            }
+                        }
                         break;
                     case 4:
                         $ability_id = null;
@@ -129,16 +141,17 @@ class CalculationController extends ApiController
                         break;
                 }
             }
-            $applicationProgram = ApplicationsPrograms::find($wishIds[$i]);
+            $applicationProgram = ApplicationsPrograms::find($wish);
             if(!$failedCondition || !$failedGraduation || !$failedGrades) {
                 $applicationProgram->points = $points;
             }
             else{
                 $applicationProgram->points = -1;
             }
-            $applicationProgram->save;
+            $applicationProgram->save();
         }
 
+        //return $grades[0]["grade"];
         return $application;
     }
 
@@ -176,5 +189,24 @@ class CalculationController extends ApiController
         $gradeTable["koncna"] = $koncna;
 
         return $gradeTable;
+    }
+
+    public static function gradePoint($val){
+        $gradePoint = 0;
+        switch($val){
+            case 2:
+                $gradePoint = 40;
+                break;
+            case 3:
+                $gradePoint = 60;
+                break;
+            case 4:
+                $gradePoint = 80;
+                break;
+            case 5:
+                $gradePoint = 100;
+                break;
+        }
+        return $gradePoint;
     }
 }

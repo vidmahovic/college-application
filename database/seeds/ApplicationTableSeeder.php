@@ -94,13 +94,6 @@ class ApplicationTableSeeder extends Seeder
             'choice_number' => 2
         ]);
 
-        $wish3 = ApplicationsPrograms::create([
-            'application_id' => $application->id,
-            'faculty_program_id' => "ZE30",
-            'status' => 0,
-            'choice_number' => 3
-        ]);
-
         $application = Application::create([ // user -> luka.zidarn@gmail.com
             'user_id' => 10,
             'application_interval_id' => 1,

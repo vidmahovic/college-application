@@ -16,19 +16,19 @@ class GradesTableSeeder extends Seeder
         $grade = Grade::create([
             'application_id' => 1,
             'subject_id' => 'M401', // mat splosna
-            'grade' => 5
+            'grade' => 4
         ]);
 
         $grade = Grade::create([
             'application_id' => 1,
             'subject_id' => 'M241', // ang splosna
-            'grade' => 5
+            'grade' => 4
         ]);
 
         $grade = Grade::create([
             'application_id' => 1,
             'subject_id' => 'M431', // kem splosna
-            'grade' => 5
+            'grade' => 3
         ]);
 
         $grade = Grade::create([
