@@ -41,7 +41,7 @@ class FacultyProgram extends Model // PROGRAM
     }
 
     public function enrollmentConditions(){
-        return $this->hasMany(EnrollmentCondition::class);
+        return $this->hasMany(EnrollmentCondition::class)->orderBy('type');
     }
 
     public function getNameAttribute()
