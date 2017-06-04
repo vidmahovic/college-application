@@ -72,6 +72,12 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             $api->get('faculties', 'AdminController@faculties');
             //$api->get('faculties/{faculty}/applications', 'FacultyController@applications');
             $api->post('create', 'AdminController@create');
+
+            // ENROLLMENT SERVICE (FILE UPLOAD)
+            $api->post('upload/general-matura', 'UploadController@generalMaturaScores');
+            $api->post('upload/general-matura-subjects', 'UploadController@generalMaturaSubjectScores');
+            $api->post('upload/vocational-matura', 'UploadController@vocationalMaturaScores');
+            $api->post('upload/vocational-matura-subjects', 'UploadController@vocationalMaturaSubjectScores');
         });
     });
 });

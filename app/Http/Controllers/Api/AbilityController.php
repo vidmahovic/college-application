@@ -60,8 +60,8 @@ class AbilityController extends ApiController
 
     if($exists != null){
         AbilityTest::destroy($exists->id);
-        $applications = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('id')->toArray();
-        ApplicationAbilityTest::destroy($applications);
+        $application_programs = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('id')->toArray();
+        ApplicationAbilityTest::destroy($application_programs);
     }
 
     $ability = AbilityTest::create([
@@ -70,6 +70,7 @@ class AbilityController extends ApiController
         'max_points' => $this->request["max_points"]
     ]);
 
+    $applications = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('application_id')->toArray();
     if($applications != null) {
         for ($i = 0; $i < count($applications); $i = $i + 1) {
             ApplicationAbilityTest::create([
