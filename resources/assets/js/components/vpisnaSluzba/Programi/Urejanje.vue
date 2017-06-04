@@ -34,19 +34,22 @@
           <p v-show="showResponse" v-bind:class="{'bg-danger': !resSucc, 'bg-success': resSucc}" style="padding: 10px; width: 30%; margin-top: 15px;"> {{ msg }} </p>
         </div>
       </div>
-      <div class="row marginB20">
+      <div class="row marginB20" v-if="ability_test">
         <div class="col-md-12">
-          <h4 class="programSection">Kreiraj oziroma popravi dodatno preizkus</h4>
+          <h4 class="programSection">Kreiraj oziroma popravi dodatni preizkus</h4>
           <div class="row">
             <div class="col-md-6">
               <label for="minP">Min točk</label>
-              <input class="form-control" type="text" name="minP" id="minP" />
-            </div>
-            <div class="col-offset-md-6 col-md-6">
-              <label for="maxP">Max točk</label>
-              <input class="form-control" type="text" name="maxP" id="maxP" />
+              <input class="form-control" v-model="ability_test.min_points" type="text" name="minP" id="minP" />
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label for="maxP">Max točk</label>
+              <input class="form-control" v-model="ability_test.max_points" type="text" name="maxP" id="maxP" />
+            </div>
+          </div>
+          <button @click="sendAbilityPoints" class="btn btn-primary btn-xs">Shrani spremembe</button>
         </div>
       </div>
       <div class="row marginB20">
@@ -191,6 +194,11 @@ export default {
     },
     sezPrijavljenih: function(){
       this.$router.push("/enrollment_service/"+this.programDetails.id+"/prijavljeni");
+    },
+    sendAbilityPoints: function(){
+      this.$http.post('/api/program/'+this.programDetails.id+'/ability', {params: this.ability_test})
+        .then(function(res){
+        })
     },
 
     updateConditions: function() {
