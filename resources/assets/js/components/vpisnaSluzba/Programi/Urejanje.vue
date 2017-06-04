@@ -298,7 +298,13 @@ export default {
 
         this.$http.get('/api/program/'+this.programDetails.id+'/ability')
           .then(function(res){
-            this.ability_test = res.data.ability_test;
+            if(typeof res.body.ability_test == 'object'){
+              this.ability_test = true;
+              this.postAbility_test = res.body.ability_test;
+            }
+            else {
+              this.ability_test = res.data.ability_test;
+            }
           })
 
 

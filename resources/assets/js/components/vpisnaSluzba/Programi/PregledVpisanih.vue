@@ -27,6 +27,9 @@
         <div class="col-md-12 marginT20">
           <button v-on:click="savePdf1" class="btn btn-primary">Prenesi PDF</button>
         </div>
+        <div class="col-md-12 marginT20">
+          <button v-on:click="savePdf1" class="btn btn-primary btn-xs">Vpiši rezultate preizkusnega testa</button>
+        </div>
       </div>
 
       <div class="row">
