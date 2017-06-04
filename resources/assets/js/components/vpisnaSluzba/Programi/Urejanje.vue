@@ -40,13 +40,13 @@
           <div class="row">
             <div class="col-md-6">
               <label for="minP">Min točk</label>
-              <input class="form-control" v-model="ability_test.min_points" type="text" name="minP" id="minP" />
+              <input class="form-control" v-model="postAbility_test.min_points" type="text" name="minP" id="minP" />
             </div>
           </div>
           <div class="row">
             <div class="col-md-6">
               <label for="maxP">Max točk</label>
-              <input class="form-control" v-model="ability_test.max_points" type="text" name="maxP" id="maxP" />
+              <input class="form-control" v-model="postAbility_test.max_points" type="text" name="maxP" id="maxP" />
             </div>
           </div>
           <button @click="sendAbilityPoints" class="btn btn-primary btn-xs">Shrani spremembe</button>
@@ -158,7 +158,11 @@ export default {
       showConditionsResponse: false,
       conditionMsg: "",
       conditionsError: false,
-      ability_test: ''
+      ability_test: '',
+      postAbility_test: {
+        min_points: null,
+        max_points: null
+      }
 
     }
   },
@@ -196,8 +200,9 @@ export default {
       this.$router.push("/enrollment_service/"+this.programDetails.id+"/prijavljeni");
     },
     sendAbilityPoints: function(){
-      this.$http.post('/api/program/'+this.programDetails.id+'/ability', {params: this.ability_test})
+      this.$http.post('/api/program/'+this.programDetails.id+'/ability', this.postAbility_test)
         .then(function(res){
+          debugger;
         })
     },
 
