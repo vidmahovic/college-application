@@ -31,7 +31,7 @@ class CalculationController extends ApiController
         $grades = $application->grades; // M - matura, L - poklicna matura, S - preizkus sposobnosti
         $graduation_type = $application->graduation_type_id; // 1 - splošna matura,  2 - poklicna matura
         $profession = $application->profession_id;
-        $ability_test = $application->applicationAbilityTests;
+        $application_ability_test = $application->applicationAbilityTests()->first();
         if(empty($ability_test)){
             $ability_test = null;
         }
@@ -116,19 +116,18 @@ class CalculationController extends ApiController
                         }
                         break;
                     case 4:
-                        $ability_id = null;
-                        for($i = 0; $i < count($grades); $i = $i + 1){
-                            $sid = $grades[$i]["id"];
-                            if($sid[0] == 'S'){
-                                $ability_id = $sid;
-                            }
-                        }
-                        if($ability_id != null && $ability_id == $condition["conditions_subject_id"] && $ability_test != null){
-                            $test = AbilityTest::where('$ability_id', $ability_test->ability_test_id);
-                            $score = $ability_test;
-                            $max = $test->max_points;
+                        if($application_ability_test != null){
+                            $aid = $application_ability_test->ability_test_id;
+                            $test = AbilityTest::where('id', $aid)->first();
+                            $score = $application_ability_test->points;
                             $min = $test->min_points;
-                            $points = $points + (40 + 60 * (($score - $min)/($max - $min)));
+                            $max = $test->max_points;
+                            if($score > $min) {
+                                $points = $points + ((40 + 60 * (($score - $min) / ($max - $min)))*($condition["weight"] / 100));
+                            }
+                            else{
+                                $failedCondition = true;
+                            }
                         }
                         else {
                             $failedCondition = true;
@@ -151,7 +150,6 @@ class CalculationController extends ApiController
             $applicationProgram->save();
         }
 
-        //return $grades[0]["grade"];
         return $application;
     }
 

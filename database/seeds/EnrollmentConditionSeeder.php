@@ -86,6 +86,32 @@ class EnrollmentConditionSeeder extends Seeder
             'weight' => null
         ]);
 
+        $faculty_program_id = 'ZE30';
+        EnrollmentCondition::create([ // splosna matura
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 0,
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 20
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 1,
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 20
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 4,
+            'type' => 0,
+            'conditions_subject_id' => 'S251',
+            'conditions_profession_id' => null,
+            'weight' => 60
+        ]);
+
         // - prosojnice: FRI, FMF, FU, BF, FA, FF
 
         // FRI
