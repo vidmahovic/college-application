@@ -38,7 +38,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 3,
+            'name' => 2,
             'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
