@@ -58,10 +58,7 @@ class AbilityController extends ApiController
             return $this->response->errorBadRequest($errors);
         }
 
-        if($exists == null){
-            throw new ResourceException('Resource not found');
-        }
-        else{
+        if($exists != null){
             AbilityTest::destroy($exists->id);
             $applications = ApplicationsPrograms::where('faculty_program_id', $id)->pluck('id')->toArray();
             ApplicationAbilityTest::destroy($applications);
