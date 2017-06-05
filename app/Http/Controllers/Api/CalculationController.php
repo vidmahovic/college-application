@@ -102,11 +102,11 @@ class CalculationController extends ApiController
                             $failedCondition = true;
                         }
                         break;
-                    case 2:
+                    case 2: // samo pri poklicni maturi, namesto max poisci predmet na splosni maturi
                         $grade = self::gradePoint(max($grades->toArray())["grade"]);
                         $points = $points + ($grade * ($condition["weight"] / 100));
                         break;
-                    case 3:
+                    case 3: // pri matematiki, uspeh pri predpisanem, matematika splosna matura in uspeh pri matematiki 3. in 4. letnik
                         for($i = 0; $i < count($grades); $i = $i + 1){
                             $sid = $grades[$i]["id"];
                             if($sid == $condition["conditions_subject_id"]){

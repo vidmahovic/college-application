@@ -230,7 +230,6 @@ class EnrollmentConditionSeeder extends Seeder
             'conditions_profession_id' => null,
             'weight' => 20
         ]);
-        // TODO: poklicna matura?
 
         $faculty_program_id = 'TH00'; // FMF Praktična Matematika
         EnrollmentCondition::create([
@@ -331,7 +330,7 @@ class EnrollmentConditionSeeder extends Seeder
             'weight' => 60
         ]);
 
-        EnrollmentCondition::create([  // BF Gozdarstvo UN, poklica matura
+        EnrollmentCondition::create([  // BF Gozdarstvo UN, poklicna matura
             'faculty_program_id' => $faculty_program_id,
             'name' => 1,
             'type' => 2,
