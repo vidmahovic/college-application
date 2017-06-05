@@ -108,7 +108,7 @@ class AbilityController extends ApiController
         $results = $this->request->input('results');
 
         if($results == null){
-            return $this->response->errorBadRequest("You must enter results of the test");
+            return $this->response->errorBadRequest("Vnesite rezultate preizkusa!");
         }
 
         $applications = Application::all()->pluck('id')->toArray();
@@ -117,11 +117,11 @@ class AbilityController extends ApiController
             $curr = $results[$i];
 
             if(!in_array($curr["aid"], $applications)){
-                return $this->response->errorBadRequest("Invalid application id!");
+                return $this->response->errorBadRequest("Neveljavna vpisnica!");
             }
 
             if($curr["points"] > $ability_test->max_points || $curr["points"] < -1){
-                return $this->response->errorBadRequest("Points must be between ability test min/max points!");
+                return $this->response->errorBadRequest("Točke morajo biti med mejami!");
             }
         }
 
