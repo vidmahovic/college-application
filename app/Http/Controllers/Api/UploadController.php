@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\MaturaScore;
 use App\Transformers\ScoreErrorTransformer;
 use App\Transformers\ScoreTransformer;
-use CollegeApplication\Parsing\GeneralMaturaScoreParser;
+use CollegeApplication\Parsing\GeneralMaturaParser;
+use CollegeApplication\Parsing\GeneralMaturaSubjectsParser;
+use CollegeApplication\Parsing\ScoreParser;
+use CollegeApplication\Parsing\VocationalMaturaParser;
+use CollegeApplication\Parsing\VocationalMaturaSubjectsParser;
 use Dingo\Api\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -23,39 +29,93 @@ class UploadController extends ApiController
         if(! $this->request->user()->isEnrollmentService())
             throw new AuthorizationException('Unauthorized access');
 
-        $this->validate($this->request, ['general_matura' => 'file']);
+        $file = $this->getValidatedFile('general_matura');
 
-        $file = $this->request->file('general_matura');
-        if (!$file->isValid())
-            throw new BadRequestHttpException($file->getErrorMessage());
-
-        $parser = new GeneralMaturaScoreParser;
+        $parser = new GeneralMaturaParser;
         $data = $parser->parse($file);
-        // TODO: Store parsed $data to DB.
 
-        $parse_result = new \stdClass;
-        $parse_result->total = $parser->getAllLines();
-        $parse_result->new = $parser->getNewLines();
-        $parse_result->updated =  $parser->getEditedLines();
-        $parse_result->errors = $parser->getErrors();
+        ['new' => $new, 'updated' => $updated] = MaturaScore::storeScores($data->map(function($item, $key) {
+            $item['general_matura'] = true;
+            return $item;
+        }));
 
-        return $this->response->item($parse_result, new ScoreTransformer);
+        return $this->buildResponse($parser, $new, $updated);
 
-    }
-
-    public function generalMaturaSubjectScores() {
-
-
-        $file = $this->request->file('general-matura-subjects');
     }
 
     public function vocationalMaturaScores()
     {
+        if(! $this->request->user()->isEnrollmentService())
+            throw new AuthorizationException('Unauthorized access.');
+
+        $file = $this->getValidatedFile('vocational_matura');
+
+        $parser = new VocationalMaturaParser;
+        $data = $parser->parse($file);
+
+        ['new' => $new, 'updated' => $updated] = MaturaScore::storeScores($data->map(function($item, $key) {
+            $item['general_matura'] = false;
+            return $item;
+        }));
+
+        return $this->buildResponse($parser, $new, $updated);
 
     }
 
+    // TODO: finish with implementation.
+    public function generalMaturaSubjectScores() {
+
+        if(! $this->request->user()->isEnrollmentService())
+            throw new AuthorizationException('Unauthorized access.');
+
+        $file = $this->getValidatedFile('general_matura_subjects');
+
+        $parser = new GeneralMaturaSubjectsParser;
+
+        ['new' => $new, 'updated' => $updated] = MaturaScore::storeSubjectScores($parser->parse($file));
+
+        return $this->buildResponse($parser, $new, $updated);
+
+    }
+
+    // TODO: finish with implementation.
     public function vocationalMaturaSubjectScores()
     {
+        if(! $this->request->user()->isEnrollmentService())
+            throw new AuthorizationException('Unauthorized access.');
+
+        $file = $this->getValidatedFile('vocational_matura_subjects');
+
+        $parser = new VocationalMaturaSubjectsParser;
+
+        ['new' => $new, 'updated' => $updated] = MaturaScore::storeSubjectScores($parser->parse($file));
+
+        return $this->buildResponse($parser, $new, $updated);
 
     }
+
+    private function getValidatedFile(string $filename)
+    {
+        $this->validate($this->request, [$filename => 'required|file']);
+        $file = $this->request->file($filename);
+
+        if(! $file->isValid())
+            throw new BadRequestHttpException($file->getErrorMessage());
+
+        return $file;
+
+    }
+
+    public function buildResponse(ScoreParser $parser, $new, $updated)
+    {
+        $parse_result = new \stdClass;
+        $parse_result->total = $parser->getLines();
+        $parse_result->errors = $parser->getErrors();
+        $parse_result->new = $new;
+        $parse_result->updated = $updated;
+
+        return $this->response->item($parse_result, new ScoreTransformer);
+    }
+
+
 }

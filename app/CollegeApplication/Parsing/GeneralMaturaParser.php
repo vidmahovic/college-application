@@ -10,7 +10,7 @@ use Illuminate\Validation\Rule;
  *
  * @package \App\Parsing
  */
-class GeneralMaturaScoreParser extends ScoreParser
+class GeneralMaturaParser extends ScoreParser
 {
 
     /**
@@ -33,8 +33,8 @@ class GeneralMaturaScoreParser extends ScoreParser
     private function columns(): array
     {
         return [
-            'emso', 'first_name', 'last_name', 'matura_points', 'matura_done', 'points_3_grade',
-            'points_4_grade', 'boo', 'middle_school_id', 'profession_id'
+            'emso', 'first_name', 'last_name', 'matura_points', 'matura_done', '3_grade_mark',
+            '4_grade_mark', 'boo', 'middle_school_id', 'profession_id'
         ];
     }
 
@@ -44,12 +44,13 @@ class GeneralMaturaScoreParser extends ScoreParser
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'emso' => 'required|size:13',
-            'matura_points' => 'present|numeric|min:0|max:34',
-            'matura_done' => ['present', Rule::in(['D', 'N'])],
-            'points_3_grade' => 'present|numeric|min:1|max:5',
-            'points_4_grade' => 'present|numeric|min:1|max:5',
+            'matura_points' => 'required_with:matura_done,3_grade_mark,4_grade_mark|numeric|min:0|max:34',
+            'matura_done' => ['required_with:matura_points,3_grade_mark,4_grade_mark', Rule::in(['D', 'N'])],
+            '3_grade_mark' => 'required_with:matura_points,matura_done,4_grade_mark|numeric|min:2|max:5',
+            '4_grade_mark' => 'required_with:matura_points_matura_done,3_grade_mark|numeric|min:2|max:5',
             'profession_id' => 'required|exists:professions,id',
-            'middle_school_id' => 'required|exists:middle_schools,id'
+            'middle_school_id' => 'required|exists:middle_schools,id',
+            'boo' => 'present'
         ];
     }
 }

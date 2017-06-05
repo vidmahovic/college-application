@@ -13,9 +13,6 @@ abstract class ScoreParser implements FileParser
 {
     protected $errors = [];
     protected $lines = 0;
-    protected $new = 0;
-    protected $edited = 0;
-
 
     public function parse(UploadedFile $file): Collection
     {
@@ -25,14 +22,12 @@ abstract class ScoreParser implements FileParser
             $line_attrs = $this->parseLine($line);
             $validator = $this->getValidationFactory()->make($line_attrs, $this->rules());
 
-            if($validator->fails()) {
+            if($validator->fails())
                 array_push($this->errors, $line_attrs);
-            }
+            else
+                $lines->push($line_attrs);
 
-            $this->new += 1;
-            $this->lines += 1;
-
-            $lines->push($line_attrs);
+            $this->lines++;
         }
 
         return $lines;
@@ -43,19 +38,9 @@ abstract class ScoreParser implements FileParser
         return $this->errors;
     }
 
-    public function getAllLines(): int
+    public function getLines(): int
     {
         return $this->lines;
-    }
-
-    public function getNewLines(): int
-    {
-        return $this->new;
-    }
-
-    public function getEditedLines(): int
-    {
-        return $this->edited;
     }
 
     /**
