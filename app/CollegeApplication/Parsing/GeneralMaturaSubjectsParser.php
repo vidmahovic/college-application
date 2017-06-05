@@ -9,7 +9,7 @@ use Illuminate\Validation\Rule;
  *
  * @package \CollegeApplication\Parsing
  */
-class MaturaSubjectsParser extends ScoreParser
+class GeneralMaturaSubjectsParser extends ScoreParser
 {
 
     protected function parseLine(string $line): array

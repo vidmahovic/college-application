@@ -96,9 +96,23 @@ class MaturaScore extends Model
     }
 
 
-    public function storeSubjectScores()
+    public static function storeSubjectScores(Collection $scores)
     {
+        $updated = 0;
+        $new = 0;
 
+        foreach ($scores as $score) {
+
+            if($score['3_grade_mark'] === '') {
+                // Find the relation
+                // Update the grade.
+                $updated++;
+            } else {
+                $new++;
+            }
+        }
+
+        return ['new' => $new, 'updated' => $updated];
     }
 
 }

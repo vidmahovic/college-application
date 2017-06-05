@@ -6,9 +6,10 @@ use App\Models\MaturaScore;
 use App\Transformers\ScoreErrorTransformer;
 use App\Transformers\ScoreTransformer;
 use CollegeApplication\Parsing\GeneralMaturaParser;
-use CollegeApplication\Parsing\MaturaSubjectsParser;
+use CollegeApplication\Parsing\GeneralMaturaSubjectsParser;
 use CollegeApplication\Parsing\ScoreParser;
 use CollegeApplication\Parsing\VocationalMaturaParser;
+use CollegeApplication\Parsing\VocationalMaturaSubjectsParser;
 use Dingo\Api\Http\Request;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -42,23 +43,6 @@ class UploadController extends ApiController
 
     }
 
-    // TODO: needs implementation.
-    public function generalMaturaSubjectScores() {
-
-        if(! $this->request->user()->isEnrollmentService())
-            throw new AuthorizationException('Unauthorized access.');
-
-        $file = $this->getValidatedFile('general_matura_subjects');
-
-        $parser = new MaturaSubjectsParser;
-        $data = $parser->parse($file);
-
-        // Store data
-
-        return $this->buildResponse($parser);
-
-    }
-
     public function vocationalMaturaScores()
     {
         if(! $this->request->user()->isEnrollmentService())
@@ -78,7 +62,23 @@ class UploadController extends ApiController
 
     }
 
-    // TODO: needs impelementation
+    // TODO: finish with implementation.
+    public function generalMaturaSubjectScores() {
+
+        if(! $this->request->user()->isEnrollmentService())
+            throw new AuthorizationException('Unauthorized access.');
+
+        $file = $this->getValidatedFile('general_matura_subjects');
+
+        $parser = new GeneralMaturaSubjectsParser;
+
+        ['new' => $new, 'updated' => $updated] = MaturaScore::storeSubjectScores($parser->parse($file));
+
+        return $this->buildResponse($parser, $new, $updated);
+
+    }
+
+    // TODO: finish with implementation.
     public function vocationalMaturaSubjectScores()
     {
         if(! $this->request->user()->isEnrollmentService())
@@ -86,12 +86,11 @@ class UploadController extends ApiController
 
         $file = $this->getValidatedFile('vocational_matura_subjects');
 
-        $parser = new MaturaSubjectsParser;
-        $data = $parser->parse($file);
+        $parser = new VocationalMaturaSubjectsParser;
 
-        // Store data
+        ['new' => $new, 'updated' => $updated] = MaturaScore::storeSubjectScores($parser->parse($file));
 
-        return $this->buildResponse($parser);
+        return $this->buildResponse($parser, $new, $updated);
 
     }
 
