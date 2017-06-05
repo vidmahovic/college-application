@@ -33,7 +33,7 @@ Vue.use(VeeValidate)
 
 
 Vue.component('v-select', vSelect)
-Vue.component('datatable',require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
+Vue.component('datatable',require('../../../resources/lib/vuejs-datatable/src/vue-datatable.vue'))
 Vue.component('datepicker', Datepicker)
 
 
@@ -49,6 +49,15 @@ Vue.component('edit-program', {
 				//ker ne delata $emit $on sem uproabil $root
 				//this.$emit('programdata', this.row);
 				this.$router.push("/enrollment_service/programi/"+this.row.id);
+	    }
+		}
+})
+
+Vue.component('ability_test_input', {
+    template: '<input class="form-control" type="text" @click="goToUpdatePage" />',
+    props: ['row'],
+		methods: {
+			goToUpdatePage: function(row){
 	    }
 		}
 })

@@ -36,7 +36,7 @@ class AbilityController extends ApiController
                     $ability = true;
                 }
                 else {
-                    $applied = ApplicationAbilityTest::where('ability_test_id', $ability->id)->get();
+                    $applied = ApplicationAbilityTest::with('application')->where('ability_test_id', $ability->id)->get();
                 }
             }
         }
