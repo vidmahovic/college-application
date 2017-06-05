@@ -29,10 +29,9 @@
           <button v-on:click="savePdf1" class="btn btn-primary">Prenesi PDF</button>
         </div>
         <div class="col-md-12 marginT20">
-          <button data-toggle="modal" data-target="#myModal1" class="btn btn-primary btn-xs">Vpiši rezultate preizkusnega testa</button>
+          <button v-if="typeof ability_test == 'object'" data-toggle="modal" data-target="#myModal1" class="btn btn-primary btn-xs">Vpiši rezultate preizkusnega testa</button>
         </div>
       </div>
-      {{applied}}dsad {{ability_test}} sdasd
       <div class="row">
         <div class="col-md-12">
           <datatable id="datatable" :columns="table_columns" :data="params" :data-store="prijavljeni_store" class="programs-datatable" paginate></datatable>
@@ -60,18 +59,18 @@
               <th>Število točk</th>
             </thead>
             <tbody>
-              <tr v-for="(index, item) in applied">
+              <tr v-for="(item, index) in applied">
                 <td>{{ item.application_id }}</td>
-                <td>ohhio</td>
+                <td>{{ item.application.emso }}</td>
                 <!--<td>Denis Grabljevec</td>-->
-                <!--<td><input class="form-control" type="text" v-model="applied[index].points" /></td>-->
+                <td><input class="form-control" type="text" v-model="applied[index].points" /></td>
               </tr>
             </tbody>
           </table>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Prekliči</button>
-          <button type="button" class="btn btn-primary">Shrani podatke</button>
+          <button type="button" class="btn btn-primary" @click="posljiTocke">Shrani podatke</button>
         </div>
       </div>
 
@@ -246,11 +245,16 @@ function prijavljeniPdf(data) {
           programData: this.params.programData
         };
 
-        /*this.$http.get('/api/program/'+this.params.programData.id+'/ability')
+        this.$http.get('/api/program/'+this.params.programData.id+'/ability')
           .then(function(res){
             this.ability_test = res.data.ability_test;
             this.applied = res.data.applied;
-          })*/
+            for(var i in this.applied){
+              if(this.applied[i].points == -1){
+                this.applied[i].points = null;
+              }
+            }
+          })
       },
       spremeniProgram: function(val){
 
@@ -259,11 +263,38 @@ function prijavljeniPdf(data) {
           programData: val
         };
 
-        /*this.$http.get('/api/program/'+this.params.programData.id+'/ability')
+        this.$http.get('/api/program/'+this.params.programData.id+'/ability')
           .then(function(res){
             this.ability_test = res.data.ability_test;
             this.applied = res.data.applied;
-          })*/
+            for(var i in this.applied){
+              if(this.applied[i].points == -1){
+                this.applied[i].points = null;
+              }
+            }
+          })
+      },
+      posljiTocke: function(){
+        var results1 = [];
+
+        for(var i in this.applied){
+          var tmp = {};
+
+          tmp.aid = this.applied[i].application_id;
+          if(this.applied[i].points == null || this.applied[i].points == ""){
+            tmp.points = -1;
+          }
+          else {
+            tmp.points = this.applied[i].points;
+          }
+          results1.push(tmp);
+        }
+
+        this.$http.post('/api/ability/'+this.params.programData.id, {results: results1})
+          .then(function(res){
+
+          })
+
       }
     },
     created: function() {
@@ -277,12 +308,16 @@ function prijavljeniPdf(data) {
         this.faculty_id = this.params.programData.faculty_id;
       }
 
-      /*this.$http.get('/api/program/'+this.params.programData.id+'/ability')
+      this.$http.get('/api/program/'+this.params.programData.id+'/ability')
         .then(function(res){
           this.ability_test = res.data.ability_test;
           this.applied = res.data.applied;
-          console.log(this.applied);
-        })*/
+          for(var i in this.applied){
+            if(this.applied[i].points == -1){
+              this.applied[i].points = null;
+            }
+          }
+        })
 
       this.$http.get('/api/programs', {params: {filters: {faculty_id: this.faculty_id}}})
         .then(function(res){
