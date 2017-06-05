@@ -42,6 +42,7 @@ class UploadController extends ApiController
 
     }
 
+    // TODO: needs implementation.
     public function generalMaturaSubjectScores() {
 
         if(! $this->request->user()->isEnrollmentService())
@@ -77,6 +78,7 @@ class UploadController extends ApiController
 
     }
 
+    // TODO: needs impelementation
     public function vocationalMaturaSubjectScores()
     {
         if(! $this->request->user()->isEnrollmentService())
