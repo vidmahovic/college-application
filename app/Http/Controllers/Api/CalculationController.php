@@ -24,10 +24,7 @@ class CalculationController extends ApiController
         $programIds = [];
         $programConditions = [];
         $wishIds = [];
-
-        $failedGraduation = false;
-        $failedGrades = false;
-        $failedCondition = false;
+		
         $points = 0;
 
         $grades = $application->grades; // M - matura, L - poklicna matura, S - preizkus sposobnosti
@@ -40,7 +37,6 @@ class CalculationController extends ApiController
 
         if(!($graduation_type == 1 || $graduation_type == 2)){
             $points = -100;
-            $failedGraduation = true;
         }
 
         if(count($grades) < 4){
@@ -51,7 +47,6 @@ class CalculationController extends ApiController
             for($i = 0; $i < count($grades); $i = $i + 1){
                 if($grades[$i]["grade"] < 2){
                     $points = -100;
-                    $failedGrades = true;
                 }
             }
         }
@@ -76,7 +71,6 @@ class CalculationController extends ApiController
         for($wish_index = 0; $wish_index < count($wishIds); $wish_index = $wish_index + 1){ // wish
             $wish = $wishIds[$wish_index];
             $points = 0;
-            $failedCondition = false;
             for($j = 0; $j < count($programConditions[$wish_index]); $j = $j + 1){ // condition of certain wish
                 $condition = $programConditions[$wish_index][$j];
                 $curr_point = 0;
@@ -109,7 +103,6 @@ class CalculationController extends ApiController
                         }
                         else {
                             $points = -100;
-                            $failedCondition = true;
                         }
                         break;
                     case 2:
@@ -149,25 +142,22 @@ class CalculationController extends ApiController
                             }
                             else{
                                 $points = -100;
-                                $failedCondition = true;
                             }
                         }
                         else {
                             $points = -100;
-                            $failedCondition = true;
                         }
                         break;
                     case 5:
                         if($condition["conditions_profession_id"] != $profession){
                             $points = -100;
-                            $failedCondition = true;
                         }
                         break;
                 }
             }
 
             $applicationProgram = ApplicationsPrograms::find($wish);
-            if(!$failedCondition || !$failedGraduation || !$failedGrades) {
+            if($points > 0) {
                 $applicationProgram->points = $points;
             }
             else{
