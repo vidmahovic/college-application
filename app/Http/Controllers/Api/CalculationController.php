@@ -74,6 +74,7 @@ class CalculationController extends ApiController
             $failedCondition = false;
             for($j = 0; $j < count($programConditions[$wish_index]); $j = $j + 1){ // condition of certain wish
                 $condition = $programConditions[$wish_index][$j];
+                $curr_point = 0;
                 switch($condition["name"]) {
                     case 0:
                         $sum = 0;
@@ -86,32 +87,44 @@ class CalculationController extends ApiController
 
                         if($graduation_type == 1) {
                             $index = array_search($sum, $grade_table["splosnaMatura"]);
-                            $points = $points + ($grade_table["koncna"][$index] * ($condition["weight"] / 100));
+                            $curr_point = ($grade_table["koncna"][$index] * ($condition["weight"] / 100));
+                            $points = $points + $curr_point;
                         }
                         else{
                             $index = array_search($sum, $grade_table["poklicnaMatura"]);
-                            $points = $points + ($grade_table["koncna"][$index] * ($condition["weight"] / 100));
+                            $curr_point = ($grade_table["koncna"][$index] * ($condition["weight"] / 100));
+                            $points = $points + $curr_point;
                         }
                         break;
                     case 1:
                         if($uspeh3L > 1 && $uspeh3L < 6 && $uspeh4L > 1 && $uspeh4L < 6){
                             $uspeh34L = ($uspeh3L + $uspeh3L) * 10;
-                            $points = $points + ($uspeh34L * ($condition["weight"] / 100));
+                            $curr_point = ($uspeh34L * ($condition["weight"] / 100));
+                            $points = $points + $curr_point;
                         }
                         else {
                             $failedCondition = true;
                         }
                         break;
-                    case 2: // samo pri poklicni maturi, namesto max poisci predmet na splosni maturi
-                        $grade = self::gradePoint(max($grades->toArray())["grade"]);
-                        $points = $points + ($grade * ($condition["weight"] / 100));
+                    case 2:
+                        $grad_grades = [];
+                        for($k = 0; $k < count($grades); $k = $k + 1){
+                            $sid = $grades[$i]["subject_id"];
+                            if($sid[0] == 'M'){
+                                array_push($grad_grades,$grades[$i]);
+                            }
+                        }
+                        $grade = self::gradePoint(max($grades["grade"]));
+                        $curr_point = ($grade * ($condition["weight"] / 100));
+                        $points = $points + $curr_point;
                         break;
-                    case 3: // pri matematiki, uspeh pri predpisanem, matematika splosna matura in uspeh pri matematiki 3. in 4. letnik
+                    case 3:
                         for($i = 0; $i < count($grades); $i = $i + 1){
                             $sid = $grades[$i]["id"];
                             if($sid == $condition["conditions_subject_id"]){
                                 $grade = self::gradePoint($grades[$i]["grade"]);
-                                $points = $points + ($grade * ($condition["weight"] / 100));
+                                $curr_point = ($grade * ($condition["weight"] / 100));
+                                $points = $points + $curr_point;
                             }
                         }
                         break;
@@ -123,7 +136,8 @@ class CalculationController extends ApiController
                             $min = $test->min_points;
                             $max = $test->max_points;
                             if($score > $min) {
-                                $points = $points + ((40 + 60 * (($score - $min) / ($max - $min)))*($condition["weight"] / 100));
+                                $curr_point = ((40 + 60 * (($score - $min) / ($max - $min)))*($condition["weight"] / 100));
+                                $points = $points + $curr_point;
                             }
                             else{
                                 $failedCondition = true;
@@ -145,7 +159,7 @@ class CalculationController extends ApiController
                 $applicationProgram->points = $points;
             }
             else{
-                $applicationProgram->points = -1;
+                $applicationProgram->points = 0;
             }
             $applicationProgram->save();
         }
