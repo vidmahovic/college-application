@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\AbilityTest;
+use App\User;
 use App\Models\Application;
 use App\Models\ApplicationAbilityTest;
 use App\Models\ApplicationsPrograms;
@@ -28,6 +29,7 @@ class AbilityController extends ApiController
         $conditions = EnrollmentCondition::where('faculty_program_id', $id)->get();
         $ability = false;
         $applied = null;
+        $users = [];
 
         for($i = 0; $i < count($conditions); $i = $i + 1){
             if($conditions[$i]["name"] == 4){
@@ -36,14 +38,24 @@ class AbilityController extends ApiController
                     $ability = true;
                 }
                 else {
-                    $applied = ApplicationAbilityTest::where('ability_test_id', $ability->id)->get();
+                    $applied = ApplicationAbilityTest::with('application')->where('ability_test_id', $ability->id)->get();
+                    $user_ids = $applied->pluck('application')->pluck("user_id");
+                    $users = User::find($user_ids);
+
+                    /*
+                    for($i = 0; $i < count($applied); $i = $i + 1){
+                        $curr = $applied[$i];
+                        $curr["name"] = $users[$i];
+                    }
+                    */
                 }
             }
         }
 
         return $this->response->array([
             'ability_test'=> $ability,
-            'applied' => $applied
+            'applied' => $applied,
+            'users' => $users
         ]);
     }
 

@@ -1,0 +1,297 @@
+<template>
+<div>
+  <div class="container prijave">
+    <div class="panel panel-body">
+      <h3 style="text-align: center;">Seznam prijavljenih {{ params.programData.name || " na izbran program" }}</h3>
+      <h4>Dodatni kriteriji iskanja: </h4>
+      <div class="row">
+        <div class="col-md-12">
+          <h6>Državljanstvo</h6>
+          <input type="radio" id="one" value="1" v-model="params.regular"  v-on:click="regular1('1')">
+          <label style="margin-right: 15px;" for="one">Državljani Slovenije</label>
+
+          <input type="radio" id="two" value="6" v-model="params.regular"  v-on:click="regular1('6')">
+          <label style="margin-right: 15px;" for="two">Tujci EU</label>
+
+          <input type="radio" id="three" value="3" v-model="params.regular" v-on:click="regular1('3')">
+          <label style="margin-right: 15px;" for="three">Tujci izven EU</label>
+
+          <input type="radio" id="four" value="4" v-model="params.regular" v-on:click="regular1('4')">
+          <label style="margin-right: 15px;" for="four">Slovenci brez slovenskega državljanstva</label>
+        </div>
+      </div>
+      <div class="row marginB40">
+        <div v-if="role == 'referent'" class="col-md-12">
+          <h6>Iskanje programa:</h6>
+          <v-select v-model="params.programData" label="name" :options="referentPrograms" :on-change="spremeniProgram"></v-select>
+        </div>
+        <div class="col-md-12 marginT20">
+          <button v-on:click="savePdf1" class="btn btn-primary">Prenesi PDF</button>
+        </div>
+        <div class="col-md-12 marginT20">
+          <button data-toggle="modal" data-target="#myModal1" class="btn btn-primary btn-xs">Vpiši rezultate preizkusnega testa</button>
+        </div>
+      </div>
+      {{applied}}dsad {{ability_test}} sdasd
+      <div class="row">
+        <div class="col-md-12">
+          <datatable id="datatable" :columns="table_columns" :data="params" :data-store="prijavljeni_store" class="programs-datatable" paginate></datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="myModal1" class="modal fade" role="dialog" ref="vuemodal">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3 class="modal-title">Vpis točk preizkusa sposobnosti</h3>
+        </div>
+        <div class="modal-body">
+          <table v-if="applied.length != 0" class="table">
+            <thead>
+              <th>#</th>
+              <th>Emšo</th>
+              <!--<th>Ime in priimek</th>-->
+              <th>Število točk</th>
+            </thead>
+            <tbody>
+              <tr v-for="(index, item) in applied">
+                <td>{{ item.application_id }}</td>
+                <td>ohhio</td>
+                <!--<td>Denis Grabljevec</td>-->
+                <!--<td><input class="form-control" type="text" v-model="applied[index].points" /></td>-->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Prekliči</button>
+          <button type="button" class="btn btn-primary">Shrani podatke</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</template>
+
+<script>
+import prijavljeni_store from './prijavljeni_store.js';
+
+function prijavljeniPdf(data) {
+  var doc = new jsPDF('landscape');
+  var header = ["#", "Ime in priimek", "Naslov", "Mesto", "Državljanstvo", "Nacin zakljucka srednje sole"];
+
+  //210 je visina, 297mm sirina
+  doc.setLineWidth(0.1);
+  doc.setFont("sans-serif");
+
+  doc.setTextColor(99, 107, 111);
+  doc.setFontSize(20);
+  doc.text(148, 20, "Tabela prijavljenih študentov", null, null, "center");
+
+  //table header
+  doc.setFontSize(10);
+  var x = 5;
+
+  for(var i in header){
+
+    doc.text(x, 40, header[i]);
+
+    if(i == 0){
+      x += 6;
+    }
+    else if(i == 1){
+      x += 35;
+    }
+    else if(i == 2){
+      x+=45;
+    }
+    else if(i == 3){
+      x += 50;
+    }
+    else if(i == 5){
+      x += 50;
+    }
+    else if(i == 4){
+      x += 93;
+    }
+  }
+
+  // začetek vsebine
+  var y = 47
+  var counter = 1;
+  var totalPages = 1;
+  doc.setFontSize(9);
+  for(var i in data){
+    x = 5;
+    doc.text(x, y, data[i].id.toString());
+
+    x += 6;
+
+    var tmp = data[i].applicant.data.name.replace("Č", "C");
+
+    doc.text(x, y, tmp);
+
+    x += 35;
+
+    tmp = data[i].mailingAddress.meta.address.replace("Č", "C");
+
+    doc.text(x, y, tmp);
+
+    x += 45;
+
+    tmp = data[i].mailingAddress.data.name.replace("Č", "C");
+
+    doc.text(x, y, tmp);
+
+    x += 50;
+
+    tmp = data[i].citizen.data.name.replace("Č", "C");
+
+    doc.text(x, y, tmp);
+
+    x += 93;
+
+    tmp = data[i].profession.data.name.replace("Č", "C");
+
+    doc.text(x, y, data[i].profession.data.name);
+
+    x += 50;
+
+    var tmpY = y;
+    var tmpY1 = y;
+
+    if(tmpY > tmpY1){
+      if(tmpY + 33 < 210){
+        doc.line(6,tmpY+3,289,tmpY+3);
+        y = tmpY+9;
+      }
+      else {
+        doc.addPage();
+        totalPages++;
+        y = 10;
+      }
+
+    }
+    else {
+      if(tmpY1 + 33 < 210){
+        doc.line(6,tmpY1+3,289,tmpY1+3);
+        y = tmpY1+9;
+      }
+      else {
+        doc.addPage();
+        totalPages++;
+        y = 10;
+      }
+    }
+
+    counter++;
+
+  }
+
+  doc.output("datauri");
+}
+
+  export default {
+    name: 'PregledVpisanih',
+    data: function(router){
+      return {
+        programData: '',
+        referentPrograms: [],
+        result: [],
+        role: '',
+        faculty_id: '',
+        ability_test: false,
+        applied: [],
+        params: {
+          regular: '',
+          programData: ''
+        },
+        table_columns: [
+          {label: '#', field: 'id'},
+          {label: 'Ime in priimek', field: 'applicant.data.name'},
+          {label: 'Naslov', field: 'mailingAddress.meta.address'},
+          {label: 'Mesto', field: 'mailingAddress.data.name'},
+          {label: 'Državljanstvo', field: 'citizen.data.name'},
+          {label: 'Način zaključka srednje šole', field: 'graduation.data.name'},
+
+        ],
+        prijavljeni_store: prijavljeni_store
+      }
+    },
+    methods: {
+      savePdf1: function(){
+        var postData = {
+          nationality_id: this.params.regular,
+          program_id: this.params.programData.id
+        };
+
+        this.$http.get('/api/applications', {params: {filters: postData}})
+          .then(function(res){
+            prijavljeniPdf(res.body.data);
+          })
+
+      },
+      regular1: function(param){
+        console.log(this.applied);
+        this.params = {
+          regular: param,
+          programData: this.params.programData
+        };
+
+        /*this.$http.get('/api/program/'+this.params.programData.id+'/ability')
+          .then(function(res){
+            this.ability_test = res.data.ability_test;
+            this.applied = res.data.applied;
+          })*/
+      },
+      spremeniProgram: function(val){
+
+        this.params = {
+          regular: this.params.regular,
+          programData: val
+        };
+
+        /*this.$http.get('/api/program/'+this.params.programData.id+'/ability')
+          .then(function(res){
+            this.ability_test = res.data.ability_test;
+            this.applied = res.data.applied;
+          })*/
+      }
+    },
+    created: function() {
+      var user = JSON.parse(window.localStorage.getItem('user'));
+      this.role = user.role;
+      if(user.role == 'referent'){
+        this.faculty_id = user.faculty.data.id;
+      }
+      else {
+        this.params.programData = this.$root.programData;
+        this.faculty_id = this.params.programData.faculty_id;
+      }
+
+      /*this.$http.get('/api/program/'+this.params.programData.id+'/ability')
+        .then(function(res){
+          this.ability_test = res.data.ability_test;
+          this.applied = res.data.applied;
+          console.log(this.applied);
+        })*/
+
+      this.$http.get('/api/programs', {params: {filters: {faculty_id: this.faculty_id}}})
+        .then(function(res){
+          this.referentPrograms = res.data.data;
+        });
+      //ker ne dela $on sem uporabil $root
+    }
+  }
+
+
+
+</script>

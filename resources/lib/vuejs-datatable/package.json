@@ -1,0 +1,103 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "vuejs-datatable@^0.9.0",
+        "scope": null,
+        "escapedName": "vuejs-datatable",
+        "name": "vuejs-datatable",
+        "rawSpec": "^0.9.0",
+        "spec": ">=0.9.0 <0.10.0",
+        "type": "range"
+      },
+      "/home/vagrant/Code/college-application"
+    ]
+  ],
+  "_from": "vuejs-datatable@>=0.9.0 <0.10.0",
+  "_id": "vuejs-datatable@0.9.0",
+  "_inCache": true,
+  "_location": "/vuejs-datatable",
+  "_nodeVersion": "6.8.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/vuejs-datatable-0.9.0.tgz_1488465405297_0.12440256006084383"
+  },
+  "_npmUser": {
+    "name": "pstephan1187",
+    "email": "pstephan1187@gmail.com"
+  },
+  "_npmVersion": "3.10.8",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "vuejs-datatable@^0.9.0",
+    "scope": null,
+    "escapedName": "vuejs-datatable",
+    "name": "vuejs-datatable",
+    "rawSpec": "^0.9.0",
+    "spec": ">=0.9.0 <0.10.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vuejs-datatable/-/vuejs-datatable-0.9.0.tgz",
+  "_shasum": "4c85692ae5613ade3567ebc254a0c3c66eaae0f0",
+  "_shrinkwrap": null,
+  "_spec": "vuejs-datatable@^0.9.0",
+  "_where": "/home/vagrant/Code/college-application",
+  "author": {
+    "name": "Patrick Stephan",
+    "email": "pstephan1187@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/pstephan1187/vue-datatable/issues"
+  },
+  "dependencies": {},
+  "description": "A Vue.js component for filterable, sortable, and paginated tables.",
+  "devDependencies": {
+    "axios": "^0.15.3",
+    "laravel-mix": "^0.8.8",
+    "object-path": "^0.11.4",
+    "vue": "^2.2.1"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "4c85692ae5613ade3567ebc254a0c3c66eaae0f0",
+    "tarball": "https://registry.npmjs.org/vuejs-datatable/-/vuejs-datatable-0.9.0.tgz"
+  },
+  "gitHead": "f829718aeec3cb9b326709160d44235ce87673ac",
+  "homepage": "https://github.com/pstephan1187/vue-datatable#readme",
+  "keywords": [
+    "Vue.js",
+    "vue",
+    "datatable",
+    "table",
+    "filter",
+    "sort",
+    "sortable",
+    "paginate",
+    "pagination"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "pstephan1187",
+      "email": "pstephan1187@gmail.com"
+    }
+  ],
+  "name": "vuejs-datatable",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pstephan1187/vue-datatable.git"
+  },
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development webpack --progress --hide-modules",
+    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot",
+    "production": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "watch": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules"
+  },
+  "version": "0.9.0"
+}

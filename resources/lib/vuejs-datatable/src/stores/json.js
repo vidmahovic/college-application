@@ -4,30 +4,19 @@ export default {
 	data: () => ({
 		paginate: false,
 		filterable: false,
-		sortable: true,
-		can_resize: false,
+		sortable: false,
+		can_resize: true,
 		filter: '',
 		sort_by: '',
 		sort_dir: 'asc',
 		page: 1,
-		page_size: 30,
-		last_pageData: 1,
+		page_size: 10,
 		data: [],
-		table: null,
-		params: {
-			type: '',
-			regular: '',
-			faculty_id: '',
-			program_id: ''
-		},
-		apiUrl: '/api/programs/paginate'
+		table: null
 	}),
 	computed: {
 		last_page(){
-			return this.last_pageData;
-		},
-		visible_rows(){
-			return this.sorted_rows;
+			return Math.ceil(this.filtered_rows.length / this.page_size);
 		},
 		filtered_rows(){
 			var rows = this.data;
@@ -111,6 +100,14 @@ export default {
 
 				return sort_val;
 			}.bind(this));
+		},
+		visible_rows(){
+			if(this.paginate){
+				var beginning = this.page_size * (this.page - 1);
+				return this.sorted_rows.slice(beginning, beginning + this.page_size);
+			}
+
+			return this.sorted_rows;
 		}
 	},
 	methods: {
@@ -136,22 +133,13 @@ export default {
 		},
 		setPage(page_number, event){
 			this.page = page_number;
-
-			this.getRows(this.apiUrl, function(){
-				this.page = page_number;
-			}.bind(this));
-
 			event.target.blur();
 		},
 		setTable(table){
 			this.table = table;
 		},
 		setData(data){
-			this.params.type = data.type;
-			this.params.regular = data.regular;
-			this.params.faculty_id = data.selectedFaculty.id;
-			this.params.program_id = data.selectedProgram.id;
-			this.getRows(this.apiUrl);
+			this.data = data;
 		},
 		setFilterable(value){
 			this.filterable = value;
@@ -162,17 +150,6 @@ export default {
 		setSortable(value){
 			this.sortable = value;
 		},
-		getRows(url, callback){
-			this.$http.get(url, {params: {filters: this.params, page: this.page}})
-				.then(function(res){
-					this.data = res.data.data;
-					this.page_size = res.data.meta.pagination.per_page;
-					this.last_pageData = res.data.meta.pagination.total_pages;
-
-					if(callback) callback();
-
-				}.bind(this));
-		}
 	},
 	watch: {
 		filter(){
@@ -182,4 +159,4 @@ export default {
 			this.page = 1;
 		}
 	}
-}
+};

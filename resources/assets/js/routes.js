@@ -18,6 +18,8 @@ import VpisnaSluzbaDashboard from './components/vpisnaSluzba/Dashboard.vue'
 import VpisnaSluzbaProgrami from './components/vpisnaSluzba/Programi/Programi.vue'
 import VpisnaSluzbaProgramiUrejanje from './components/vpisnaSluzba/Programi/Urejanje.vue'
 import VpisnaSluzbaProgramiUstvari from './components/vpisnaSluzba/Programi/Ustvari.vue'
+
+import PregledVpisanih from './components/vpisnaSluzba/Programi/PregledVpisanih.vue'
 import vpisnaSluzbaIO from './components/vpisnaSluzba/IO/IO.vue'
 
 const routes = [
@@ -63,7 +65,12 @@ const routes = [
 				component: ReferentDashboard,
 				name: 'ReferentDashboard',
 				meta: {description: 'ReferentDashboard'}
-      		}
+      },
+			{
+				path: '/referent/pregled_vpisanih',
+				component: PregledVpisanih,
+				name: 'PregledVpisanih'
+			}
 		]
 	},
 	{
@@ -93,6 +100,11 @@ const routes = [
 				path: '/enrollment_service/programi/:id',
 				component: VpisnaSluzbaProgramiUrejanje,
 				name: 'VpisnaSluzbaProgramiUrejanje'
+			},
+			{
+				path: '/enrollment_service/:id/prijavljeni',
+				component: PregledVpisanih,
+				name: 'PregledVpisanih'
 			},
 			{
 				path: '/enrollment_service/io',

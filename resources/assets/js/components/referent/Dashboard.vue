@@ -5,9 +5,9 @@
               <div class="panel-heading">Referen dashboard</div>
 
               <div class="panel-body">
-                  Dashboard component2!!!
+                  <button style="padding-left: 0px; padding-right: 0px;" type="button" @click="redirect" class="btn btn-link">Preglej prijavljene</button>
               </div>
-              
+
           </div>
       </div>
   </div>
@@ -19,7 +19,12 @@
     data: function(router) {
         return {
           section: 'Referent'
-        }    
+        }
+    },
+    methods: {
+      redirect: function(){
+        this.$router.push("/referent/pregled_vpisanih");
+      }
     },
     mounted() {
       console.log('referent dashboard mounted.');

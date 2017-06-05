@@ -11,16 +11,16 @@
               <li>
                   <router-link to="/enrollment_service/io">Uvoz podatkov</router-link>
               </li>
-             
+
           </ul>
       </div>
 
     </div>
-    <div class="container">
+    <div>
         <router-view></router-view>
     </div>
   </div>
-  
+
 </template>
 
 <script>

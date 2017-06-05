@@ -33,7 +33,7 @@ Vue.use(VeeValidate)
 
 
 Vue.component('v-select', vSelect)
-Vue.component('datatable',require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
+Vue.component('datatable',require('../../../resources/lib/vuejs-datatable/src/vue-datatable.vue'))
 Vue.component('datepicker', Datepicker)
 
 
@@ -41,7 +41,7 @@ Vue.component('datepicker', Datepicker)
 //export const eventBus = new Vue();
 
 Vue.component('edit-program', {
-    template: '<button class="btn btn-xs btn-warning" @click="goToUpdatePage">Uredi</button>',
+    template: '<button class="btn btn-xs btn-warning" @click="goToUpdatePage">Podrobno</button>',
     props: ['row'],
 		methods: {
 			goToUpdatePage: function(row){
@@ -53,17 +53,14 @@ Vue.component('edit-program', {
 		}
 })
 
-var FileUpload = require('vue-upload-component');
-console.log(FileUpload)
-new Vue({
-        template: '<file-upload post-action="/post.method" put-action="/put.method"></file-upload>',
-        components: {
-            FileUpload: FileUpload
-        }
-    })
-
-
-
+Vue.component('ability_test_input', {
+    template: '<input class="form-control" type="text" @click="goToUpdatePage" />',
+    props: ['row'],
+		methods: {
+			goToUpdatePage: function(row){
+	    }
+		}
+})
 
 
 Vue.http.interceptors.push(function(request, next) {
