@@ -40,7 +40,7 @@ class AbilityController extends ApiController
                 else {
                     $applied = ApplicationAbilityTest::with('application')->where('ability_test_id', $ability->id)->get();
                     $user_ids = $applied->pluck('application')->pluck("user_id");
-                    $users = User::find($user_ids);
+                    $users = User::whereIn('id', $user_ids)->get();
 
                     /*
                     for($i = 0; $i < count($applied); $i = $i + 1){
