@@ -92,18 +92,18 @@
         console.log(this.files.splosna);
 
         //todo kam treba postat
-        // this.$http.post("api/", this.files.splosna)
-        // .then(function(data) {
-        // this.msgs.splosna.error = false;
-            // this.msgs.splosna.msg = "Podatki uspešno uvoženi";          
+        this.$http.post("api/upload/general-matura", {'general_matura': this.files.splosna})
+        .then(function(data) {
+        this.msgs.splosna.error = false;
+            this.msgs.splosna.msg = "Podatki uspešno uvoženi";          
 
-        //   console.log(data),
-        // }, function(err) {
-          // this.msgs.splosna.error = true;
-            // this.msgs.splosna.msg = err.body.message;          
+          console.log(data);
+        }, function(err) {
+          this.msgs.splosna.error = true;
+            this.msgs.splosna.msg = err.body.message;          
                 
-        //   console.log(err);
-        // })
+          console.log(err);
+        })
       },
       submitPoklicna: function(status) {
         console.log(this.files.poklicna);
