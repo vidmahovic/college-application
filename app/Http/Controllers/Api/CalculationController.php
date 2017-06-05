@@ -27,6 +27,8 @@ class CalculationController extends ApiController
 
         $failedGraduation = false;
         $failedGrades = false;
+        $failedCondition = false;
+        $points = 0;
 
         $grades = $application->grades; // M - matura, L - poklicna matura, S - preizkus sposobnosti
         $graduation_type = $application->graduation_type_id; // 1 - splošna matura,  2 - poklicna matura
@@ -37,15 +39,18 @@ class CalculationController extends ApiController
         }
 
         if(!($graduation_type == 1 || $graduation_type == 2)){
+            $points = -100;
             $failedGraduation = true;
         }
 
         if(count($grades) < 4){
+            $points = -100;
             $failedGrades = true;
         }
         else{
             for($i = 0; $i < count($grades); $i = $i + 1){
                 if($grades[$i]["grade"] < 2){
+                    $points = -100;
                     $failedGrades = true;
                 }
             }
@@ -103,18 +108,20 @@ class CalculationController extends ApiController
                             $points = $points + $curr_point;
                         }
                         else {
+                            $points = -100;
                             $failedCondition = true;
                         }
                         break;
                     case 2:
                         $grad_grades = [];
                         for($k = 0; $k < count($grades); $k = $k + 1){
-                            $sid = $grades[$i]["subject_id"];
+                            $sid = $grades[$k]["subject_id"];
                             if($sid[0] == 'M'){
-                                array_push($grad_grades,$grades[$i]);
+                                array_push($grad_grades, $grades[$k]["grade"]);
                             }
                         }
-                        $grade = self::gradePoint(max($grades["grade"]));
+
+                        $grade = self::gradePoint(max($grad_grades));
                         $curr_point = ($grade * ($condition["weight"] / 100));
                         $points = $points + $curr_point;
                         break;
@@ -135,25 +142,30 @@ class CalculationController extends ApiController
                             $score = $application_ability_test->points;
                             $min = $test->min_points;
                             $max = $test->max_points;
+
                             if($score > $min) {
                                 $curr_point = ((40 + 60 * (($score - $min) / ($max - $min)))*($condition["weight"] / 100));
                                 $points = $points + $curr_point;
                             }
                             else{
+                                $points = -100;
                                 $failedCondition = true;
                             }
                         }
                         else {
+                            $points = -100;
                             $failedCondition = true;
                         }
                         break;
                     case 5:
                         if($condition["conditions_profession_id"] != $profession){
+                            $points = -100;
                             $failedCondition = true;
                         }
                         break;
                 }
             }
+
             $applicationProgram = ApplicationsPrograms::find($wish);
             if(!$failedCondition || !$failedGraduation || !$failedGrades) {
                 $applicationProgram->points = $points;
@@ -164,7 +176,7 @@ class CalculationController extends ApiController
             $applicationProgram->save();
         }
 
-        return $application;
+        return Application::with('wishes', 'applicationsPrograms', 'grades', 'applicationAbilityTests')->find($id);
     }
 
     public static function gradeTable(){
