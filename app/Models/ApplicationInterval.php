@@ -21,7 +21,13 @@ class ApplicationInterval extends Model
         return $this->hasMany(Application::class);
     }
 
+    public function maturaScores()
+    {
+        return $this->hasMany(MaturaScore::class, 'interval_id');
+    }
+
     public function scopeCurrent($scope) {
         return $scope->where('starts_at', '<=', Carbon::now())->where('ends_at', '>=', Carbon::now());
     }
+
 }
