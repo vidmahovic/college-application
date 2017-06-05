@@ -145,5 +145,19 @@ class ApplicationTableSeeder extends Seeder
             'status' => 0,
             'choice_number' => 1
         ]);
+
+        $wish2 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "ZE20",
+            'status' => 0,
+            'choice_number' => 2
+        ]);
+
+        $wish3 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "ZE30",
+            'status' => 0,
+            'choice_number' => 3
+        ]);
     }
 }

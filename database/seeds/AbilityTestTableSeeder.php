@@ -28,6 +28,14 @@ class AbilityTestTableSeeder extends Seeder
             'updated_at' => \Carbon\Carbon::now(),
             'created_at' => \Carbon\Carbon::now()
         ]);
+
+        ApplicationAbilityTest::create([ // user -> lukineli@gmail.com, application -> 2
+            'application_id' => 2,
+            'ability_test_id' => $ability_test->id,
+            'points' => 20,
+            'updated_at' => \Carbon\Carbon::now(),
+            'created_at' => \Carbon\Carbon::now()
+        ]);
     }
 
 }
