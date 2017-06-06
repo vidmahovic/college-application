@@ -49,14 +49,17 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h3 class="modal-title">Vpis točk preizkusa sposobnosti</h3>
+          <h5>Meje točk: {{ability_test.min_points}} - {{ability_test.max_points}}</h5>
         </div>
         <div class="modal-body">
           <table v-if="applied.length != 0" class="table">
             <thead>
-              <th>#</th>
-              <th>Emšo</th>
-              <!--<th>Ime in priimek</th>-->
-              <th>Število točk</th>
+              <tr>
+                <th>#</th>
+                <th>Emšo</th>
+                <!--<th>Ime in priimek</th>-->
+                <th>Število točk</th>
+              </tr>
             </thead>
             <tbody>
               <tr v-for="(item, index) in applied">
@@ -67,6 +70,7 @@
               </tr>
             </tbody>
           </table>
+          <div v-show="showMsg" class="alert alert-danger" role="alert"> {{ msgTocke }}</div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Prekliči</button>
@@ -195,7 +199,7 @@ function prijavljeniPdf(data) {
 
   }
 
-  doc.output("datauri");
+  doc.output('dataurlnewwindow'); 
 }
 
   export default {
@@ -207,6 +211,8 @@ function prijavljeniPdf(data) {
         result: [],
         role: '',
         faculty_id: '',
+        showMsg: false,
+        msgTocke: '',
         ability_test: false,
         applied: [],
         params: {
@@ -292,7 +298,11 @@ function prijavljeniPdf(data) {
 
         this.$http.post('/api/ability/'+this.params.programData.id, {results: results1})
           .then(function(res){
-
+            this.msgTocke = "";
+            this.showMsg = false;
+          }, function(err){
+            this.msgTocke = "Ni znotraj meja!";
+            this.showMsg = true;
           })
 
       }
