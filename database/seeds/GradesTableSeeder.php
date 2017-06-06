@@ -40,9 +40,9 @@ class GradesTableSeeder extends Seeder
         // ---
 
         $grade = Grade::create([
-            'application_id' => 8,
+            'application_id' => 2,
             'subject_id' => 'L103', // slo poklicna, visja raven
-            'grade' => 2
+            'grade' => 8
         ]);
 
         $grade = Grade::create([

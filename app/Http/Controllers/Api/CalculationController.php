@@ -67,7 +67,7 @@ class CalculationController extends ApiController
         $uspeh3L = 4;
         $uspeh4L = 4;
         $grade_table = self::gradeTable();
-        $high_level_subjects = ['L103', 'L222', 'M222'];
+        $high_level_subjects = ['L103', 'L222', 'M222', 'M212', 'M812'];
 
         for($wish_index = 0; $wish_index < count($wishIds); $wish_index = $wish_index + 1){ // wish
             $wish = $wishIds[$wish_index];
@@ -137,7 +137,13 @@ class CalculationController extends ApiController
                             }
                         }
                         if($obligatory != null){
-                            $grade = self::gradePoint($obligatory["grade"]);
+                            $grade = 0;
+                            if(in_array($obligatory["subject_id"], $high_level_subjects)){
+                                $grade = self::gradePointHighLevel($obligatory["grade"]);
+                            }
+                            else{
+                                $grade = self::gradePoint($obligatory["grade"]);
+                            }
                             $curr_point = ($grade * ($condition["weight"] / 100));
                             $points = $points + $curr_point;
                         }

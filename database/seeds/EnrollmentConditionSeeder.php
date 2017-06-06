@@ -65,7 +65,7 @@ class EnrollmentConditionSeeder extends Seeder
             'faculty_program_id' => $faculty_program_id,
             'name' => 3,
             'type' => 2,
-            'conditions_subject_id' => 'L241',
+            'conditions_subject_id' => 'L103',
             'conditions_profession_id' => null,
             'weight' => 30
         ]);
