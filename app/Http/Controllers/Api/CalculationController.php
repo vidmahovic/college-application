@@ -7,11 +7,10 @@ use App\Models\Application;
 use App\Models\ApplicationsPrograms;
 use App\Models\EnrollmentCondition;
 use Dingo\Api\Http\Request;
-
+use Dingo\Api\Exception\ResourceException;
 
 class CalculationController extends ApiController
 {
-
     public function __construct(Request $request)
     {
         parent::__construct($request);
@@ -20,6 +19,10 @@ class CalculationController extends ApiController
     public function calculate($id)
     {
         $application = Application::with('wishes', 'applicationsPrograms', 'grades', 'applicationAbilityTests')->find($id);
+
+        if($application == null){
+            throw new ResourceException('Resource not found');
+        }
 
         $programIds = [];
         $programConditions = [];
@@ -113,17 +116,25 @@ class CalculationController extends ApiController
                         break;
                     case 2:
                         $general_grades = [];
+                        $general_subjects= [];
                         for($k = 0; $k < count($grades); $k = $k + 1){
                             $sid = $grades[$k]["subject_id"];
                             if($sid[0] == 'M'){
                                 array_push($general_grades, $grades[$k]["grade"]);
+                                array_push($general_subjects, $grades[$k]["subject_id"]);
                             }
                         }
                         if(empty($general_grades)){
                             $points = -100;
                         }
                         else{
-                            $grade = self::gradePoint(max($general_grades));
+                            $max_subject_index = array_keys($general_grades, max($general_grades));
+                            if(in_array($general_subjects[intval($max_subject_index[0])], $high_level_subjects)){
+                                $grade = self::gradePointHighLevel(max($general_grades));
+                            }
+                            else {
+                                $grade = self::gradePoint(max($general_grades));
+                            }
                             $curr_point = ($grade * ($condition["weight"] / 100));
                             $points = $points + $curr_point;
                         }
