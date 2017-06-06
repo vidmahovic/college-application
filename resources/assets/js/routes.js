@@ -107,6 +107,11 @@ const routes = [
 				name: 'PregledVpisanih'
 			},
 			{
+				path: '/enrollment_service/prijavljeni',
+				component: PregledVpisanih,
+				name: 'PregledVpisanih1'
+			},
+			{
 				path: '/enrollment_service/io',
 				component: vpisnaSluzbaIO,
 				name: 'vpisnaSluzbaIO'

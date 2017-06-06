@@ -21,7 +21,11 @@
         </div>
       </div>
       <div class="row marginB40">
-        <div v-if="role == 'referent'" class="col-md-12">
+        <div v-if="role != 'referent' || $route.name == 'PregledVpisanih1'" class="col-md-12">
+          <h6>Filtriranje po fakulteti:</h6>
+          <v-select v-model="params.facultyData" label="name" :options="faculties" :on-change="spremeniFakulteto"></v-select>
+        </div>
+        <div v-if="role == 'referent' || $route.name == 'PregledVpisanih1'" class="col-md-12">
           <h6>Iskanje programa:</h6>
           <v-select v-model="params.programData" label="name" :options="referentPrograms" :on-change="spremeniProgram"></v-select>
         </div>
@@ -41,7 +45,7 @@
   </div>
 
   <!-- Modal -->
-  <div id="myModal1" class="modal fade" role="dialog" ref="vuemodal">
+  <div v-if="typeof ability_test == 'object'" id="myModal1" class="modal fade" role="dialog" ref="vuemodal">
     <div class="modal-dialog">
 
       <!-- Modal content-->
@@ -199,7 +203,7 @@ function prijavljeniPdf(data) {
 
   }
 
-  doc.output('dataurlnewwindow'); 
+  doc.output('dataurlnewwindow');
 }
 
   export default {
@@ -211,13 +215,15 @@ function prijavljeniPdf(data) {
         result: [],
         role: '',
         faculty_id: '',
+        faculties: [],
         showMsg: false,
         msgTocke: '',
         ability_test: false,
         applied: [],
         params: {
           regular: '',
-          programData: ''
+          programData: '',
+          facultyData: ''
         },
         table_columns: [
           {label: '#', field: 'id'},
@@ -235,7 +241,8 @@ function prijavljeniPdf(data) {
       savePdf1: function(){
         var postData = {
           nationality_id: this.params.regular,
-          program_id: this.params.programData.id
+          program_id: this.params.programData.id,
+          faculty_id: this.params.facultyData.id
         };
 
         this.$http.get('/api/applications', {params: {filters: postData}})
@@ -245,40 +252,83 @@ function prijavljeniPdf(data) {
 
       },
       regular1: function(param){
-        console.log(this.applied);
         this.params = {
           regular: param,
-          programData: this.params.programData
+          programData: this.params.programData,
+          facultyData: this.params.facultyData
         };
-
-        this.$http.get('/api/program/'+this.params.programData.id+'/ability')
-          .then(function(res){
-            this.ability_test = res.data.ability_test;
-            this.applied = res.data.applied;
-            for(var i in this.applied){
-              if(this.applied[i].points == -1){
-                this.applied[i].points = null;
+        if(this.params.programData != undefined){
+          this.$http.get('/api/program/'+this.params.programData.id+'/ability')
+            .then(function(res){
+              this.ability_test = res.data.ability_test;
+              this.applied = res.data.applied;
+              for(var i in this.applied){
+                if(this.applied[i].points == -1){
+                  this.applied[i].points = null;
+                }
               }
-            }
-          })
+            })
+        }
+      },
+      spremeniFakulteto: function(val){
+        if(val == null){
+          this.params = {
+            regular: this.params.regular,
+            facultyData: '',
+            programData: this.params.programData
+          };
+
+          this.faculty_id = '';
+        }
+        else {
+          this.params = {
+            regular: this.params.regular,
+            facultyData: val,
+            programData: this.params.programData
+          };
+
+          this.faculty_id = val.id;
+        }
+
+
+
+
+        this.$http.get('/api/programs', {params: {filters: {faculty_id: this.faculty_id}}})
+          .then(function(res){
+            this.referentPrograms = res.data.data;
+          });
+
+
       },
       spremeniProgram: function(val){
+        if(val == null){
+          this.params = {
+            regular: this.params.regular,
+            programData: '',
+            facultyData: this.params.facultyData
+          };
+        }
+        else {
+          this.params = {
+            regular: this.params.regular,
+            programData: val,
+            facultyData: this.params.facultyData
+          };
+        }
 
-        this.params = {
-          regular: this.params.regular,
-          programData: val
-        };
-
-        this.$http.get('/api/program/'+this.params.programData.id+'/ability')
-          .then(function(res){
-            this.ability_test = res.data.ability_test;
-            this.applied = res.data.applied;
-            for(var i in this.applied){
-              if(this.applied[i].points == -1){
-                this.applied[i].points = null;
+        if(this.params.programData != undefined){
+          this.$http.get('/api/program/'+this.params.programData.id+'/ability')
+            .then(function(res){
+              this.ability_test = res.data.ability_test;
+              this.applied = res.data.applied;
+              for(var i in this.applied){
+                if(this.applied[i].points == -1){
+                  this.applied[i].points = null;
+                }
               }
-            }
-          })
+            })
+        }
+
       },
       posljiTocke: function(){
         var results1 = [];
@@ -310,30 +360,39 @@ function prijavljeniPdf(data) {
     created: function() {
       var user = JSON.parse(window.localStorage.getItem('user'));
       this.role = user.role;
+
       if(user.role == 'referent'){
         this.faculty_id = user.faculty.data.id;
       }
-      else {
+      else if(this.$route.name == 'PregledVpisanih') {
         this.params.programData = this.$root.programData;
         this.faculty_id = this.params.programData.faculty_id;
       }
 
-      this.$http.get('/api/program/'+this.params.programData.id+'/ability')
-        .then(function(res){
-          this.ability_test = res.data.ability_test;
-          this.applied = res.data.applied;
-          for(var i in this.applied){
-            if(this.applied[i].points == -1){
-              this.applied[i].points = null;
+      if(this.$route.name != 'PregledVpisanih1'){
+        this.$http.get('/api/program/'+this.params.programData.id+'/ability')
+          .then(function(res){
+            this.ability_test = res.data.ability_test;
+            this.applied = res.data.applied;
+            for(var i in this.applied){
+              if(this.applied[i].points == -1){
+                this.applied[i].points = null;
+              }
             }
-          }
-        })
+          })
+      }
+      else{
+        this.$http.get('/api/faculties')
+          .then(function(res){
+            this.faculties = res.data.data;
+          });
+      }
 
       this.$http.get('/api/programs', {params: {filters: {faculty_id: this.faculty_id}}})
         .then(function(res){
           this.referentPrograms = res.data.data;
         });
-      //ker ne dela $on sem uporabil $root
+
     }
   }
 
