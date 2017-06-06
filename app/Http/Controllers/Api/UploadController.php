@@ -26,6 +26,9 @@ class UploadController extends ApiController
 
     public function generalMaturaScores()
     {
+
+        dd($this->request->hasFile('general_matura'));
+        
         if(! $this->request->user()->isEnrollmentService())
             throw new AuthorizationException('Unauthorized access');
 

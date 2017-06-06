@@ -232,6 +232,7 @@ function prijavljeniPdf(data) {
           {label: 'Mesto', field: 'mailingAddress.data.name'},
           {label: 'Državljanstvo', field: 'citizen.data.name'},
           {label: 'Način zaključka srednje šole', field: 'graduation.data.name'},
+          {label: '', component: 'points_calculation'}
 
         ],
         prijavljeni_store: prijavljeni_store

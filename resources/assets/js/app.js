@@ -62,9 +62,24 @@ Vue.component('ability_test_input', {
 		}
 })
 
+Vue.component('points_calculation', {
+    template: '<button class="btn btn-xs btn-warning" @click="goToUpdatePage">Podrobno</button>',
+    props: ['row'],
+		methods: {
+			goToUpdatePage: function(row){
+
+				this.$root.userApplicationPoints = this.row;
+
+				this.$router.push("/enrollment_service/calculation/"+this.row.id)
+	    }
+		}
+})
+
 
 Vue.http.interceptors.push(function(request, next) {
 
+
+	//request.headers.set('Content-Type','multipart/form-data');
 	request.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
   	next();
 });

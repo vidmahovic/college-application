@@ -9,11 +9,18 @@
                 <h3>Uvoz podatkov za splošno maturo</h3>
                 <div>
                    
-                  <div class="input-group">
-                    <input type="file" @change="splosnaChange">
-                    <span class="input-group-addon" id="basic-addon2" style="padding:0px;">
+                  <div >
+
+                  <!--<form method="post" action="/api/upload/general-matura" enctype="multipart/form-data"> -->
+                    <label> Maturanti</label>
+                      <input type="file" name="general_matura" @change="splosnaChange">
+                      
+                    <label>Točke</label>
+                      <input type="file" name="general_matura_subjects" @change="splosnaChange_tocke">
+                  
+                    <!--<button type="submit" > Shrani</button>-->
                     <div class="btn btn-success" v-on:click="submitSplosna">Uvozi</div>
-                    </span>
+                  <!--</form>-->
                   </div>
                   <p v-show="msgs.splosna.display" v-bind:class="{'bg-danger': msgs.splosna.error, 'bg-success': !msgs.splosna.error}" style="padding: 10px; width: 30%; margin-top: 15px;">
                   {{ msgs.splosna.msg }}
@@ -48,7 +55,10 @@
       return {
         files: {
           splosna: null,
-          poklica: null
+          splosna_tocke: null,
+          poklica: null,
+          poklicna_tocke: null
+
         },
         msgs: {
           splosna: {
@@ -72,11 +82,23 @@
           return;
         this.createFile(files[0], 'splosna');
       },
+      splosnaChange_tocke(e) {
+        var files = e.target.files || e.dataTransfer.files;
+        if (!files.length)
+          return;
+        this.createFile(files[0], 'splosna_tocke');
+      },
       poklicnaChange(e) {
         var files = e.target.files || e.dataTransfer.files;
         if (!files.length)
           return;
         this.createFile(files[0], 'poklicna');
+      },
+      poklicnaChange_tocke(e) {
+        var files = e.target.files || e.dataTransfer.files;
+        if (!files.length)
+          return;
+        this.createFile(files[0], 'poklicna_tocke');
       },
       createFile(file, type) {
         var image = new Image();
@@ -92,7 +114,9 @@
         console.log(this.files.splosna);
 
         //todo kam treba postat
-        this.$http.post("api/upload/general-matura", {'general_matura': this.files.splosna})
+        
+        
+        this.$http.post("api/upload/general-matura", {'general_matura': this.files.splosna, "general_matura_subjects": this.files.splosna_tocke})
         .then(function(data) {
         this.msgs.splosna.error = false;
             this.msgs.splosna.msg = "Podatki uspešno uvoženi";          

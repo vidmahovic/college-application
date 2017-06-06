@@ -21,6 +21,7 @@ import VpisnaSluzbaProgramiUstvari from './components/vpisnaSluzba/Programi/Ustv
 
 import PregledVpisanih from './components/vpisnaSluzba/Programi/PregledVpisanih.vue'
 import vpisnaSluzbaIO from './components/vpisnaSluzba/IO/IO.vue'
+import Calculation from './components/vpisnaSluzba/Programi/Calculation.vue'
 
 const routes = [
 	{
@@ -84,7 +85,7 @@ const routes = [
 				component: VpisnaSluzbaDashboard,
 				name: 'VpisnaSluzbaDashboard',
 				meta: {description: 'VpisnaSluzbaDashboard'}
-      },
+      		},
 			{
 				path: '/enrollment_service/programi',
 				component: VpisnaSluzbaProgrami,
@@ -115,7 +116,12 @@ const routes = [
 				path: '/enrollment_service/io',
 				component: vpisnaSluzbaIO,
 				name: 'vpisnaSluzbaIO'
-			}
+			},
+			{
+				path: '/enrollment_service/calculation/:id',
+				component: Calculation,
+				name: 'Calculation'
+			}			
 		]
 	},
 	{
