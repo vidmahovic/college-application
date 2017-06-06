@@ -38,7 +38,7 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 3,
+            'name' => 2,
             'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
@@ -84,6 +84,32 @@ class EnrollmentConditionSeeder extends Seeder
             'conditions_subject_id' => null,
             'conditions_profession_id' => 57311,
             'weight' => null
+        ]);
+
+        $faculty_program_id = 'ZE30';
+        EnrollmentCondition::create([ // splosna matura
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 0,
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 20
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 1,
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 20
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 4,
+            'type' => 0,
+            'conditions_subject_id' => 'S251',
+            'conditions_profession_id' => null,
+            'weight' => 60
         ]);
 
         // - prosojnice: FRI, FMF, FU, BF, FA, FF
@@ -171,11 +197,11 @@ class EnrollmentConditionSeeder extends Seeder
 
         // FMF
 
-        $faculty_program_id = 'SZ00'; // FMF Matematika UN
+        $faculty_program_id = 'SZ00'; // FMF Matematika UN splosna matura
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
             'name' => 1,
-            'type' => 0,
+            'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
             'weight' => 20
@@ -183,18 +209,59 @@ class EnrollmentConditionSeeder extends Seeder
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
             'name' => 0,
-            'type' => 0,
+            'type' => 1,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
             'weight' => 30
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 2,
-            'type' => 0,
+            'name' => 3,
+            'type' => 1,
+            'conditions_subject_id' => 'M401',
+            'conditions_profession_id' => null,
+            'weight' => 30
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 3,
+            'type' => 1,
+            'conditions_subject_id' => 'X401',
+            'conditions_profession_id' => null,
+            'weight' => 20
+        ]);
+
+        EnrollmentCondition::create([ // FMF Matematika UN poklicna matura
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 0,
+            'type' => 2,
             'conditions_subject_id' => null,
             'conditions_profession_id' => null,
-            'weight' => 50
+            'weight' => 20
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 1,
+            'type' => 2,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 10
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 3,
+            'type' => 2,
+            'conditions_subject_id' => 'M401',
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 3,
+            'type' => 2,
+            'conditions_subject_id' => 'X401',
+            'conditions_profession_id' => null,
+            'weight' => 30
         ]);
 
         $faculty_program_id = 'TH00'; // FMF Praktična Matematika
@@ -216,11 +283,19 @@ class EnrollmentConditionSeeder extends Seeder
         ]);
         EnrollmentCondition::create([
             'faculty_program_id' => $faculty_program_id,
-            'name' => 2,
+            'name' => 3,
             'type' => 0,
-            'conditions_subject_id' => null,
+            'conditions_subject_id' => 'M401',
             'conditions_profession_id' => null,
-            'weight' => 50
+            'weight' => 30
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 3,
+            'type' => 0,
+            'conditions_subject_id' => 'X401',
+            'conditions_profession_id' => null,
+            'weight' => 30
         ]);
 
         // FU
@@ -288,7 +363,7 @@ class EnrollmentConditionSeeder extends Seeder
             'weight' => 60
         ]);
 
-        EnrollmentCondition::create([  // BF Gozdarstvo UN, poklica matura
+        EnrollmentCondition::create([  // BF Gozdarstvo UN, poklicna matura
             'faculty_program_id' => $faculty_program_id,
             'name' => 1,
             'type' => 2,
