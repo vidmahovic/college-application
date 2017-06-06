@@ -24,8 +24,7 @@ class CalculationController extends ApiController
         $programIds = [];
         $programConditions = [];
         $wishIds = [];
-		
-        $points = 0;
+
 
         $grades = $application->grades; // M - matura, L - poklicna matura, S - preizkus sposobnosti
         $graduation_type = $application->graduation_type_id; // 1 - splošna matura,  2 - poklicna matura
@@ -35,18 +34,19 @@ class CalculationController extends ApiController
             $ability_test = null;
         }
 
+        $failed = false;
+
         if(!($graduation_type == 1 || $graduation_type == 2)){
-            $points = -100;
+            $failed = true;
         }
 
         if(count($grades) < 4){
-            $points = -100;
-            $failedGrades = true;
+            $failed = true;
         }
         else{
             for($i = 0; $i < count($grades); $i = $i + 1){
                 if($grades[$i]["grade"] < 2){
-                    $points = -100;
+                    $failed = true;
                 }
             }
         }
@@ -67,10 +67,16 @@ class CalculationController extends ApiController
         $uspeh3L = 4;
         $uspeh4L = 4;
         $grade_table = self::gradeTable();
+        $high_level_subjects = ['L103', 'L222', 'M222'];
 
         for($wish_index = 0; $wish_index < count($wishIds); $wish_index = $wish_index + 1){ // wish
             $wish = $wishIds[$wish_index];
-            $points = 0;
+            if($failed){
+                $points = -100;
+            }
+            else {
+                $points = 0;
+            }
             for($j = 0; $j < count($programConditions[$wish_index]); $j = $j + 1){ // condition of certain wish
                 $condition = $programConditions[$wish_index][$j];
                 $curr_point = 0;
@@ -106,26 +112,37 @@ class CalculationController extends ApiController
                         }
                         break;
                     case 2:
-                        $grad_grades = [];
+                        $general_grades = [];
                         for($k = 0; $k < count($grades); $k = $k + 1){
                             $sid = $grades[$k]["subject_id"];
                             if($sid[0] == 'M'){
-                                array_push($grad_grades, $grades[$k]["grade"]);
+                                array_push($general_grades, $grades[$k]["grade"]);
                             }
                         }
-
-                        $grade = self::gradePoint(max($grad_grades));
-                        $curr_point = ($grade * ($condition["weight"] / 100));
-                        $points = $points + $curr_point;
+                        if(empty($general_grades)){
+                            $points = -100;
+                        }
+                        else{
+                            $grade = self::gradePoint(max($general_grades));
+                            $curr_point = ($grade * ($condition["weight"] / 100));
+                            $points = $points + $curr_point;
+                        }
                         break;
                     case 3:
+                        $obligatory = null;
                         for($i = 0; $i < count($grades); $i = $i + 1){
-                            $sid = $grades[$i]["id"];
+                            $sid = $grades[$i]["subject_id"];
                             if($sid == $condition["conditions_subject_id"]){
-                                $grade = self::gradePoint($grades[$i]["grade"]);
-                                $curr_point = ($grade * ($condition["weight"] / 100));
-                                $points = $points + $curr_point;
+                                $obligatory = $grades[$i];
                             }
+                        }
+                        if($obligatory != null){
+                            $grade = self::gradePoint($obligatory["grade"]);
+                            $curr_point = ($grade * ($condition["weight"] / 100));
+                            $points = $points + $curr_point;
+                        }
+                        else {
+                            $points = -100;
                         }
                         break;
                     case 4:
@@ -218,6 +235,34 @@ class CalculationController extends ApiController
                 $gradePoint = 80;
                 break;
             case 5:
+                $gradePoint = 100;
+                break;
+        }
+        return $gradePoint;
+    }
+
+    public static function gradePointHighLevel($val){
+        $gradePoint = 0;
+        switch($val){
+            case 2:
+                $gradePoint = 40;
+                break;
+            case 3:
+                $gradePoint = 50;
+                break;
+            case 4:
+                $gradePoint = 60;
+                break;
+            case 5:
+                $gradePoint = 70;
+                break;
+            case 6:
+                $gradePoint = 80;
+                break;
+            case 7:
+                $gradePoint = 90;
+                break;
+            case 8:
                 $gradePoint = 100;
                 break;
         }
