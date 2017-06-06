@@ -16,9 +16,15 @@ class CalculationController extends ApiController
         parent::__construct($request);
     }
 
+    public function index(){
+        $applications = Application::with('applicant')->get();
+
+        return $applications;
+    }
+
     public function calculate($id)
     {
-        $application = Application::with('wishes', 'applicationsPrograms', 'grades', 'applicationAbilityTests')->find($id);
+        $application = Application::with('wishes', 'grades')->find($id);
 
         if($application == null){
             throw new ResourceException('Resource not found');
@@ -27,7 +33,6 @@ class CalculationController extends ApiController
         $programIds = [];
         $programConditions = [];
         $wishIds = [];
-
 
         $grades = $application->grades; // M - matura, L - poklicna matura, S - preizkus sposobnosti
         $graduation_type = $application->graduation_type_id; // 1 - splošna matura,  2 - poklicna matura
@@ -200,7 +205,7 @@ class CalculationController extends ApiController
             $applicationProgram->save();
         }
 
-        return Application::with('wishes', 'applicationsPrograms', 'grades', 'applicationAbilityTests')->find($id);
+        return Application::with('wishes', 'grades', 'applicationAbilityTests')->find($id);
     }
 
     public static function gradeTable(){

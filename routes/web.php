@@ -31,7 +31,8 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
 
-        $api->get('applications/{id}/calculate', 'CalculationController@calculate');
+        //$api->get('applications/{id}/calculate', 'CalculationController@calculate');
+        //$api->get('applications/calculate', 'CalculationController@index');
 
         // Authentication routes
         $api->post('register', 'AuthController@register');
@@ -80,6 +81,10 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             $api->post('upload/general-matura-subjects', 'UploadController@generalMaturaSubjectScores');
             $api->post('upload/vocational-matura', 'UploadController@vocationalMaturaScores');
             $api->post('upload/vocational-matura-subjects', 'UploadController@vocationalMaturaSubjectScores');
+
+            // CALCULATION
+            $api->get('applications/{id}/calculate', 'CalculationController@calculate');
+            $api->get('applications/calculate', 'CalculationController@index');
         });
     });
 });
