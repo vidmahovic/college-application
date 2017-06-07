@@ -76,13 +76,13 @@
                   <div class="form-group">
                     <input type="password" v-model="reg.repswd" v-validate="'required|confirmed:password'"  name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Potrdi geslo">
                     <p class="text-danger" v-if="errors.has('confirm-password')">{{ errors.first('confirm-password') }}</p>
-                  
+
 
                   </div>
                    <p v-show="registerError" class="bg-danger" style="padding-top: 10px; padding-bottom: 10px; margin-top: 15px;">  {{ registerMsg }} </p>
-                   
+
                   <div class="form-group">
-                     
+
                     <div class="row">
                       <div class="col-sm-6 col-sm-offset-3">
                         <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Registriraj">
@@ -137,8 +137,9 @@ module.exports = {
             }
 
             this.$parent.user = user;
+            this.$root.user = user;
 
-            
+
             window.localStorage.setItem('user', JSON.stringify(user));
             window.localStorage.setItem('token', res.body.meta.api_token);
 
@@ -158,7 +159,7 @@ module.exports = {
 
         this.$validator.validateAll();
         if (this.errors.any()) {
-          console.log("VALIDATION FAILED") 
+          console.log("VALIDATION FAILED")
           return;
         }
 
@@ -171,10 +172,10 @@ module.exports = {
           .then(function(res){
 
             this.registerError = false;
-            
+
             console.log(res);
           }, function(err){
-            
+
             let errs = err.body.errors;
             Object.entries(errs).forEach(
               ([key, value]) => this.registerMsg = this.registerMsg.concat(value)
@@ -185,7 +186,7 @@ module.exports = {
 
             console.log(err);
           });
-       
+
       }
     },
     mounted() {
@@ -203,7 +204,7 @@ module.exports = {
       $(this).addClass('active');
       e.preventDefault();
     });
-  }  
+  }
 }
 
 </script>

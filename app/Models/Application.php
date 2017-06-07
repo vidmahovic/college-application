@@ -120,7 +120,7 @@ class Application extends Model
     {
         return $this
             ->belongsToMany(FacultyProgram::class, 'applications_programs', 'application_id', 'faculty_program_id')
-            ->withPivot('status', 'choice_number');
+            ->withPivot('status', 'choice_number', 'points');
     }
 
     public function firstWish()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\AbilityTest;
+use App\User;
 use App\Models\Application;
 use App\Models\ApplicationAbilityTest;
 use App\Models\ApplicationsPrograms;
@@ -28,6 +29,7 @@ class AbilityController extends ApiController
         $conditions = EnrollmentCondition::where('faculty_program_id', $id)->get();
         $ability = false;
         $applied = null;
+        $users = [];
 
         for($i = 0; $i < count($conditions); $i = $i + 1){
             if($conditions[$i]["name"] == 4){
@@ -36,14 +38,24 @@ class AbilityController extends ApiController
                     $ability = true;
                 }
                 else {
-                    $applied = ApplicationAbilityTest::where('ability_test_id', $ability->id)->get();
+                    $applied = ApplicationAbilityTest::with('application')->where('ability_test_id', $ability->id)->get();
+                    $user_ids = $applied->pluck('application')->pluck("user_id");
+                    $users = User::whereIn('id', $user_ids)->get();
+
+                    /*
+                    for($i = 0; $i < count($applied); $i = $i + 1){
+                        $curr = $applied[$i];
+                        $curr["name"] = $users[$i];
+                    }
+                    */
                 }
             }
         }
 
         return $this->response->array([
             'ability_test'=> $ability,
-            'applied' => $applied
+            'applied' => $applied,
+            'users' => $users
         ]);
     }
 
@@ -96,7 +108,7 @@ class AbilityController extends ApiController
         $results = $this->request->input('results');
 
         if($results == null){
-            return $this->response->errorBadRequest("You must enter results of the test");
+            return $this->response->errorBadRequest("Vnesite rezultate preizkusa!");
         }
 
         $applications = Application::all()->pluck('id')->toArray();
@@ -105,11 +117,11 @@ class AbilityController extends ApiController
             $curr = $results[$i];
 
             if(!in_array($curr["aid"], $applications)){
-                return $this->response->errorBadRequest("Invalid application id!");
+                return $this->response->errorBadRequest("Neveljavna vpisnica!");
             }
 
             if($curr["points"] > $ability_test->max_points || $curr["points"] < -1){
-                return $this->response->errorBadRequest("Points must be between ability test min/max points!");
+                return $this->response->errorBadRequest("Točke morajo biti med mejami!");
             }
         }
 

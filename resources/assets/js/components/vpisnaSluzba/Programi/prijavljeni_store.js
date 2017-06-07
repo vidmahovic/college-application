@@ -15,12 +15,11 @@ export default {
 		data: [],
 		table: null,
 		params: {
-			type: '',
-			regular: '',
-			faculty_id: '',
-			program_id: ''
+			program_id: '',
+      nationality_id: '',
+			faculty_id: ''
 		},
-		apiUrl: '/api/programs/paginate'
+		apiUrl: '/api/applications/paginate'
 	}),
 	computed: {
 		last_page(){
@@ -147,10 +146,9 @@ export default {
 			this.table = table;
 		},
 		setData(data){
-			this.params.type = data.type;
-			this.params.regular = data.regular;
-			this.params.faculty_id = data.selectedFaculty.id;
-			this.params.program_id = data.selectedProgram.id;
+      this.params.program_id = data.programData.id;
+      this.params.nationality_id = data.regular;
+			this.params.faculty_id = data.facultyData.id;
 			this.getRows(this.apiUrl);
 		},
 		setFilterable(value){
@@ -165,10 +163,10 @@ export default {
 		getRows(url, callback){
 			this.$http.get(url, {params: {filters: this.params, page: this.page}})
 				.then(function(res){
+          console.log(res.data);
 					this.data = res.data.data;
 					this.page_size = res.data.meta.pagination.per_page;
 					this.last_pageData = res.data.meta.pagination.total_pages;
-
 					if(callback) callback();
 
 				}.bind(this));

@@ -76,6 +76,10 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             // ENROLLMENT SERVICE (FILE UPLOAD)
             $api->post('upload/general-matura', 'UploadController@storeGeneralMatura');
             $api->post('upload/vocational-matura', 'UploadController@storeVocationalMatura');
+
+            // CALCULATION
+            $api->get('applications/{id}/calculate', 'CalculationController@calculate');
+            $api->get('applications/calculate', 'CalculationController@index');
         });
     });
 });

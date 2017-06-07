@@ -11,10 +11,10 @@ class ApplicationAbilityTest extends Model // PIVOT MED TESTOM SPOSOBNOSTI IN PR
     protected $guarded = ['id'];
 
     public function abilityTest(){
-        return $this->belongsTo(AbilityTest::class, 'application_id');
+        return $this->belongsTo(AbilityTest::class, 'ability_test_id');
     }
 
     public function application(){
-        return $this->belongsTo(Application::class, 'ability_test_id');
+        return $this->belongsTo(Application::class, 'application_id');
     }
 }

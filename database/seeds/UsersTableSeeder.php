@@ -93,6 +93,7 @@ class UsersTableSeeder extends Seeder
         // --- id = 9
         User::create([
             'email' => 'rok.zidarn@gmail.com',
+            'name' => 'Rok Zidarn',
             'username' => 'rokzidarn',
             'password' => bcrypt('rokzidarn9'),
             'activated_at' => Carbon::now(),
@@ -102,6 +103,7 @@ class UsersTableSeeder extends Seeder
         // --- id = 10
         User::create([
             'email' => 'luka.zidarn@gmail.com',
+            'name' => 'Luka Zidarn',
             'username' => 'lukazidarn',
             'password' => bcrypt('lukazidarn10'),
             'activated_at' => Carbon::now(),
