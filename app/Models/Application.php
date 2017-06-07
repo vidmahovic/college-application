@@ -123,6 +123,11 @@ class Application extends Model
             ->withPivot('status', 'choice_number', 'points');
     }
 
+    public function acceptedWish()
+    {
+        return $this->wishes()->wherePivot('status', true);
+    }
+
     public function firstWish()
     {
         return $this->wishes()->wherePivot('choice_number', 1);
@@ -158,6 +163,20 @@ class Application extends Model
 
     public function scopeActive($scope) {
         return $scope->whereIn('applications.status', ['created', 'saved']);
+    }
+
+    public function scopeAccepted($query) {
+        return $query->has('acceptedWish');
+    }
+
+    public function scopeFromEuOrSlovenia($query)
+    {
+        return $query->whereIn('citizen_id', Citizen::fromSloveniaOrEu()->pluck('id')->toArray());
+    }
+
+    public function scopeFromOtherCountries($query)
+    {
+        return $query->whereIn('citizen_id', Citizen::fromOtherCountries()->pluck('id')->toArray());
     }
 
     public static function createTemplate(User $applicant)

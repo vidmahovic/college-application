@@ -56,7 +56,7 @@ class GeneralScoreParser extends MaturaFileParser
                 break;
             case 7:
                 // Store new general matura score, but only emso, first_name, last_name and general_matura bool
-                $line['general_matura'] = false;
+                $line['general_matura'] = null;
                 MaturaScore::create(array_only($line, ['emso', 'first_name', 'last_name', 'general_matura']));
                 break;
         }
