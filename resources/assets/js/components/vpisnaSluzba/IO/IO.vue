@@ -19,8 +19,37 @@
                   
                     <div v-show="files.splosna != null && files.splosna_tocke != null" class="btn btn-success" v-on:click="submitSplosna">Uvozi</div>
                   </div>
-                  <p v-show="msgs.splosna.display" v-bind:class="{'bg-danger': msgs.splosna.error, 'bg-success': !msgs.splosna.error}" style="padding: 10px; width: 30%; margin-top: 15px;">
+                  <p v-if="msgs.splosna.display" v-bind:class="{'bg-danger': msgs.splosna.error, 'bg-success': !msgs.splosna.error}" style="padding: 10px; width: 30%; margin-top: 15px;">
                   {{ msgs.splosna.msg }}
+                  <div v-if="msgs.splosna.error">
+                    
+                      <ul>
+                      <li v-for="e in msgs.splosna.errList">{{e.emso}} {{e.name}}</li>
+                      </ul>
+                    
+                  </div>
+                  <div v-if="splosnaInfo.candidates.all != null">
+                  <label>Kandidati</label>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Vsi</th>
+                        <th>Novi</th>
+                        <th>Posodobljeni</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{splosnaInfo.candidates.all}}</td>
+                        <td>{{splosnaInfo.candidates.new}}</td>
+                        <td>{{splosnaInfo.candidates.updated}}</td>
+                        
+                      </tr>
+                       
+                    </tbody>
+                    </table>
+                    </div>
                 </p>
                 </div>
 
@@ -38,8 +67,35 @@
                     </span>
                   </div>
                 </div>
-                <p v-show="msgs.poklicna.display" v-bind:class="{'bg-danger': msgs.poklicna.error, 'bg-success': !msgs.poklicna.error}" style="padding: 10px; width: 30%; margin-top: 15px;">
+                <p v-if="msgs.poklicna.display" v-bind:class="{'bg-danger': msgs.poklicna.error, 'bg-success': !msgs.poklicna.error}" style="padding: 10px; width: 30%; margin-top: 15px;">
                   {{ msgs.poklicna.msg }}
+                  <div v-if="msgs.poklicna.error">
+                    <div v-for="e in msgs.poklicna.errList">
+                      {{e}}
+                    </div>
+                  </div>
+                  <div v-if="poklicnaInfo.candidates.all != null">
+                  <label>Kandidati</label>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Vsi</th>
+                        <th>Novi</th>
+                        <th>Posodobljeni</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{poklicnaInfo.candidates.all}}</td>
+                        <td>{{poklicnaInfo.candidates.new}}</td>
+                        <td>{{poklicnaInfo.candidates.updated}}</td>
+                        
+                      </tr>
+                       
+                    </tbody>
+                    </table>
+                    </div>
                 </p>
       
               </div>
@@ -65,12 +121,28 @@
           splosna: {
             display: false,
             error: false,
-            msg: ""
+            msg: "",
+            errList : []
           },
           poklicna: {
             display: false,
             error:false,
-            msg: ""
+            msg: "",
+            errList : []
+          }
+        },
+        splosnaInfo: {
+          candidates: {
+            all: null,
+            new: null,
+            updated: null
+          }
+        },
+        poklicnaInfo: {
+          candidates: {
+            all: null,
+            new: null,
+            updated: null
           }
         }
         
@@ -116,34 +188,63 @@
         let splosna = this.files.splosna.split(",")[1];
         let splosna_tocke = this.files.splosna_tocke.split(",")[1]
         this.$http.post("api/upload/general-matura", {'general_matura': splosna, "general_matura_subjects": splosna_tocke})
-        .then(function(data) {
-        this.msgs.splosna.error = false;
-            this.msgs.splosna.msg = "Podatki uspešno uvoženi";          
+        .then(function(response) {
+              
 
-          console.log(data);
-        }, function(err) {
+            
+
+          this.splosnaInfo = response.body.data;
+          if(!this.isValidationOk(response.body.data)) {
+            this.msgs.splosna.error = true;
+            this.msgs.splosna.msg = "Napaka pri validaciji:"
+            this.msgs.splosna.errList = response.body.data.errors.data;
+          }else{
+            this.msgs.splosna.error = false;  
+            this.msgs.splosna.msg = "Podatki uspešno uvoženi";
+            this.msgs.splosna.errList = [];   
+          }
+          this.msgs.splosna.display = true;
+          
+        },function(err) {
+            
+          this.msgs.splosna.display = true;
           this.msgs.splosna.error = true;
-            this.msgs.splosna.msg = err.body.message;          
-                
-          console.log(err);
+          this.msgs.splosna.msg = "Napaka pri uvozu datotek";
         });
       },
       submitPoklicna: function(status) {
-        console.log(this.files.poklicna);
-        //todo kam treba postat
+        
         let poklicna = this.files.poklicna.split(",")[1];
         let poklicna_tocke = this.files.poklicna_tocke.split(",")[1];
+
         this.$http.post("api/upload/vocational-matura", {'vocational_matura': poklicna, 'vocational_matura_subjects': poklicna_tocke})
-        .then(function(data) {
-        this.msgs.poklicna.error = false;
-            this.msgs.poklicna.msg = "Podatki uspešno uvoženi";          
+        .then(function(response) {
         
-          console.log(data);
-        }, function(err) {
+
+          this.poklicnaInfo = response.body.data;
+          if(!this.isValidationOk(response.body.data)) {
             this.msgs.poklicna.error = true;
-            this.msgs.poklicna.msg = err.body.message;          
-          console.log(err);
+            this.msgs.poklicna.msg = "Napaka pri validaciji:"
+            this.msgs.poklicna.errList = response.body.data.errors.data;
+          }else{
+            this.msgs.poklicna.error = false;  
+            this.msgs.poklicna.msg = "Podatki uspešno uvoženi";
+            this.msgs.poklicna.errList = [];   
+          }
+          this.msgs.poklicna.display = true;
+
+        }, function(err) {
+          this.msgs.poklicna.error = true;
+          this.msgs.poklicna.msg = err.body.message;          
+          this.msgs.poklicna.display = true;          
         });
+      },
+      isValidationOk: function(data) {
+
+        if("errors" in data){
+          if(data.errors.data.length > 0) return false;
+        }
+        return true;
       }
      
     },

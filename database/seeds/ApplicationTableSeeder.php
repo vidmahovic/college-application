@@ -377,8 +377,8 @@ class ApplicationTableSeeder extends Seeder
             'citizen_id' => 0,
             'graduation_type_id' => 0,
             'status' => "filed",
-            'district_id' => 61,
-            'country_id' => 705,
+            'district_id' => 0,
+            'country_id' => 999,
             'phone' => 041251307
         ]);
         $permanent = ApplicationCity::create([
