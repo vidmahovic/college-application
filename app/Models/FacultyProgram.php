@@ -40,6 +40,10 @@ class FacultyProgram extends Model // PROGRAM
             'application_id')->withPivot('status', 'choice_number');
     }
 
+    public function applicationsPrograms() {
+        return $this->hasMany(ApplicationsPrograms::class);
+    }
+
     public function enrollmentConditions(){
         return $this->hasMany(EnrollmentCondition::class)->orderBy('type');
     }
