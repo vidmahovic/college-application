@@ -15,9 +15,8 @@ class ScoreTransformer extends Fractal\TransformerAbstract
 
     public function transform($item) {
         return [
-            'total' => $item->total,
-            'new' => $item->new,
-            'updated' => $item->updated,
+            'candidates' => $item->candidates,
+            'subjects' => $item->subjects
         ];
     }
 
@@ -25,5 +24,22 @@ class ScoreTransformer extends Fractal\TransformerAbstract
         //dd($item->errors);
         if(count($item->errors))
             return $this->collection(collect($item->errors), new ScoreErrorTransformer);
+    }
+
+    public function includeCandidates($item) {
+        $candidates = $item->candidates;
+        return $this->array([
+            'total' => $candidates['total'],
+            'successful' => $candidates['successful']
+        ]);
+    }
+
+    public function includeSubjects($item) {
+        $subjects = $item->subjects;
+        return $this->array([
+            'total' => $subjects['total'],
+            'new' => $subjects['new'],
+            'updated' => $subjects['updated']
+        ]);
     }
 }

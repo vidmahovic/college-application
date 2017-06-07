@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 /**
  * Class MaturaScore
@@ -14,7 +15,8 @@ class MaturaScore extends Model
 {
     public $timestamps = false;
 
-    protected $fillable = ['first_name', 'last_name', 'middle_school_id', 'profession_id', 'interval_id'];
+    protected $fillable = ['emso','first_name', 'last_name', 'middle_school_id', 'profession_id', 'interval_id', 'matura_points',
+        'matura_score', 'matura_done', 'general_matura', 'third_grade_mark', 'fourth_grade_mark'];
 
     public function interval()
     {
@@ -31,11 +33,11 @@ class MaturaScore extends Model
         return $this->belongsTo(MiddleSchool::class, 'middle_school_id');
     }
 
-    public function subjectGrades()
+    public function subjects()
     {
         return $this->belongsToMany(
-            Grade::class,
-            'subject_grade',
+            Subject::class,
+            'subject_score',
             'matura_score_id',
             'subject_id')->withPivot(['matura_mark', '3_grade_mark', '4_grade_mark']);
     }
@@ -48,68 +50,71 @@ class MaturaScore extends Model
         return $query->where('general_matura', false);
     }
 
-    public static function storeScores(Collection $scores)
+    public static function storeScores(array $scores)
     {
-        $new = 0;
-        $updated = 0;
+        $processed = 0;
 
         foreach($scores as $score) {
 
             $s = static::where('emso', $score['emso'])->first();
 
-            if($score['matura_points'] === '') {
-                // Ignore altogether... Data for this entity is in the other file
-                // Za te kandidate vemo, da opravljajo samo dodaten maturitetni predmet, imajo pa poklicno maturo (so v datoteki POKLMAT.txt)
-//                $s = ApplicationInterval::current()->first()->maturaScores()->firstOrCreate(['emso' => $score['emso']],
-//                    [
-//                        'first_name' => $score['first_name'],
-//                        'last_name' => $score['last_name'],
-//                        'middle_school_id' => $score['middle_school_id'],
-//                        'profession_id' => $score['profession_id'],
-//                        'interval_id' => ApplicationInterval::current()->first()->id
-//                    ]
-//                );
-
-                $updated++;
-            } else {
-                // Create process...
-                if($s == null) {
+            if ($score['matura_points'] === '') {
+                if ($s === null) {
                     $s = new static;
                     $s->emso = $score['emso'];
+                    $s->first_name = $score['first_name'];
+                    $s->last_name = $score['last_name'];
+                    $s->save();
+                    $processed++;
                 }
+            } else {
+                if ($s === null) {
+                    $s = new static;
+                    $s->emso = $score['emso'];
+                    $s->general_matura = $score['general_matura'];
+                }
+
                 $s->first_name = $score['first_name'];
                 $s->last_name = $score['last_name'];
                 $s->middle_school_id = $score['middle_school_id'];
                 $s->profession_id = $score['profession_id'];
                 $s->matura_points = $score['matura_points'];
-                $s->matura_done = $score['matura_done'] === 'D' ? true : false;
+                $s->matura_done = $score['matura_done'] = $score['matura_done'] === 'D' ? true : false;
                 $s->third_grade_mark = $score['3_grade_mark'];
                 $s->fourth_grade_mark = $score['4_grade_mark'];
-                $s->general_matura = $score['general_matura'];
                 $s->interval_id = ApplicationInterval::current()->first()->id;
                 $s->save();
-                $new++;
+                $processed++;
             }
         }
 
-        return ['new' => $new, 'updated' => $updated];
+        return $processed;
     }
 
 
-    public static function storeSubjectScores(Collection $scores)
+    public static function storeSubjectScores(array $scores)
     {
         $updated = 0;
         $new = 0;
 
         foreach ($scores as $score) {
+            $s = static::where('emso', $score['emso'])->first();
 
-            if($score['3_grade_mark'] === '') {
-                // Find the relation
-                // Update the grade.
-                $updated++;
-            } else {
-                $new++;
+            if($s !== null) {
+                $s->subjectGrades()->detach($score['subject_id']);
+                $s->subjectGrades()->attach($score['subject_id'], [
+                    'third_grade_mark' => $score['3_grade_mark'] === '' ? null : $score['3_grade_mark'],
+                    'fourth_grade_mark' => $score['4_grade_mark'] === '' ? null : $score['4_grade_mark'],
+                    'matura_mark' => $score['matura_mark']
+                ]);
+
+                if($score['3_grade_mark'] === '') {
+                    $updated++;
+                } else {
+                    $new++;
+                }
             }
+
         }
 
         return ['new' => $new, 'updated' => $updated];

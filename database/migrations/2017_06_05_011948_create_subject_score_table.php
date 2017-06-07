@@ -17,8 +17,8 @@ class CreateSubjectScoreTable extends Migration
             $table->string('subject_id');
             $table->integer('matura_score_id')->unsigned();
             $table->tinyInteger('matura_mark')->unsigned();
-            $table->tinyInteger('third_grade_mark')->unsigned();
-            $table->tinyInteger('fourth_grade_mark')->unsigned();
+            $table->tinyInteger('third_grade_mark')->unsigned()->nullable()->default(null);
+            $table->tinyInteger('fourth_grade_mark')->unsigned()->nullable()->default(null);
         });
     }
 
