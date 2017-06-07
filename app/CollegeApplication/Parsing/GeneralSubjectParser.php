@@ -41,11 +41,14 @@ class GeneralSubjectParser extends MaturaFileParser
     protected function storeLine(array $line)
     {
         $score = MaturaScore::where('emso', $line['emso'])->first();
-        $score->subjects()->attach($line['subject_id'], [
-            'matura_mark' => $line['matura_mark'] == null ? null : $line['matura_mark'],
-            'third_grade_mark' => $line['third_grade_mark'] == null ? null : $line['third_grade_mark'],
-            'fourth_grade_mark' => $line['third_grade_mark'] == null ? null : $line['fourth_grade_mark']
-        ]);
+        if($score !== null) {
+            $score->subjects()->attach($line['subject_id'], [
+                'matura_mark' => $line['matura_mark'] == null ? null : $line['matura_mark'],
+                'third_grade_mark' => $line['third_grade_mark'] == null ? null : $line['third_grade_mark'],
+                'fourth_grade_mark' => $line['third_grade_mark'] == null ? null : $line['fourth_grade_mark']
+            ]);
+            $this->created_lines++;
+        }
 
     }
 

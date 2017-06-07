@@ -68,11 +68,11 @@ class UploadController extends ApiController
 
     private function getValidatedFile(string $filename)
     {
-        $this->validate($this->request, [$filename => 'required']);
-        $file = $this->request->file($filename);
+        $this->validate($this->request, [$filename => 'required|string']);
+        $file = base64_decode($this->request->get($filename));
 
-        if (!$file->isValid())
-            throw new BadRequestHttpException($file->getErrorMessage());
+//        if (!$file->isValid())
+//            throw new BadRequestHttpException($file->getErrorMessage());
 
         return $file;
 

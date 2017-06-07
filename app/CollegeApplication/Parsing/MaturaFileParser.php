@@ -8,16 +8,17 @@ use Illuminate\Http\UploadedFile;
  *
  * @package \CollegeApplication\Parsing
  */
-abstract class MaturaFileParser implements FileParser
+abstract class MaturaFileParser
 {
     protected $all_lines = 0;
     protected $created_lines = 0;
     protected $updated_lines = 0;
     protected $errors = [];
 
-    public function parse(UploadedFile $file): array
+    public function parse(string $file_content): array
     {
-        foreach(file($file) as $row) {
+        foreach(explode(PHP_EOL, $file_content) as $row) {
+            $row = str_replace(['\r', '\t'], '', $row);
             $line = $this->parseLine($row);
             $validator = $this->getValidationFactory()->make($line, $this->rules());
 
