@@ -22,6 +22,10 @@ class CalculationController extends ApiController
         return $applications;
     }
 
+    public function classify(){
+        
+    }
+
     public function calculate($id)
     {
         $application = Application::with('wishes', 'grades')->find($id);
