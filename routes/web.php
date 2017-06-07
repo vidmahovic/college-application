@@ -30,9 +30,12 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
     $api = app('api.router');
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
-
-        //$api->get('applications/{id}/calculate', 'CalculationController@calculate');
-        //$api->get('applications/calculate', 'CalculationController@index');
+        /*
+        $api->get('applications/{id}/calculate', 'CalculationController@calculate');
+        $api->get('applications/calculate', 'CalculationController@index');
+        $api->get('applications/classify/eu', 'CalculationController@classifyEU');
+        $api->get('applications/classify/foreign', 'CalculationController@classifyForeign');
+        */
 
         // Authentication routes
         $api->post('register', 'AuthController@register');
@@ -83,6 +86,8 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             // CALCULATION
             $api->get('applications/{id}/calculate', 'CalculationController@calculate');
             $api->get('applications/calculate', 'CalculationController@index');
+            $api->get('classify/eu', 'CalculationController@classifyEU');
+            $api->get('classify/foreign', 'CalculationController@classifyForeign');
         });
     });
 });
