@@ -90,6 +90,8 @@ class UsersTableSeeder extends Seeder
             'role_id' => 3
         ]);
 
+        // CALCULATION TESTS
+
         // --- id = 9
         User::create([
             'email' => 'rok.zidarn@gmail.com',
@@ -102,10 +104,60 @@ class UsersTableSeeder extends Seeder
 
         // --- id = 10
         User::create([
-            'email' => 'luka.zidarn@gmail.com',
-            'name' => 'Luka Zidarn',
-            'username' => 'lukazidarn',
-            'password' => bcrypt('lukazidarn10'),
+            'email' => 'miha.mihic@gmail.com',
+            'name' => 'Miha Mihič',
+            'username' => 'mihamihic',
+            'password' => bcrypt('mihamihic10'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        // --- id = 11
+        User::create([
+            'email' => 'bozidar.daribozic@gmail.com',
+            'name' => 'Božidar Daribožič',
+            'username' => 'bozidardaribozic',
+            'password' => bcrypt('bozidardaribozic11'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        // --- id = 12
+        User::create([
+            'email' => 'karolina.travnikar@gmail.com',
+            'name' => 'Karolina Travnikar',
+            'username' => 'karolinatravnikar',
+            'password' => bcrypt('karolinatravnikar12'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        // --- id = 13
+        User::create([
+            'email' => 'janez.novak@gmail.com',
+            'name' => 'Janez Novak',
+            'username' => 'janeznovak',
+            'password' => bcrypt('janeznovak13'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        // --- id = 14
+        User::create([
+            'email' => 'metka.jankec@gmail.com',
+            'name' => 'Metka Jankec',
+            'username' => 'metkajankec',
+            'password' => bcrypt('metkajankec14'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        // --- id = 15
+        User::create([
+            'email' => 'mirko.ojojoj@gmail.com',
+            'name' => 'Mirko Ojojoj',
+            'username' => 'mirkoojojoj',
+            'password' => bcrypt('mirkoojojoj15'),
             'activated_at' => Carbon::now(),
             'role_id' => 4
         ]);

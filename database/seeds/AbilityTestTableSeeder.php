@@ -14,14 +14,14 @@ class AbilityTestTableSeeder extends Seeder
     public function run()
     {
         $ability_test = AbilityTest::create([
-            'faculty_program_id' => "ZE30",
+            'faculty_program_id' => "SU00",
             'max_points' => 120,
             'min_points' => 30,
             'updated_at' => \Carbon\Carbon::now(),
             'created_at' => \Carbon\Carbon::now()
         ]);
 
-        ApplicationAbilityTest::create([ // user -> rok.zidarn@gmail.com, application -> 1
+        ApplicationAbilityTest::create([ // user -> Rok Zidarn
             'application_id' => 1,
             'ability_test_id' => $ability_test->id,
             'points' => 80,
@@ -29,7 +29,7 @@ class AbilityTestTableSeeder extends Seeder
             'created_at' => \Carbon\Carbon::now()
         ]);
 
-        ApplicationAbilityTest::create([ // user -> lukineli@gmail.com, application -> 2
+        ApplicationAbilityTest::create([ // user -> Miha Mihič
             'application_id' => 2,
             'ability_test_id' => $ability_test->id,
             'points' => 20,

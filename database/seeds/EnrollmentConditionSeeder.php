@@ -416,5 +416,33 @@ class EnrollmentConditionSeeder extends Seeder
             'weight' => 80
         ]);
 
+        // CALCULATION TEST
+
+        $faculty_program_id = 'SG00'; // BF Lesarstvo UN
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 1,
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 40
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 0,
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => null,
+            'weight' => 60
+        ]);
+        EnrollmentCondition::create([
+            'faculty_program_id' => $faculty_program_id,
+            'name' => 5,
+            'type' => 0,
+            'conditions_subject_id' => null,
+            'conditions_profession_id' => 51001,
+            'weight' => 0
+        ]);
+
     }
 }
