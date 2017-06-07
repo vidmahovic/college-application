@@ -42,19 +42,27 @@ class CalculationController extends ApiController
             $ability_test = null;
         }
 
+        $uspeh3L = 1;
+        $uspeh4L = 1;
         $failed = false;
 
         if(!($graduation_type == 1 || $graduation_type == 2)){
             $failed = true;
         }
 
-        if(count($grades) < 4){
+        if(count($grades) < 6){
             $failed = true;
         }
         else{
             for($i = 0; $i < count($grades); $i = $i + 1){
                 if($grades[$i]["grade"] < 2){
                     $failed = true;
+                }
+                if($grades[$i]["subject_id"] == 'U003'){
+                    $uspeh3L = $grades[$i]["grade"];
+                }
+                if($grades[$i]["subject_id"] == 'U004'){
+                    $uspeh4L = $grades[$i]["grade"];
                 }
             }
         }
@@ -72,8 +80,6 @@ class CalculationController extends ApiController
         $names = [0 =>'Uspeh na maturi', 1 => 'Uspeh v 3. in 4. letniku', 2 => 'Uspeh pri dodatnem predmetu',
             3 => 'Uspeh pri predpisanem predmetu', 4 => 'Uspeh pri preizkusu nadarjenosti', 5 => 'Poklic'];
 
-        $uspeh3L = 4;
-        $uspeh4L = 4;
         $grade_table = self::gradeTable();
         $high_level_subjects = ['L103', 'L222', 'M222', 'M212', 'M812'];
 

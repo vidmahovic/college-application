@@ -34,6 +34,16 @@ class GradesTableSeeder extends Seeder
             'subject_id' => 'M541', // psi splosna
             'grade' => 5
         ]);
+        $grade = Grade::create([
+            'application_id' => 1,
+            'subject_id' => 'U003', // uspeh 3. letnik
+            'grade' => 4
+        ]);
+        $grade = Grade::create([
+            'application_id' => 1,
+            'subject_id' => 'U004', // uspeh 4. letnik
+            'grade' => 4
+        ]);
 
         // Miha Mihič
         $grade = Grade::create([
@@ -61,6 +71,17 @@ class GradesTableSeeder extends Seeder
             'subject_id' => 'M541', // psi splosna
             'grade' => 5
         ]);
+        $grade = Grade::create([
+            'application_id' => 2,
+            'subject_id' => 'U003', // uspeh 3. letnik
+            'grade' => 4
+        ]);
+        $grade = Grade::create([
+            'application_id' => 2,
+            'subject_id' => 'U004', // uspeh 4. letnik
+            'grade' => 3
+        ]);
+
         // Božidar Daribožič
         $grade = Grade::create([
             'application_id' => 3,
@@ -86,6 +107,16 @@ class GradesTableSeeder extends Seeder
             'application_id' => 3,
             'subject_id' => 'M541',
             'grade' => 5
+        ]);
+        $grade = Grade::create([
+            'application_id' => 3,
+            'subject_id' => 'U003', // uspeh 3. letnik
+            'grade' => 5
+        ]);
+        $grade = Grade::create([
+            'application_id' => 3,
+            'subject_id' => 'U004', // uspeh 4. letnik
+            'grade' => 2
         ]);
 
         // Karolina Travnikar
@@ -113,6 +144,16 @@ class GradesTableSeeder extends Seeder
             'application_id' => 4,
             'subject_id' => 'M541', // psi splosna
             'grade' => 1
+        ]);
+        $grade = Grade::create([
+            'application_id' => 4,
+            'subject_id' => 'U003', // uspeh 3. letnik
+            'grade' => 5
+        ]);
+        $grade = Grade::create([
+            'application_id' => 4,
+            'subject_id' => 'U004', // uspeh 4. letnik
+            'grade' => 2
         ]);
 
         // Janez Novak
@@ -146,6 +187,16 @@ class GradesTableSeeder extends Seeder
             'subject_id' => 'X401',
             'grade' => 5
         ]);
+        $grade = Grade::create([
+            'application_id' => 5,
+            'subject_id' => 'U003', // uspeh 3. letnik
+            'grade' => 2
+        ]);
+        $grade = Grade::create([
+            'application_id' => 5,
+            'subject_id' => 'U004', // uspeh 4. letnik
+            'grade' => 2
+        ]);
 
         // Metka Jankec
         $grade = Grade::create([
@@ -171,6 +222,16 @@ class GradesTableSeeder extends Seeder
         $grade = Grade::create([
             'application_id' => 6,
             'subject_id' => 'M541',
+            'grade' => 5
+        ]);
+        $grade = Grade::create([
+            'application_id' => 6,
+            'subject_id' => 'U003', // uspeh 3. letnik
+            'grade' => 5
+        ]);
+        $grade = Grade::create([
+            'application_id' => 6,
+            'subject_id' => 'U004', // uspeh 4. letnik
             'grade' => 5
         ]);
 
