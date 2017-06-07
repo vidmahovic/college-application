@@ -6,6 +6,7 @@ use App\Models\AbilityTest;
 use App\Models\Application;
 use App\Models\ApplicationsPrograms;
 use App\Models\EnrollmentCondition;
+use App\Models\FacultyProgram;
 use Dingo\Api\Http\Request;
 use Dingo\Api\Exception\ResourceException;
 
@@ -17,13 +18,165 @@ class CalculationController extends ApiController
     }
 
     public function index(){
-        $applications = Application::with('applicant')->get();
+        $applications = Application::with('applicant', 'wishes')->get();
 
         return $applications;
     }
 
-    public function classify(){
-        
+    public function classifyEU(){
+        $faculty_programs = FacultyProgram::has('applicationsPrograms')->get();
+        $faculty_program_ids = $faculty_programs->pluck('id')->toArray();
+        $faculty_program_available = $faculty_programs->pluck('max_accepted')->toArray();
+        $eu = [1,4,5,6];
+
+        for($i = 0; $i < count($faculty_program_ids); $i = $i + 1){
+            $wishes1 = ApplicationsPrograms::where('faculty_program_id', $faculty_program_ids[$i])
+                ->whereHas('application', function($query) use($eu){
+                    $query->whereIn('citizen_id', $eu);
+                })->where('choice_number', 1)->where('points', '>', 0)->orderBy('points', 'desc')->get();
+
+            $number_of_applied = count($wishes1);
+            if($faculty_program_available[$i] >= $number_of_applied){
+                for($j = 0; $j < count($wishes1); $j = $j + 1){
+                    $wishes1[$j]->fill(['status' => true]);
+                    $wishes1[$j]->save();
+                }
+                $faculty_program_available[$i] = $faculty_program_available[$i] - $number_of_applied;
+            }
+            else{
+                for($k = 0; $k < count($faculty_program_available); $k = $k + 1){
+                    $wishes1[$k]->fill(['status' => true]);
+                    $wishes1[$k]->save();
+                }
+                $faculty_program_available[$i] = 0;
+            }
+
+            $wishes2 = ApplicationsPrograms::where('faculty_program_id', $faculty_program_ids[$i])
+                ->whereHas('application', function($query) use($eu){
+                    $query->whereIn('citizen_id', $eu);
+                })->where('choice_number', 2)->where('points', '>', 0)->orderBy('points', 'desc')->get();
+
+            $number_of_applied = count($wishes2);
+            if($faculty_program_available[$i] >= $number_of_applied){
+                for($j = 0; $j < count($wishes2); $j = $j + 1){
+                    $wishes2[$j]->fill(['status' => true]);
+                    $wishes2[$j]->save();
+                }
+                $faculty_program_available[$i] = $faculty_program_available[$i] - $number_of_applied;
+            }
+            else{
+                for($k = 0; $k < count($faculty_program_available); $k = $k + 1){
+                    $wishes2[$k]->fill(['status' => true]);
+                    $wishes2[$k]->save();
+                }
+                $faculty_program_available[$i] = 0;
+            }
+
+            $wishes3 = ApplicationsPrograms::where('faculty_program_id', $faculty_program_ids[$i])
+                ->whereHas('application', function($query) use($eu){
+                    $query->whereIn('citizen_id', $eu);
+                })->where('choice_number', 3)->where('points', '>', 0)->orderBy('points', 'desc')->get();
+
+            $number_of_applied = count($wishes3);
+            if($faculty_program_available[$i] >= $number_of_applied){
+                for($j = 0; $j < count($wishes3); $j = $j + 1){
+                    $wishes3[$j]->fill(['status' => true]);
+                    $wishes3[$j]->save();
+                }
+                $faculty_program_available[$i] = $faculty_program_available[$i] - $number_of_applied;
+            }
+            else{
+                for($k = 0; $k < count($faculty_program_available); $k = $k + 1){
+                    $wishes1[$k]->fill(['status' => true]);
+                    $wishes1[$k]->save();
+                }
+                $faculty_program_available[$i] = 0;
+            }
+        }
+
+        return ApplicationsPrograms::whereHas('application', function($query) use($eu){
+            $query->whereIn('citizen_id', $eu);
+        })->with(['application' => function($query) use($eu){
+            $query->whereIn('citizen_id', $eu)->with('applicant');
+        }])->orderBy('points', 'desc')->get();
+    }
+
+    public function classifyForeign(){
+        $faculty_programs = FacultyProgram::has('applicationsPrograms')->get();
+        $faculty_program_ids = $faculty_programs->pluck('id')->toArray();
+        $faculty_program_available = $faculty_programs->pluck('max_accepted_foreign')->toArray();
+        $foreign = [0,2,3];
+
+        for($i = 0; $i < count($faculty_program_ids); $i = $i + 1){
+            $wishes1 = ApplicationsPrograms::where('faculty_program_id', $faculty_program_ids[$i])
+                ->whereHas('application', function($query) use($foreign){
+                    $query->whereIn('citizen_id', $foreign);
+                })->where('choice_number', 1)->where('points', '>', 0)->orderBy('points', 'desc')->get();
+
+            $number_of_applied = count($wishes1);
+            if($faculty_program_available[$i] >= $number_of_applied){
+                for($j = 0; $j < count($wishes1); $j = $j + 1){
+                    $wishes1[$j]->fill(['status' => true]);
+                    $wishes1[$j]->save();
+                }
+                $faculty_program_available[$i] = $faculty_program_available[$i] - $number_of_applied;
+            }
+            else{
+                for($k = 0; $k < count($faculty_program_available); $k = $k + 1){
+                    $wishes1[$k]->fill(['status' => true]);
+                    $wishes1[$k]->save();
+                }
+                $faculty_program_available[$i] = 0;
+            }
+
+            $wishes2 = ApplicationsPrograms::where('faculty_program_id', $faculty_program_ids[$i])
+                ->whereHas('application', function($query) use($foreign){
+                    $query->whereIn('citizen_id', $foreign);
+                })->where('choice_number', 2)->where('points', '>', 0)->orderBy('points', 'desc')->get();
+
+            $number_of_applied = count($wishes2);
+            if($faculty_program_available[$i] >= $number_of_applied){
+                for($j = 0; $j < count($wishes2); $j = $j + 1){
+                    $wishes2[$j]->fill(['status' => true]);
+                    $wishes2[$j]->save();
+                }
+                $faculty_program_available[$i] = $faculty_program_available[$i] - $number_of_applied;
+            }
+            else{
+                for($k = 0; $k < count($faculty_program_available); $k = $k + 1){
+                    $wishes2[$k]->fill(['status' => true]);
+                    $wishes2[$k]->save();
+                }
+                $faculty_program_available[$i] = 0;
+            }
+
+            $wishes3 = ApplicationsPrograms::where('faculty_program_id', $faculty_program_ids[$i])
+                ->whereHas('application', function($query) use($foreign){
+                    $query->whereIn('citizen_id', $foreign);
+                })->where('choice_number', 3)->where('points', '>', 0)->orderBy('points', 'desc')->get();
+
+            $number_of_applied = count($wishes3);
+            if($faculty_program_available[$i] >= $number_of_applied){
+                for($j = 0; $j < count($wishes3); $j = $j + 1){
+                    $wishes3[$j]->fill(['status' => true]);
+                    $wishes3[$j]->save();
+                }
+                $faculty_program_available[$i] = $faculty_program_available[$i] - $number_of_applied;
+            }
+            else{
+                for($k = 0; $k < count($faculty_program_available); $k = $k + 1){
+                    $wishes1[$k]->fill(['status' => true]);
+                    $wishes1[$k]->save();
+                }
+                $faculty_program_available[$i] = 0;
+            }
+        }
+
+        return ApplicationsPrograms::whereHas('application', function($query) use($foreign){
+                $query->whereIn('citizen_id', $foreign);
+            })->with(['application' => function($query) use($foreign){
+                $query->whereIn('citizen_id', $foreign)->with('applicant');
+            }])->orderBy('points', 'desc')->get();
     }
 
     public function calculate($id)
