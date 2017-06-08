@@ -27,7 +27,7 @@ class CreateMaturaScoresTable extends Migration
             $table->tinyInteger('third_grade_mark')->unsigned()->nullable()->default(null);
             $table->tinyInteger('fourth_grade_mark')->unsigned()->nullable()->default(null);
             $table->boolean('matura_done')->nullable()->default(null);
-            $table->boolean('general_matura');
+            $table->boolean('general_matura')->nullable()->default(null);
         });
 
         Schema::table('matura_scores', function (Blueprint $table) {

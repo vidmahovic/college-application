@@ -65,6 +65,8 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             $api->post('ability/{pid}', 'AbilityController@insert');
 
             // APPLICATION
+            //$api->get('applications/accepted/paginate', 'ApplicationController@acceptedPaginated');
+            $api->get('applications/accepted', 'ApplicationController@accepted');
             $api->get('applications/active', 'ApplicationController@active');
             $api->get('applications/paginate', 'ApplicationController@paginate');
             $api->get('applications', 'ApplicationController@index');
