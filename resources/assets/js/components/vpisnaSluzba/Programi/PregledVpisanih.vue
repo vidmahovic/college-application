@@ -91,7 +91,7 @@
 <script>
 import prijavljeni_store from './prijavljeni_store.js';
 
-function prijavljeniPdf(data) {
+function prijavljeniPdf(data, params) {
   var doc = new jsPDF('landscape');
   var header = ["#", "Ime in priimek", "Naslov", "Mesto", "Državljanstvo", "Nacin zakljucka srednje sole"];
 
@@ -102,6 +102,13 @@ function prijavljeniPdf(data) {
   doc.setTextColor(99, 107, 111);
   doc.setFontSize(20);
   doc.text(148, 20, "Tabela prijavljenih študentov", null, null, "center");
+
+  doc.setFontSize(7);
+  var tmp1 = params.facultyData.name.replace("Č", "C").replace("Š", "S");
+  doc.text(148, 25, tmp1, null, null, "center");
+
+  tmp1 = params.programData.name.replace("Č", "C").replace("Š", "S");
+  doc.text(148, 30, tmp1, null, null, "center");
 
   //table header
   doc.setFontSize(10);
@@ -141,8 +148,8 @@ function prijavljeniPdf(data) {
     doc.text(x, y, data[i].id.toString());
 
     x += 6;
-
     var tmp = data[i].applicant.data.name.replace("Č", "C");
+    tmp = tmp.replace("č", "c").replace("š", "s");
 
     doc.text(x, y, tmp);
 
@@ -203,6 +210,11 @@ function prijavljeniPdf(data) {
 
   }
 
+  //footer (oštevilčenje strani)
+  for(var i = 1; i <= totalPages; i++){
+    doc.setPage(i).text(277, 207, "Stran "+ i +"/"+ totalPages);
+  }
+
   doc.output('dataurlnewwindow');
 }
 
@@ -247,7 +259,7 @@ function prijavljeniPdf(data) {
 
         this.$http.get('/api/applications', {params: {filters: postData}})
           .then(function(res){
-            prijavljeniPdf(res.body.data);
+            prijavljeniPdf(res.body.data, this.params);
           })
 
       },

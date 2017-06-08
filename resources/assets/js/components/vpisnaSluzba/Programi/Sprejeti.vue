@@ -29,7 +29,7 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <datatable id="datatable" :columns="table_columns" :data="params" :data-store="sprejeti_store" class="programs-datatable" paginate></datatable>
+            <datatable id="datatable" :columns="table_columns" :data="params" :data-store="sprejeti_store" class="programs-datatable"></datatable>
           </div>
         </div>
       </div>

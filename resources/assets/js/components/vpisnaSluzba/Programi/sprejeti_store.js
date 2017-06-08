@@ -18,7 +18,7 @@ export default {
 			program_id: '',
 			faculty_id: ''
 		},
-		apiUrl: '/api/applications/accepted/paginate'
+		apiUrl: '/api/applications/accepted'
 	}),
 	computed: {
 		last_page(){
@@ -159,11 +159,11 @@ export default {
 			this.sortable = value;
 		},
 		getRows(url, callback){
-			this.$http.get(url, {params: {filters: this.params, page: this.page}})
+			this.$http.get(url, {params: {filters: this.params}})
 				.then(function(res){
 					this.data = res.data.data;
-					this.page_size = res.data.meta.pagination.per_page;
-					this.last_pageData = res.data.meta.pagination.total_pages;
+					//this.page_size = res.data.meta.pagination.per_page;
+					//this.last_pageData = res.data.meta.pagination.total_pages;
 					if(callback) callback();
 
 				}.bind(this));
