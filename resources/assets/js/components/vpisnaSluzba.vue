@@ -13,10 +13,12 @@
 
               </li>
               <li>
+                  <router-link to="/enrollment_service/sprejeti">Seznam sprejetih študentov</router-link>
+
+              </li>
+              <li>
                   <router-link to="/enrollment_service/io">Uvoz podatkov</router-link>
               </li>
-
-
           </ul>
       </div>
 

@@ -13,6 +13,7 @@
           <p class="program-text">{{ programDetails.type == 0 ?  "Univerzitetni program" : (programDetails.type == 1 ? "Visokošolski program" : (programDetails.type == 2 ? "Enovitni magisterski program" : "Ni podatka")) }}</p>
           <p class="program-text">{{ programDetails.is_regular == 0 ? "Izredni študij" : "Redni študij" }} </p>
           <button style="padding-left: 0px; padding-right: 0px;" type="button" @click="sezPrijavljenih" class="btn btn-link">Preglej prijavljene</button>
+          <button style="padding-left: 0px; padding-right: 0px;" type="button" @click="sezSprejetih" class="btn btn-link">Preglej sprejete</button>
         </div>
       </div>
       <div class="row marginB20">
@@ -199,10 +200,12 @@ export default {
     sezPrijavljenih: function(){
       this.$router.push("/enrollment_service/"+this.programDetails.id+"/prijavljeni");
     },
+    sezSprejetih: function(){
+      this.$router.push("/enrollment_service/"+this.programDetails.id+"/sprejeti");
+    },
     sendAbilityPoints: function(){
       this.$http.post('/api/program/'+this.programDetails.id+'/ability', this.postAbility_test)
         .then(function(res){
-          debugger;
         })
     },
 

@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="row marginB40">
-        <div v-if="role != 'referent' || $route.name == 'PregledVpisanih1'" class="col-md-12">
+        <div v-if="role != 'referent' && $route.name == 'PregledVpisanih1'" class="col-md-12">
           <h6>Filtriranje po fakulteti:</h6>
           <v-select v-model="params.facultyData" label="name" :options="faculties" :on-change="spremeniFakulteto"></v-select>
         </div>
@@ -232,7 +232,6 @@ function prijavljeniPdf(data) {
           {label: 'Mesto', field: 'mailingAddress.data.name'},
           {label: 'Državljanstvo', field: 'citizen.data.name'},
           {label: 'Način zaključka srednje šole', field: 'graduation.data.name'},
-          {label: '', component: 'points_calculation'}
 
         ],
         prijavljeni_store: prijavljeni_store

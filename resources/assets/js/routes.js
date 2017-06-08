@@ -20,6 +20,7 @@ import VpisnaSluzbaProgramiUrejanje from './components/vpisnaSluzba/Programi/Ure
 import VpisnaSluzbaProgramiUstvari from './components/vpisnaSluzba/Programi/Ustvari.vue'
 
 import PregledVpisanih from './components/vpisnaSluzba/Programi/PregledVpisanih.vue'
+import Sprejeti from './components/vpisnaSluzba/Programi/Sprejeti.vue'
 import vpisnaSluzbaIO from './components/vpisnaSluzba/IO/IO.vue'
 import Calculation from './components/vpisnaSluzba/Programi/Calculation.vue'
 
@@ -71,6 +72,11 @@ const routes = [
 				path: '/referent/pregled_vpisanih',
 				component: PregledVpisanih,
 				name: 'PregledVpisanih'
+			},
+			{
+				path: '/referent/sprejeti',
+				component: Sprejeti,
+				name: 'Sprejeti'
 			}
 		]
 	},
@@ -108,9 +114,19 @@ const routes = [
 				name: 'PregledVpisanih'
 			},
 			{
+				path: '/enrollment_service/:id/sprejeti',
+				component: Sprejeti,
+				name: 'Sprejeti'
+			},
+			{
 				path: '/enrollment_service/prijavljeni',
 				component: PregledVpisanih,
 				name: 'PregledVpisanih1'
+			},
+			{
+				path: '/enrollment_service/sprejeti',
+				component: Sprejeti,
+				name: 'Sprejeti1'
 			},
 			{
 				path: '/enrollment_service/io',
@@ -121,7 +137,7 @@ const routes = [
 				path: '/enrollment_service/calculation/:id',
 				component: Calculation,
 				name: 'Calculation'
-			}			
+			}
 		]
 	},
 	{
