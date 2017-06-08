@@ -38,8 +38,14 @@ class AdminController extends ApiController
             return $this->response->errorBadRequest("Only referent can be connected to a faculty!");
         }
 
-        $user = User::create($this->request->all());
-        $user->password =  bcrypt($this->request->input('password'));
+        $user = User::create([
+            'email' => $this->request->input('email'),
+            'username' => $this->request->input('username'),
+            'name' => $this->request->input('name'),
+            'role_id' => $this->request->input('role_id'),
+            'faculty_id' => $this->request->input('faculty_id')
+        ]);
+        $user->password = bcrypt($this->request->input('password'));
         $user->activated_at = Carbon::now();
         $user->save();
 

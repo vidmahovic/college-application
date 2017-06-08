@@ -15,7 +15,7 @@ class Regular implements Filter
     public static function apply(Builder $builder, $value): Builder
     {
         return $builder->whereHas('wishes', function($q) use($value) {
-
+            return $q->where('is_regular', $value);
         });
     }
 }

@@ -27,6 +27,10 @@ class FacultyProgram extends Model // PROGRAM
         return $this->belongsTo(Faculty::class);
     }
 
+    public function abilityTest(){
+        return $this->hasOne(AbilityTest::class);
+    }
+
     public function applications()
     {
         return $this->belongsToMany(
@@ -36,8 +40,12 @@ class FacultyProgram extends Model // PROGRAM
             'application_id')->withPivot('status', 'choice_number');
     }
 
+    public function applicationsPrograms() {
+        return $this->hasMany(ApplicationsPrograms::class);
+    }
+
     public function enrollmentConditions(){
-        return $this->hasMany(EnrollmentCondition::class);
+        return $this->hasMany(EnrollmentCondition::class)->orderBy('type');
     }
 
     public function getNameAttribute()

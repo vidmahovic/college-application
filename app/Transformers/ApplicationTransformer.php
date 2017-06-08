@@ -17,7 +17,7 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
 
     protected $defaultIncludes = [
         'applicant', 'citizen', 'interval', 'middleSchool', 'education', 'profession', 'graduation',
-        'firstWish', 'secondWish', 'thirdWish', 'mailingAddress', 'mailingCountry'
+        'firstWish', 'secondWish', 'thirdWish', 'acceptedWish', 'mailingAddress', 'mailingCountry'
     ];
 
     public function transform(Application $application)
@@ -93,6 +93,13 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
 
     public function includeApplicant(Application $application) {
         return $this->item($application->applicant, new UserTransformer);
+    }
+
+    public function includeAcceptedWish(Application $app) {
+        $accepted = $app->acceptedWish()->first();
+        if($accepted !== null) {
+            return $this->item($accepted, new FacultyProgramTransformer);
+        }
     }
 
 

@@ -30,13 +30,12 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
     $api = app('api.router');
 
     $api->version('v1', ['namespace' => 'App\Http\Controllers\Api'], function($api) {
-
-        $api->get('test_all', function() { return Application::with('wishes','permanentAddress','permanentCountry')->get(); }); // test
-        $api->get('test', function() { return FacultyProgram::all()->where('allow_double_degree',true)->pluck('id')->toArray(); }); // test
-        $api->get('test_template', 'ApplicationController@active');
-        $api->post('test_create', 'ApplicationController@create');
-        $api->post('test_update/{id}', 'ApplicationController@update');
-        $api->delete('test_delete/{id}', 'ApplicationController@archive');
+        /*
+        $api->get('applications/{id}/calculate', 'CalculationController@calculate');
+        $api->get('applications/calculate', 'CalculationController@index');
+        $api->get('applications/classify/eu', 'CalculationController@classifyEU');
+        $api->get('applications/classify/foreign', 'CalculationController@classifyForeign');
+        */
 
         // Authentication routes
         $api->post('register', 'AuthController@register');
@@ -58,8 +57,16 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             $api->post('programs/create', 'FacultyProgramController@create');
             $api->post('programs/update/{id}', 'FacultyProgramController@update');
             $api->delete('programs/{id}', 'FacultyProgramController@destroy');
+            $api->post('programs/{id}', 'FacultyProgramController@destroy');
+            $api->post('programs/{id}/conditions', 'ConditionController@create');
+            $api->get('subjectsAndProfessions', 'ConditionController@subjectsAndProfessions');
+            $api->get('program/{id}/ability', 'AbilityController@applied');
+            $api->post('program/{id}/ability', 'AbilityController@create');
+            $api->post('ability/{pid}', 'AbilityController@insert');
 
             // APPLICATION
+            //$api->get('applications/accepted/paginate', 'ApplicationController@acceptedPaginated');
+            $api->get('applications/accepted', 'ApplicationController@accepted');
             $api->get('applications/active', 'ApplicationController@active');
             $api->get('applications/paginate', 'ApplicationController@paginate');
             $api->get('applications', 'ApplicationController@index');
@@ -73,6 +80,16 @@ $app->group(['middleware' => 'api.throttle'], function($app) {
             $api->get('faculties', 'AdminController@faculties');
             //$api->get('faculties/{faculty}/applications', 'FacultyController@applications');
             $api->post('create', 'AdminController@create');
+
+            // ENROLLMENT SERVICE (FILE UPLOAD)
+            $api->post('upload/general-matura', 'UploadController@storeGeneralMatura');
+            $api->post('upload/vocational-matura', 'UploadController@storeVocationalMatura');
+
+            // CALCULATION
+            $api->get('applications/{id}/calculate', 'CalculationController@calculate');
+            $api->get('applications/calculate', 'CalculationController@index');
+            $api->get('classify/eu', 'CalculationController@classifyEU');
+            $api->get('classify/foreign', 'CalculationController@classifyForeign');
         });
     });
 });

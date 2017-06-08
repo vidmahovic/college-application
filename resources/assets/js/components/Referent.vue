@@ -15,7 +15,7 @@
                   <router-link to="/admin">admin</router-link>
               </li>
               <li>
-                  <router-link to="/vpisna_sluzba">Vpisna služba</router-link>
+                  <router-link to="/enrollment_service">Vpisna služba</router-link>
               </li>
           </ul>
       </div>

@@ -19,4 +19,24 @@ class Citizen extends Model // DRZAVLJAN
     {
         return $this->hasMany(Application::class);
     }
+
+    public function scopeBornSlovenian($query)
+    {
+        return $query->whereIn('id', [1,5]);
+    }
+
+    public function scopebornForeigner($query)
+    {
+        return $query->whereNotIn('id', [1,5]);
+    }
+
+    public function scopeFromSloveniaOrEu($query)
+    {
+        return $query->whereIn('id', [1,5,6]);
+    }
+
+    public function scopeFromOtherCountries($query)
+    {
+        return $query->whereNotIn('id', [1,5,6]);
+    }
 }

@@ -16,12 +16,14 @@ use App\Models\EducationType;
 use App\Models\Country;
 use App\Models\MiddleSchool;
 use App\Models\Profession;
+use App\Transformers\AcceptedApplicationsTransformer;
 use App\Transformers\ApplicationTransformer;
 use App\Transformers\ApplicationTemplateTransformer;
 use CollegeApplication\Search\ApplicationSearch\ApplicationSearch;
 use Dingo\Api\Exception\ResourceException;
 use App\Validators\ApplicationValidator;
 use Dingo\Api\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -36,6 +38,30 @@ class ApplicationController extends ApiController {
         parent::__construct($request);
     }
 
+    public function accepted()
+    {
+        $user = $this->request->user();
+
+        if($user->cannot('get', Application::class))
+            throw new UnauthorizedHttpException('Basic');
+
+        if($user->isReferent())
+            $this->request['filters'] = array_merge($this->request['filters'], ['faculty_id' => $user->faculty_id]);
+
+        $applications_si_eu = $this->search
+            ->applyFiltersFromRequest($this->request)
+            ->accepted()->fromEuOrSlovenia()->get();
+        $applications_other = $this->search
+            ->applyFiltersFromRequest($this->request)
+            ->accepted()->fromOtherCountries()->get();
+
+        $apps = new \stdClass;
+        $apps->fromEu = $this->groupAccepted($applications_si_eu);
+        $apps->fromOther = $this->groupAccepted($applications_other);
+
+        return $this->response->item($apps, new AcceptedApplicationsTransformer);
+    }
+
     public function index()
     {
         $user = $this->request->user();
@@ -45,7 +71,7 @@ class ApplicationController extends ApiController {
 
         // If user is a referent for the faculty, allow him to view only applications that are connected to his faculty.
         if($user->isReferent())
-            $this->request['filters'] = ['faculty_id' => $user->faculty_id];
+            $this->request['filters'] = array_merge($this->request['filters'], ['faculty_id' => $user->faculty_id]);
 
         // Send only applications with status 'filed'
         $applications = $this->search->applyFiltersFromRequest($this->request)->filed()->get();
@@ -62,7 +88,7 @@ class ApplicationController extends ApiController {
 
         // If user is a referent for the faculty, allow him to view only applications that are connected to his faculty.
         if($user->isReferent())
-            $this->request['filters'] = ['faculty_id' => $user->faculty_id];
+            $this->request['filters'] = array_merge($this->request['filters'], ['faculty_id' => $user->faculty_id]);
 
         // Send only applications with status 'filed'
         $applications = $this->search
@@ -317,5 +343,22 @@ class ApplicationController extends ApiController {
             'middle_schooles'=> $middle_schooles,
             'professions'=> $professions
         ]);
+    }
+
+    private function groupAccepted(Collection $applications) {
+        return $applications->load('acceptedWish.faculty')->sort(function($appA, $appB) {
+            $programA = $appA->acceptedWish->first();
+            $programB = $appB->acceptedWish->first();
+            if($programA->faculty->name === $programB->faculty->name) {
+                if($programA->name === $programB->name) {
+                    if($programA->type === $programB->type) {
+                        return $programB->pivot->points <=> $programA->pivot->points;
+                    }
+                    return $programA->type <=> $programB->type;
+                }
+                return $programA->name <=> $programB->name;
+            }
+            return $programA->faculty->name <=> $programB->faculty->name;
+        });
     }
 }

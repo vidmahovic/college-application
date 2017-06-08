@@ -33,31 +33,53 @@ Vue.use(VeeValidate)
 
 
 Vue.component('v-select', vSelect)
-Vue.component('datatable',require('../../../node_modules/vuejs-datatable/src/vue-datatable.vue'))
+Vue.component('datatable',require('../../../resources/lib/vuejs-datatable/src/vue-datatable.vue'))
 Vue.component('datepicker', Datepicker)
+
 
 //za $emit in $on
 //export const eventBus = new Vue();
 
 Vue.component('edit-program', {
-    template: '<button class="btn btn-xs btn-warning" @click="goToUpdatePage">Uredi</button>',
+    template: '<button class="btn btn-xs btn-warning" @click="goToUpdatePage">Podrobno</button>',
     props: ['row'],
 		methods: {
 			goToUpdatePage: function(row){
 				this.$root.programData = this.row;
 				//ker ne delata $emit $on sem uproabil $root
 				//this.$emit('programdata', this.row);
-				this.$router.push("/vpisna_sluzba/programi/"+this.row.id);
+				this.$router.push("/enrollment_service/programi/"+this.row.id);
+	    }
+		}
+})
+
+Vue.component('ability_test_input', {
+    template: '<input class="form-control" type="text" @click="goToUpdatePage" />',
+    props: ['row'],
+		methods: {
+			goToUpdatePage: function(row){
+	    }
+		}
+})
+
+Vue.component('points_calculation', {
+    template: '<button class="btn btn-xs btn-warning" @click="goToUpdatePage">Podrobno</button>',
+    props: ['row'],
+		methods: {
+			goToUpdatePage: function(row){
+
+				this.$root.userApplicationPoints = this.row;
+
+				this.$router.push("/enrollment_service/calculation/"+this.row.id)
 	    }
 		}
 })
 
 
-
-
-
 Vue.http.interceptors.push(function(request, next) {
 
+
+	//request.headers.set('Content-Type','multipart/form-data');
 	request.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
   	next();
 });

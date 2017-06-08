@@ -5,7 +5,7 @@
             <div v-if="doRender" class="panel-body" >
               <div v-if="hasApplication">
               <h2>Imate aktivno vpisnico</h2>
-                
+
                 <div v-if="apl.status=='filed'" v-on:click="remove_application" class="btn btn-default">
                   Izbrisi oddano vpisnico
                 </div>
@@ -14,10 +14,10 @@
                 </div>
                 <div class="btn btn-primary pull-right" v-on:click="applicationPdf">Preglej</div>
               </div>
-              <div v-else> 
+              <div v-else>
                 <h2>Nimate aktivne vpisnice</h2>
                 <span class="btn btn-default" v-on:click="goto_application">Začni vpisom</span>
-              </div> 
+              </div>
             </div>
           </div>
       </div>
@@ -33,7 +33,7 @@
           application: null,
           doRender: false,
           hasApplication: false
-        }    
+        }
     },
     methods: {
       goto_application: function(event, application) {
@@ -48,7 +48,7 @@
         this.$http.delete('/api/applications/'+this.apl.id)
         .then(function(res){
 
-          this.hasApplication = false;   
+          this.hasApplication = false;
           this.$http.get('/api/applications/active')
           .then(function(res){
             this.apl = res.data.data;
@@ -69,7 +69,7 @@
 
         let apl = this.originalApplication;
         var doc = new jsPDF();
-        
+
         //210 je visina, 297mm sirina
         doc.setLineWidth(0.1);
         doc.setFont("sans-serif");
@@ -78,7 +78,7 @@
         doc.setFontSize(20);
         doc.text(100, 20, "Vpisnica", null, null, "center");
         //table header
-        
+
         doc.setFontSize(11);
         doc.text(20,30, "RAZPIS ZA VPIS NA DODIPLOMSKE IN ENOVITE MAGISTRSKE ŠTUDIJSKE PROGRAME ")
         doc.text(20,40, "v študijskem letu 2017/2018");
@@ -86,7 +86,7 @@
          // zavodi
         doc.text(20, 50, "Prijavni rok: Prvi prijavni rok");
         doc.text(20, 60, "Vpis v 1. letnik");
-                  
+
         const col1_start = 10,
           col1_text = 50,
           col2_start = 100,
@@ -100,26 +100,26 @@
         const personalData_start=70;
         let date_of_birth = new Date(apl.date_of_birth);
         date_of_birth = date_of_birth.getDay()+"."+(date_of_birth.getMonth()+1)+"."+date_of_birth.getFullYear();
-        
+
         doc.text(section_start, personalData_start, "OSEBNI PODATKI");
         doc.line(line_start,personalData_start+2,line_end,personalData_start+2);
 
         doc.text(col1_start,personalData_start+10, "Ime in Priimek:"); doc.text(col1_text,personalData_start+10, this.displayField(apl.applicant.data.name));
         //doc.text(100,50, "Priimek:"); doc.text(150,50,"Novak");
-        
+
         doc.text(col1_start,personalData_start+20, "Emso:"); doc.text(col1_text,personalData_start+20, this.displayField(apl.emso));
         doc.text(col2_start,personalData_start+20, "Spol:"); doc.text(col2_text,personalData_start+20, this.displayField(this.translate_gender(apl.gender)));
-        
+
         doc.text(col1_start,personalData_start+30, "Datum rojstva:"); doc.text(col1_text,personalData_start+30, String(date_of_birth));
         doc.text(col2_start,personalData_start+30, "Država rojstva:"); doc.text(col2_text,personalData_start+30, this.displayField(apl.birthCountry.name));
-        
+
         doc.text(col1_start,personalData_start+40, "Kraj rojstva:"); doc.text(col1_text,personalData_start+40, this.displayField(apl.birthAddress.name));
         doc.text(col1_start,personalData_start+50, "Državljanstvo:"); doc.text(col1_text,personalData_start+50,this.displayField(apl.citizen.data.name));
-        
+
         doc.text(col1_start,personalData_start+60, "Kontaktni telefon:"); doc.text(col1_text,personalData_start+60, this.displayField(apl.phone));
         doc.text(col2_start,personalData_start+60, "Email:"); doc.text(col2_text,personalData_start+60,this.displayField(apl.applicant.data.email));
-        
-    
+
+
         // NASLOV STLANEGA PREBIVALIŠČA
         const permanentAddr_start = personalData_start+70;
         doc.text(section_start, permanentAddr_start, "STALNI NASLOV");
@@ -139,8 +139,8 @@
         doc.text(col1_start, mailingAddr_start+10, "Naslov: "); doc.text(col1_text, mailingAddr_start+10, this.displayField(apl.mailingAddress.meta.address));
 
         doc.text(col1_start, mailingAddr_start+20, "Kraj: "); doc.text(col1_text, mailingAddr_start+20, this.displayField(apl.mailingAddress.data.name));
-        doc.text(col2_start, mailingAddr_start+20, "Država: "); doc.text(col2_start+20, mailingAddr_start+20, this.displayField(apl.mailingCountry.data.name));        
-        
+        doc.text(col2_start, mailingAddr_start+20, "Država: "); doc.text(col2_start+20, mailingAddr_start+20, this.displayField(apl.mailingCountry.data.name));
+
         // DOSEDANJA IZOBRAZBA
         const education_start = mailingAddr_start+40;
         doc.text(section_start, education_start, "DOSEDANJA IZOBRAZBA");
@@ -149,13 +149,13 @@
         doc.text(col1_start, education_start+10, "Najvisja dosezena izobrazba"); doc.text(col2_start, education_start+10, this.displayField(apl.education.data.name));
 
 
-        doc.text(col1_start, education_start+20, "Srednješolska izobrazba"); 
-        
+        doc.text(col1_start, education_start+20, "Srednješolska izobrazba");
+
         doc.text(col1_start, education_start+30, "Srednja šola: ");  doc.text(col1_text, education_start+30, this.displayField(apl.middleSchool.data.name));
         doc.text(col1_start, education_start+40, "Nacin zakljucka: ");  doc.text(col1_text, education_start+40, this.displayField(apl.graduation.data.name));
-        
+
         //doc.text(col1_start, education_start+40, "Država: ");  doc.text(col1_text, education_start+30, this.displayField(apl.middle_school_country));
-        
+
         doc.addPage();
         page_count++;
         const wishes_start = 10;//education_start+50;
@@ -183,7 +183,7 @@
             });
           }
         }
-      
+
         // Fill the wishes
         for(let i in wishes) {
           let w = wishes[i];
@@ -191,7 +191,7 @@
           doc.text(col1_start-5, wp, (parseInt(i)+1)+". želja"); wp +=10;
           doc.text(col1_start, wp, "Visokošolski zavod: "); doc.text(col1_text, wp, this.displayField(w.faculty.data.name));
           wp += 10;
- 
+
           doc.text(col1_start, wp, "Študijski program: "); doc.text(col1_text, wp, this.displayField(w.programs[0]));
           wp += 10;
 
@@ -210,7 +210,7 @@
           doc.setPage(i).text(180, 277, "Stran "+ i +"/"+ page_count);
         }
 
-        
+
         doc.output("datauri");
 
       },
@@ -218,7 +218,7 @@
 
         let application = JSON.parse(JSON.stringify(apl));
 
-        
+
         application['user'] = apl.applicant; //.data;
 
         let g = {};
@@ -246,13 +246,13 @@
         let wishes = [];
         if("firstWish" in apl) {
           console.log(apl.firstWish.data)
-          
+
           let prog1 = apl.firstWish.data[0];
           let prog2 = null;
           if(apl.firstWish.data.length > 1)
             prog2 = apl.firstWish.data[1];
 
-          wishes.push( 
+          wishes.push(
             {
               "faculty": apl.firstWish.data[0].faculty.data,
               "program": prog1,
@@ -263,18 +263,18 @@
               "is_double": false,
               "eligable_programs": [],
               "eligable_programs2": []
-            
+
           });
         }
 
         if("secondWish" in apl) {
-          
+
           let prog1 = apl.secondWish.data[0];
           let prog2 = null;
           if(apl.secondWish.data.length > 1)
             prog2 = apl.secondWish.data[1];
 
-          wishes.push( 
+          wishes.push(
             {
               "faculty": apl.secondWish.data[0].faculty.data,
               "program": prog1,
@@ -285,18 +285,18 @@
               "is_double": false,
               "eligable_programs": [],
               "eligable_programs2": []
-            
+
           })
         }
 
         if("thirdWish" in apl) {
-          
+
           let prog1 = apl.thirdWish.data[0];
           let prog2 = null;
           if(apl.thirdWish.data.length > 1)
             prog2 = apl.thirdWish.data[1];
 
-          wishes.push( 
+          wishes.push(
             {
               "faculty": apl.thirdWish.data[0].faculty.data,
               "program": prog1,
@@ -307,7 +307,7 @@
               "is_double": false,
               "eligable_programs": [],
               "eligable_programs2": []
-            
+
           })
         }
 
@@ -322,18 +322,18 @@
           let application = res.data.data;
           this.originalApplication = application;
           if("id" in application){
-            
+
             this.hasApplication = true;
             application = this.transformActiveApplication(application);
-   
+
           }else {
             console.log("no active application");
           }
           this.apl = application;
-          
+
           this.doRender = true;
           this.$root.studentApplication = application;
-          
+
         }, function(err) {
           console.log(err);
         });

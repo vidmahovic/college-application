@@ -1,0 +1,35 @@
+TEST:
+
+1 - Rok Zidarn (M)
+    1. Arhitektura MAG (ok, test sposobnosti)
+    2. Lesarstvo UN (neustrezen poklic)
+    3. FRI UN (ok)
+
+2 - Miha Mihič (PM)
+    1. Arhitektura MAG (premalo točk, test sposobnosti)
+    2. Lesarstvo UN (ok, ustrezen poklic)
+    3. FRI VS (ok)
+
+3 - Božidar Daribožič (M)
+    1. Uprava UN (ok)
+    2. Gozdarstvo (ok)
+
+4 - Karolina Travnikar (PM)
+    1. Matematika UN (slaba ocena na maturi)
+    2. Praktična matematika UN (slaba ocena na maturi)
+    3. Uprava UN (slaba ocena na maturi)
+
+5 - Janez Novak (M)
+    1. Matematika UN (ok, uspeh pri maturi pri matematiki in 3./4. letniku)
+    2. Gozdarstvo UN (ok)
+    3. FRI + FMF (ok)
+
+6 - Metka Jankec (PM)
+    1. FRI UN (ok)
+    2. FRI VS (ok)
+    3. Praktična matematika (ni predpisanega predmeta na maturi)
+
+7 - Mirko Ojojoj (NM)
+    1. FRI UN (ni mature)
+    2. Praktična matematika (ni mature)
+    3. Uprava UN (ni mature)

@@ -19,6 +19,11 @@ import VpisnaSluzbaProgrami from './components/vpisnaSluzba/Programi/Programi.vu
 import VpisnaSluzbaProgramiUrejanje from './components/vpisnaSluzba/Programi/Urejanje.vue'
 import VpisnaSluzbaProgramiUstvari from './components/vpisnaSluzba/Programi/Ustvari.vue'
 
+import PregledVpisanih from './components/vpisnaSluzba/Programi/PregledVpisanih.vue'
+import Sprejeti from './components/vpisnaSluzba/Programi/Sprejeti.vue'
+import vpisnaSluzbaIO from './components/vpisnaSluzba/IO/IO.vue'
+import Calculation from './components/vpisnaSluzba/Programi/Calculation.vue'
+
 const routes = [
 	{
 		path: '/login',
@@ -62,11 +67,21 @@ const routes = [
 				component: ReferentDashboard,
 				name: 'ReferentDashboard',
 				meta: {description: 'ReferentDashboard'}
-      		}
+      },
+			{
+				path: '/referent/pregled_vpisanih',
+				component: PregledVpisanih,
+				name: 'PregledVpisanih'
+			},
+			{
+				path: '/referent/sprejeti',
+				component: Sprejeti,
+				name: 'Sprejeti'
+			}
 		]
 	},
 	{
-		path: '/vpisna_sluzba',
+		path: '/enrollment_service',
 		component: VpisnaSluzbaView,
 		/*name: 'vpisnaSluzba',*/
 		meta: {description: 'Vpisna sluzba /'},
@@ -76,22 +91,52 @@ const routes = [
 				component: VpisnaSluzbaDashboard,
 				name: 'VpisnaSluzbaDashboard',
 				meta: {description: 'VpisnaSluzbaDashboard'}
-      },
+      		},
 			{
-				path: '/vpisna_sluzba/programi',
+				path: '/enrollment_service/programi',
 				component: VpisnaSluzbaProgrami,
 				name: 'VpisnaSluzbaProgrami',
 				meta: {description: 'VpisnaSluzbaProgrami'}
 			},
 			{
-				path: '/vpisna_sluzba/programi/ustvari',
+				path: '/enrollment_service/programi/ustvari',
 				component: VpisnaSluzbaProgramiUstvari,
 				name: 'VpisnaSluzbaProgramiUstvari'
 			},
 			{
-				path: '/vpisna_sluzba/programi/:id',
+				path: '/enrollment_service/programi/:id',
 				component: VpisnaSluzbaProgramiUrejanje,
 				name: 'VpisnaSluzbaProgramiUrejanje'
+			},
+			{
+				path: '/enrollment_service/:id/prijavljeni',
+				component: PregledVpisanih,
+				name: 'PregledVpisanih'
+			},
+			{
+				path: '/enrollment_service/:id/sprejeti',
+				component: Sprejeti,
+				name: 'Sprejeti'
+			},
+			{
+				path: '/enrollment_service/prijavljeni',
+				component: PregledVpisanih,
+				name: 'PregledVpisanih1'
+			},
+			{
+				path: '/enrollment_service/sprejeti',
+				component: Sprejeti,
+				name: 'Sprejeti1'
+			},
+			{
+				path: '/enrollment_service/io',
+				component: vpisnaSluzbaIO,
+				name: 'vpisnaSluzbaIO'
+			},
+			{
+				path: '/enrollment_service/calculation/:id',
+				component: Calculation,
+				name: 'Calculation'
 			}
 		]
 	},

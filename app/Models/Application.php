@@ -28,7 +28,15 @@ class Application extends Model
     }
 
     public function applicationsPrograms() {
-        return $this->belongsTo(ApplicationCity::class);
+        return $this->hasMany(ApplicationsPrograms::class);
+    }
+
+    public function applicationsProgramsId($id) {
+        return $this->hasMany(ApplicationsPrograms::class)->where('faculty_program_id', $id);
+    }
+
+    public function applicationsAbilityTests() {
+        return $this->hasMany(ApplicationAbilityTest::class);
     }
 
     public function middleSchool() {
@@ -59,11 +67,6 @@ class Application extends Model
     public function citizen(){
         return $this->belongsTo(Citizen::class);
     }
-
-//    public function country(){
-//        return $this->belongsTo(Country::class);
-//    }
-
 
     public function mailingAddress()
     {
@@ -108,19 +111,21 @@ class Application extends Model
         return $this->belongsTo(District::class, 'district_id');
     }
 
-
-//    public function applicationCities()
-//    {
-//        return $this
-//            ->belongsToMany(ApplicationCity::class, 'application_cities', 'application_id', 'city_id')
-//            ->withPivot('address', 'address_type');
-//    }
+    public function applicationAbilityTests()
+    {
+        return $this->hasMany(ApplicationAbilityTest::class, 'id');
+    }
 
     public function wishes()
     {
         return $this
             ->belongsToMany(FacultyProgram::class, 'applications_programs', 'application_id', 'faculty_program_id')
-            ->withPivot('status', 'choice_number');
+            ->withPivot('status', 'choice_number', 'points');
+    }
+
+    public function acceptedWish()
+    {
+        return $this->wishes()->wherePivot('status', true);
     }
 
     public function firstWish()
@@ -138,10 +143,14 @@ class Application extends Model
         return $this->wishes()->wherePivot('choice_number', 3);
     }
 
-//    public function applicationsPrograms()
-//    {
-//        return $this->hasMany(ApplicationsPrograms::class);
-//    }
+    public function specificWish($id)
+    {
+        return $this->wishes()->wherePivot('faculty_program_id', $id);
+    }
+
+    public function grades() {
+        return $this->hasMany(Grade::class);
+    }
 
     public function district()
     {
@@ -154,6 +163,20 @@ class Application extends Model
 
     public function scopeActive($scope) {
         return $scope->whereIn('applications.status', ['created', 'saved']);
+    }
+
+    public function scopeAccepted($query) {
+        return $query->has('acceptedWish');
+    }
+
+    public function scopeFromEuOrSlovenia($query)
+    {
+        return $query->whereIn('citizen_id', Citizen::fromSloveniaOrEu()->pluck('id')->toArray());
+    }
+
+    public function scopeFromOtherCountries($query)
+    {
+        return $query->whereIn('citizen_id', Citizen::fromOtherCountries()->pluck('id')->toArray());
     }
 
     public static function createTemplate(User $applicant)

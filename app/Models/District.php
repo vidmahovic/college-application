@@ -24,4 +24,14 @@ class District extends Model // OBCINA
     {
         return $this->hasMany(Application::class);
     }
+
+    public function scopeLocal($query)
+    {
+        return $query->whereNotLike('name', '%TUJINA%');
+    }
+
+    public function scopeForeign($query)
+    {
+        return $query->whereLike('name', '%TUJINA%');
+    }
 }
