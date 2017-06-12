@@ -215,8 +215,8 @@ class CalculationController extends ApiController
             $ability_test = null;
         }
 
-        $uspeh3L = 1;
-        $uspeh4L = 1;
+        $uspeh3L = 4;
+        $uspeh4L = 4;
         $failed = false;
 
         if(!($graduation_type == 1 || $graduation_type == 2)){
