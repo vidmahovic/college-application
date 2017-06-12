@@ -197,7 +197,7 @@ class CalculationController extends ApiController
 
     public static function calculate($id) // calculateById
     {
-        $application = Application::with('wishes', 'grades')->find($id);
+        $application = Application::with('wishes', 'grades', 'applicationsPrograms')->find($id);
 
         if($application == null){
             throw new ResourceException('Resource not found');
