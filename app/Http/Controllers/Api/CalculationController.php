@@ -179,9 +179,11 @@ class CalculationController extends ApiController
             }])->orderBy('points', 'desc')->get();
     }
 
+    /*
     public function info($id){
         return Application::with('wishes', 'grades', 'applicationAbilityTests')->find($id);
     }
+
 
     public function calculate(){
         $applications = Application::all()->pluck('id')->toArray();
@@ -191,8 +193,9 @@ class CalculationController extends ApiController
 
         return $this->response->created('Calculation complete');
     }
+    */
 
-    public static function calculateById($id)
+    public static function calculate($id) // calculateById
     {
         $application = Application::with('wishes', 'grades')->find($id);
 
@@ -381,7 +384,7 @@ class CalculationController extends ApiController
             $applicationProgram->save();
         }
 
-        return $application;
+        return Application::with('wishes', 'grades', 'applicationAbilityTests')->find($id);
     }
 
     public static function gradeTable(){
