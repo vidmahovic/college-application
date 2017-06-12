@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Grade extends Model // OCENA, PIVOT MED VPISNICO IN PREDMETOM
 {
     protected $table = 'grades';
-    protected $fillable = ['application_id', 'subject_id', 'grade'];
-    protected $guarded = ['id'];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function application(){
         return $this->belongsTo(Application::class);
@@ -16,5 +15,10 @@ class Grade extends Model // OCENA, PIVOT MED VPISNICO IN PREDMETOM
 
     public function subject(){
         return $this->belongsTo(Subject::class);
+    }
+
+    public function maturaScore()
+    {
+        return $this->belongsTo(MaturaScore::class, 'matura_score_id');
     }
 }

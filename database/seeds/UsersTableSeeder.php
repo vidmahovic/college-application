@@ -161,6 +161,245 @@ class UsersTableSeeder extends Seeder
             'activated_at' => Carbon::now(),
             'role_id' => 4
         ]);
+
+
+        // "REAL" CANDIDATES
+
+
+        User::create([
+            'email' => 'mihael.novak@gmail.com',
+            'name' => 'Mihael Novak',
+            'username' => 'mihael.novak',
+            'password' => bcrypt('novak1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'peter.planinsek@gmail.com',
+            'name' => 'Peter Planinšek',
+            'username' => 'peter.planinsek',
+            'password' => bcrypt('planinsek1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'stanko.kocjancic@gmail.com',
+            'name' => 'Stanko Kocjančič',
+            'username' => 'stanko.kocjancic',
+            'password' => bcrypt('kocjancic1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'petra.petek@gmail.com',
+            'name' => 'Petra Petek',
+            'username' => 'petra.petek',
+            'password' => bcrypt('petek1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'vida.sedmak@gmail.com',
+            'name' => 'Vida Sedmak',
+            'username' => 'vida.sedmak',
+            'password' => bcrypt('sedmak1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'bernarda.bensa@gmail.com',
+            'name' => 'Bernarda Bensa',
+            'username' => 'bernarda.bensa',
+            'password' => bcrypt('bensa1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'bojan.bojec@gmail.com',
+            'name' => 'Bojan Bojec',
+            'username' => 'bojan.bojec',
+            'password' => bcrypt('bojec1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'bojana.bojec@gmail.com',
+            'name' => 'Bojana Bojec',
+            'username' => 'bojana.bojec',
+            'password' => bcrypt('bojec1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'nives.bokal@gmail.com',
+            'name' => 'Nives Bokal',
+            'username' => 'nives.bokal',
+            'password' => bcrypt('bokal1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'jadran.jernejcic@gmail.com',
+            'name' => 'Jadran Jernejčič',
+            'username' => 'jadran.jernejcic',
+            'password' => bcrypt('jernejcic1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'jernej.jerancic@gmail.com',
+            'name' => 'Jernej Jerančič',
+            'username' => 'jernej.jerancic',
+            'password' => bcrypt('jerancic1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'fani.novak@gmail.com',
+            'name' => 'Fani Novak',
+            'username' => 'fani.novak',
+            'password' => bcrypt('novak1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'marjana.jelincic@gmail.com',
+            'name' => 'Marjana Viktorija Jelinčič',
+            'username' => 'marjana.jelincic',
+            'password' => bcrypt('jelincic1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'tomaz.velikonja@gmail.com',
+            'name' => 'Tomaž Velikonja',
+            'username' => 'tomaz.velikonja',
+            'password' => bcrypt('velikonja1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'stefan.stefancic@gmail.com',
+            'name' => 'Štefan Štefančič',
+            'username' => 'stefan.stefancic',
+            'password' => bcrypt('stefancic1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'jana.klinar@gmail.com',
+            'name' => 'Jana Klinar',
+            'username' => 'jana.klinar',
+            'password' => bcrypt('klinar1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'mira.juhant@gmail.com',
+            'name' => 'Mira Varl Juhant',
+            'username' => 'mira.juhant',
+            'password' => bcrypt('juhant1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'stanislav.stanic@gmail.com',
+            'name' => 'Stanislav Stanič',
+            'username' => 'stanislav.stanic',
+            'password' => bcrypt('stanic1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'primoz.primozic@gmail.com',
+            'name' => 'Primož Primožič',
+            'username' => 'primoz.primozic',
+            'password' => bcrypt('primozic1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'anita.cebokli@gmail.com',
+            'name' => 'Anita Čebokli',
+            'username' => 'anita.cebokli',
+            'password' => bcrypt('cebokli1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'klemen.klemencic@gmail.com',
+            'name' => 'Klemen Klemenčič',
+            'username' => 'klemen.klemencic',
+            'password' => bcrypt('klemencic1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'ivan.invancic@gmail.com',
+            'name' => 'Ivan Ivančič',
+            'username' => 'ivan.ivancic',
+            'password' => bcrypt('ivancic1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'pavla.pavlin@gmail.com',
+            'name' => 'Pavla Pavlin',
+            'username' => 'pavla.pavlin',
+            'password' => bcrypt('pavlin1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'pavel.pavlin@gmail.com',
+            'name' => 'Pavel Pavlin',
+            'username' => 'pavel.pavlin',
+            'password' => bcrypt('pavlin1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'bozidar.bozic@gmail.com',
+            'name' => 'Božidar Božič',
+            'username' => 'bozidar.bozic',
+            'password' => bcrypt('bozic1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
+        User::create([
+            'email' => 'cita.jansa@gmail.com',
+            'name' => 'Cita Janša',
+            'username' => 'cita.jansa',
+            'password' => bcrypt('jansa1234'),
+            'activated_at' => Carbon::now(),
+            'role_id' => 4
+        ]);
+
     }
 
 }

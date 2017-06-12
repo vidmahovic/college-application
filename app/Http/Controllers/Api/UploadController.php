@@ -27,11 +27,7 @@ class UploadController extends ApiController
         $score_parser = new GeneralScoreParser;
         $subject_parser = new GeneralSubjectParser;
 
-        // Delete old general matura records.
-        foreach (MaturaScore::where('general_matura', true)->get() as $score) {
-            $score->subjects()->detach();
-            $score->delete();
-        }
+        MaturaScore::deleteOldRecords(true);
 
         $response = new \stdClass;
 
@@ -51,10 +47,7 @@ class UploadController extends ApiController
         $score_parser = new VocationalScoreParser;
         $subject_parser = new VocationalSubjectParser;
 
-        foreach (MaturaScore::where('general_matura', false)->get() as $score) {
-            $score->subjects()->detach();
-            $score->delete();
-        }
+        MaturaScore::deleteOldRecords(false);
 
         $response = new \stdClass;
 

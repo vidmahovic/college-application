@@ -1,7 +1,9 @@
 <?php
 
 namespace CollegeApplication\Parsing;
+use App\Models\Application;
 use App\Models\MaturaScore;
+use Illuminate\Support\Facades\App;
 use Illuminate\Validation\Rule;
 
 /**
@@ -17,7 +19,7 @@ class GeneralSubjectParser extends MaturaFileParser
         $score = MaturaScore::where('emso', $line['emso'])->firstOrFail();
         $line['first_name'] = $score->first_name;
         $line['last_name'] = $score->last_name;
-        return parent::setError($line);
+        parent::setError($line);
     }
 
     protected function parseLine(string $line): array
@@ -40,15 +42,16 @@ class GeneralSubjectParser extends MaturaFileParser
 
     protected function storeLine(array $line)
     {
-        $score = MaturaScore::where('emso', $line['emso'])->first();
-        if($score !== null) {
-            $score->subjects()->attach($line['subject_id'], [
+        $application = Application::where('emso', $line['emso'])->first();
+        if($application !== null && $application->maturaScores()->first() !== null) {
+            $application->subjects()->attach($line['subject_id'], [
                 'matura_mark' => $line['matura_mark'] == null ? null : $line['matura_mark'],
                 'third_grade_mark' => $line['third_grade_mark'] == null ? null : $line['third_grade_mark'],
                 'fourth_grade_mark' => $line['third_grade_mark'] == null ? null : $line['fourth_grade_mark']
             ]);
             $this->created_lines++;
         }
+        // If matura score is not present in DB, that means something went wrong while parsing matura scores.
 
     }
 

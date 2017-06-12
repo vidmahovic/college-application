@@ -2,6 +2,7 @@
 
 namespace CollegeApplication\Parsing;
 
+use App\Models\Application;
 use App\Models\ApplicationInterval;
 use App\Models\MaturaScore;
 use Illuminate\Validation\Rule;
@@ -37,13 +38,20 @@ class VocationalScoreParser extends MaturaFileParser
     protected function storeLine(array $line)
     {
         $line['general_matura'] = false;
-        $line['interval_id'] = ApplicationInterval::current()->first()->id;
 
-        $score = MaturaScore::where('emso', $line['emso'])->first();
+        $application = Application::firstOrNew(['emso' => $line['emso']]);
+        $application->emso = $line['emso'];
+        //$application->name = $line['first_name'] . ' ' . $line['last_name'];
+        $application->profession_id = $line['profession_id'];
+        $application->middle_school_id = $line['middle_school_id'];
+        $application->application_interval_id = ApplicationInterval::current()->first()->id;
+        $application->save();
+
+        $score = $application->maturaScores()->first();
         if($score === null)
-             MaturaScore::create($line);
+             $application->maturaScores()->create($line);
         else
-            $score->update(array_except($line, ['emso']));
+            $score->update($line);
 
         switch($line['status']) {
             case 1:

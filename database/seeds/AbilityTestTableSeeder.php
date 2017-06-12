@@ -15,8 +15,8 @@ class AbilityTestTableSeeder extends Seeder
     {
         $ability_test = AbilityTest::create([
             'faculty_program_id' => "SU00",
-            'max_points' => 120,
-            'min_points' => 30,
+            'max_points' => 40,
+            'min_points' => 18,
             'updated_at' => \Carbon\Carbon::now(),
             'created_at' => \Carbon\Carbon::now()
         ]);
