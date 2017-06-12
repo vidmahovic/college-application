@@ -984,7 +984,7 @@ class ApplicationTableSeeder extends Seeder
             'application_id' => $application->id,
             'faculty_program_id' => "R400",
             'status' => 0,
-            'choice_number' => 2
+            'choice_number' => 3
         ]);
 
 
@@ -1039,7 +1039,7 @@ class ApplicationTableSeeder extends Seeder
             'application_id' => $application->id,
             'faculty_program_id' => "VT00",
             'status' => 0,
-            'choice_number' => 2
+            'choice_number' => 3
         ]);
 
         $application = Application::create([
