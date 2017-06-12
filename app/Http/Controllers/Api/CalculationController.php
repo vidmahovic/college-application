@@ -254,7 +254,7 @@ class CalculationController extends ApiController
         for($wish_index = 0; $wish_index < count($wishIds); $wish_index = $wish_index + 1){ // wish
             $wish = $wishIds[$wish_index];
             if($failed){
-                $points = -1000;
+                $points = -100;
             }
             else {
                 $points = 0;
@@ -370,7 +370,12 @@ class CalculationController extends ApiController
             }
 
             $applicationProgram = ApplicationsPrograms::find($wish);
-            $applicationProgram->points = $points;
+            if($points > 0) {
+                $applicationProgram->points = $points;
+            }
+            else{
+                $applicationProgram->points = 0;
+            }
             $applicationProgram->save();
         }
 
