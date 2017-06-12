@@ -46,7 +46,7 @@ class ApplicationController extends ApiController {
             throw new UnauthorizedHttpException('Basic');
 
         if($user->isReferent())
-            $this->request['filters'] = array_merge($this->request['filters'], ['faculty_id' => $user->faculty_id]);
+            $this->request['filters'] = array_merge($this->request['filters'], ['accepted_faculty' => $user->faculty_id]);
 
         $applications_si_eu = $this->search
             ->applyFiltersFromRequest($this->request)
