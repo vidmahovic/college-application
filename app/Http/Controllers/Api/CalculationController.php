@@ -215,8 +215,8 @@ class CalculationController extends ApiController
             $ability_test = null;
         }
 
-        $uspeh3L = 1;
-        $uspeh4L = 1;
+        $uspeh3L = 4;
+        $uspeh4L = 4;
         $failed = false;
 
         if(!($graduation_type == 1 || $graduation_type == 2)){
@@ -230,8 +230,14 @@ class CalculationController extends ApiController
             if($grades[$i]["subject_id"] == 'U003'){
                 $uspeh3L = $grades[$i]["matura_mark"];
             }
+            else if($grades[$i]["third_grade_mark"] != null){
+                $uspeh3L = $grades[$i]["third_grade_mark"];
+            }
             if($grades[$i]["subject_id"] == 'U004'){
                 $uspeh4L = $grades[$i]["matura_mark"];
+            }
+            else if($grades[$i]["fourth_grade_mark"] != null){
+                $uspeh4L = $grades[$i]["fourth_grade_mark"];
             }
         }
 
