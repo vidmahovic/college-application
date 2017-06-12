@@ -189,7 +189,7 @@ class CalculationController extends ApiController
             $calculated = self::calculateById($applications[$i]);
         }
 
-        return $this->response->created();
+        return $this->response->created('Calculation complete');
     }
 
     public static function calculateById($id)
@@ -225,14 +225,14 @@ class CalculationController extends ApiController
         }
         else{
             for($i = 0; $i < count($grades); $i = $i + 1){
-                if($grades[$i]["grade"] < 2){
+                if($grades[$i]["matura_mark"] < 2){
                     $failed = true;
                 }
                 if($grades[$i]["subject_id"] == 'U003'){
-                    $uspeh3L = $grades[$i]["grade"];
+                    $uspeh3L = $grades[$i]["matura_mark"];
                 }
                 if($grades[$i]["subject_id"] == 'U004'){
-                    $uspeh4L = $grades[$i]["grade"];
+                    $uspeh4L = $grades[$i]["matura_mark"];
                 }
             }
         }
@@ -270,7 +270,7 @@ class CalculationController extends ApiController
                         for($i = 0; $i < count($grades); $i = $i + 1){
                             $sid = $grades[$i]["subject_id"];
                             if($sid[0] == 'M' || $sid[0] == 'L'){
-                                $sum = $sum + $grades[$i]["grade"];
+                                $sum = $sum + $grades[$i]["matura_mark"];
                             }
                         }
 
@@ -301,7 +301,7 @@ class CalculationController extends ApiController
                         for($k = 0; $k < count($grades); $k = $k + 1){
                             $sid = $grades[$k]["subject_id"];
                             if($sid[0] == 'M'){
-                                array_push($general_grades, $grades[$k]["grade"]);
+                                array_push($general_grades, $grades[$k]["matura_mark"]);
                                 array_push($general_subjects, $grades[$k]["subject_id"]);
                             }
                         }
@@ -331,10 +331,10 @@ class CalculationController extends ApiController
                         if($obligatory != null){
                             $grade = 0;
                             if(in_array($obligatory["subject_id"], $high_level_subjects)){
-                                $grade = self::gradePointHighLevel($obligatory["grade"]);
+                                $grade = self::gradePointHighLevel($obligatory["matura_mark"]);
                             }
                             else{
-                                $grade = self::gradePoint($obligatory["grade"]);
+                                $grade = self::gradePoint($obligatory["matura_mark"]);
                             }
                             $curr_point = ($grade * ($condition["weight"] / 100));
                             $points = $points + $curr_point;
