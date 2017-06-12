@@ -836,6 +836,254 @@ class ApplicationTableSeeder extends Seeder
             'status' => 0,
             'choice_number' => 2
         ]);
+
+        $application = Application::create([
+            'user_id' => User::where('email', '=', 'stefan.stefancic@gmail.com')->first()->id,
+            'application_interval_id' => 1,
+            'middle_school_id' => 25002,
+            'education_type_id' => 15002,
+            'profession_id' => 52551,
+            'gender' => "male",
+            'date_of_birth' => "1997-07-06",
+            'emso' => '0607997500093',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => null,
+            'deleted_at' => null,
+            'citizen_id' => 1,
+            'graduation_type_id' => 2,
+            'status' => "filed",
+            'district_id' => 61,
+            'country_id' => 705,
+            'phone' => '041251307'
+        ]);
+        $permanent = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 1",
+            'address_type' => 0,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        $mailing = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 2",
+            'address_type' => 1,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        $wish1 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "VT00",
+            'status' => 0,
+            'choice_number' => 1
+        ]);
+        $wish2 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "VU00",
+            'status' => 0,
+            'choice_number' => 2
+        ]);
+
+        $application = Application::create([
+            'user_id' => User::where('email', '=', 'tomaz.velikonja@gmail.com')->first()->id,
+            'application_interval_id' => 1,
+            'middle_school_id' => 25002,
+            'education_type_id' => 15002,
+            'profession_id' => 52551,
+            'gender' => "male",
+            'date_of_birth' => "1997-07-16",
+            'emso' => '1607997500097',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => null,
+            'deleted_at' => null,
+            'citizen_id' => 1,
+            'graduation_type_id' => 2,
+            'status' => "filed",
+            'district_id' => 61,
+            'country_id' => 705,
+            'phone' => '041251307'
+        ]);
+        $permanent = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 1",
+            'address_type' => 0,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        $mailing = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 2",
+            'address_type' => 1,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        $wish1 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "VT00",
+            'status' => 0,
+            'choice_number' => 1
+        ]);
+        $wish2 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "VU00",
+            'status' => 0,
+            'choice_number' => 2
+        ]);
+
+        $application = Application::create([
+        'user_id' => User::where('email', '=', 'mihael.novak@gmail.com')->first()->id,
+        'application_interval_id' => 1,
+        'middle_school_id' => 28003,
+        'education_type_id' => 15002,
+        'profession_id' => 59911,
+        'gender' => "male",
+        'date_of_birth' => "1994-12-12",
+        'emso' => '1212994500008',
+        'created_at' => \Carbon\Carbon::now(),
+        'updated_at' => null,
+        'deleted_at' => null,
+        'citizen_id' => 1,
+        'graduation_type_id' => 1,
+        'status' => "filed",
+        'district_id' => 61,
+        'country_id' => 705,
+        'phone' => '041251307'
+    ]);
+        $permanent = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 1",
+            'address_type' => 0,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        $mailing = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 2",
+            'address_type' => 1,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        $wish1 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "VT00",
+            'status' => 0,
+            'choice_number' => 1
+        ]);
+        $wish2 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "VV00",
+            'status' => 0,
+            'choice_number' => 2
+        ]);
+        $wish3 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "R400",
+            'status' => 0,
+            'choice_number' => 3
+        ]);
+
+
+        $application = Application::create([
+            'user_id' => User::where('email', '=', 'stanko.kocjancic@gmail.com')->first()->id,
+            'application_interval_id' => 1,
+            'middle_school_id' => 26001,
+            'education_type_id' => 15002,
+            'profession_id' => 59911,
+            'gender' => "male",
+            'date_of_birth' => "1997-12-02",
+            'emso' => '0212997500013',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => null,
+            'deleted_at' => null,
+            'citizen_id' => 1,
+            'graduation_type_id' => 1,
+            'status' => "filed",
+            'district_id' => 61,
+            'country_id' => 705,
+            'phone' => '041251307'
+        ]);
+        $permanent = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 1",
+            'address_type' => 0,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        $mailing = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 2",
+            'address_type' => 1,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        $wish1 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "SE00",
+            'status' => 0,
+            'choice_number' => 1
+        ]);
+        $wish2 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "R400",
+            'status' => 0,
+            'choice_number' => 2
+        ]);
+        $wish3 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "VT00",
+            'status' => 0,
+            'choice_number' => 3
+        ]);
+
+        $application = Application::create([
+            'user_id' => User::where('email', '=', 'petra.petek@gmail.com')->first()->id,
+            'application_interval_id' => 1,
+            'middle_school_id' => 46001,
+            'education_type_id' => 15002,
+            'profession_id' => 59911,
+            'gender' => "female",
+            'date_of_birth' => "1997-12-02",
+            'emso' => '0212997505015',
+            'created_at' => \Carbon\Carbon::now(),
+            'updated_at' => null,
+            'deleted_at' => null,
+            'citizen_id' => 1,
+            'graduation_type_id' => 1,
+            'status' => "filed",
+            'district_id' => 61,
+            'country_id' => 705,
+            'phone' => '041251307'
+        ]);
+        $permanent = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 1",
+            'address_type' => 0,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        $mailing = ApplicationCity::create([
+            'application_id' => $application->id,
+            'city_id' => 1000,
+            'address' => "Slovenska cesta 2",
+            'address_type' => 1,
+            'country_id' => 705,
+            'created_at' => \Carbon\Carbon::now()
+        ]);
+        $wish1 = ApplicationsPrograms::create([
+            'application_id' => $application->id,
+            'faculty_program_id' => "R400",
+            'status' => 0,
+            'choice_number' => 1
+        ]);
+
     }
 
 
