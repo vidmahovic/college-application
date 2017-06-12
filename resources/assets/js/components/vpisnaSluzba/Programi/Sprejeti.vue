@@ -59,7 +59,9 @@ import sprejeti_store from './sprejeti_store.js';
           {label: 'Ime in priimek', field: 'applicant.data.name'},
           {label: 'Naslov', field: 'mailingAddress.meta.address'},
           {label: 'Mesto', field: 'mailingAddress.data.name'},
-          {label: 'Število točk', field: 'mailingAddress.data.name'}
+          {label: 'Število točk', callback: function(row){
+            
+          }}
 
         ],
         sprejeti_store: sprejeti_store
@@ -95,6 +97,7 @@ import sprejeti_store from './sprejeti_store.js';
 
           this.faculty_id = val.id;
         }
+        this.$root.test = this.params;
 
         this.$http.get('/api/programs', {params: {filters: {faculty_id: this.faculty_id}}})
           .then(function(res){
@@ -116,12 +119,15 @@ import sprejeti_store from './sprejeti_store.js';
             facultyData: this.params.facultyData
           };
         }
+
+        this.$root.test = this.params;
       },
       regular1: function(val){
         console.log(val);
       }
     },
     created: function(){
+      this.$root.test = {};
       var user = JSON.parse(window.localStorage.getItem('user'));
       this.role = user.role;
 
@@ -130,6 +136,7 @@ import sprejeti_store from './sprejeti_store.js';
       }
       else if(this.$route.name == 'Sprejeti') {
         this.params.programData = this.$root.programData;
+        this.$root.test = this.params;
         this.faculty_id = this.params.programData.faculty_id;
       }
 

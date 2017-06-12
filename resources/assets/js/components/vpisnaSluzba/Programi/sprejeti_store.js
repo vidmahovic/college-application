@@ -161,7 +161,7 @@ export default {
 		getRows(url, callback){
 			this.$http.get(url, {params: {filters: this.params}})
 				.then(function(res){
-					this.data = res.data.data;
+					this.data = res.data.data.eu.data;
 					//this.page_size = res.data.meta.pagination.per_page;
 					//this.last_pageData = res.data.meta.pagination.total_pages;
 					if(callback) callback();
