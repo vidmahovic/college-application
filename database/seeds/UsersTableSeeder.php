@@ -259,7 +259,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'email' => 'jernej.jerancic@gmail.com',
             'name' => 'Jernej Jerančič',
-            'username' => 'bojana.bojec',
+            'username' => 'jernej.jerancic',
             'password' => bcrypt('jerancic1234'),
             'activated_at' => Carbon::now(),
             'role_id' => 4
