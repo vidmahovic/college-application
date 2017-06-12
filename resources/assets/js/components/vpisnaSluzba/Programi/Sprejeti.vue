@@ -49,7 +49,8 @@ import sprejeti_store from './sprejeti_store.js';
         regular: '',
         params: {
           programData: '',
-          facultyData: ''
+          facultyData: '',
+          regular: ''
         },
         referentPrograms: [],
         faculties: [],
@@ -60,7 +61,7 @@ import sprejeti_store from './sprejeti_store.js';
           {label: 'Naslov', field: 'mailingAddress.meta.address'},
           {label: 'Mesto', field: 'mailingAddress.data.name'},
           {label: 'Število točk', callback: function(row){
-            
+            console.log(row.params);
           }}
 
         ],
@@ -84,7 +85,8 @@ import sprejeti_store from './sprejeti_store.js';
         if(val == null){
           this.params = {
             facultyData: '',
-            programData: this.params.programData
+            programData: this.params.programData,
+            regular: this.params.regular
           };
 
           this.faculty_id = '';
@@ -92,7 +94,8 @@ import sprejeti_store from './sprejeti_store.js';
         else {
           this.params = {
             facultyData: val,
-            programData: this.params.programData
+            programData: this.params.programData,
+            regular: this.params.regular
           };
 
           this.faculty_id = val.id;
@@ -110,20 +113,28 @@ import sprejeti_store from './sprejeti_store.js';
         if(val == null){
           this.params = {
             programData: '',
-            facultyData: this.params.facultyData
+            facultyData: this.params.facultyData,
+            regular: this.params.regular
           };
         }
         else {
           this.params = {
             programData: val,
-            facultyData: this.params.facultyData
+            facultyData: this.params.facultyData,
+            regular: this.params.regular
           };
         }
 
         this.$root.test = this.params;
       },
       regular1: function(val){
-        console.log(val);
+        this.params = {
+          programData: this.params.programData,
+          facultyData: this.params.facultyData,
+          regular: val
+        };
+
+        this.$root.test = this.params;
       }
     },
     created: function(){

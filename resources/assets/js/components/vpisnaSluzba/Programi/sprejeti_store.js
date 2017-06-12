@@ -14,9 +14,10 @@ export default {
 		last_pageData: 1,
 		data: [],
 		table: null,
+    regular: '',
 		params: {
 			program_id: '',
-			faculty_id: ''
+			faculty_id: '',
 		},
 		apiUrl: '/api/applications/accepted'
 	}),
@@ -147,6 +148,7 @@ export default {
 		setData(data){
       this.params.program_id = data.programData.id;
 			this.params.faculty_id = data.facultyData.id;
+      this.regular = data.regular;
 			this.getRows(this.apiUrl);
 		},
 		setFilterable(value){
@@ -161,7 +163,23 @@ export default {
 		getRows(url, callback){
 			this.$http.get(url, {params: {filters: this.params}})
 				.then(function(res){
-					this.data = res.data.data.eu.data;
+          console.log(res);
+          if(this.regular == '0'){
+            this.data = res.data.data.eu.data
+          }
+          else if(this.regular == '1'){
+            this.data = res.data.data.other.data;
+          }
+          else {
+            this.data = res.data.data.eu.data.concat(res.data.data.other.data);
+          }
+
+          for(var i in this.data){
+            this.data[i].params = this.params;
+          }
+
+          debugger;
+
 					//this.page_size = res.data.meta.pagination.per_page;
 					//this.last_pageData = res.data.meta.pagination.total_pages;
 					if(callback) callback();
