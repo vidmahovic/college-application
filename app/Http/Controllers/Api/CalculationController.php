@@ -179,7 +179,16 @@ class CalculationController extends ApiController
             }])->orderBy('points', 'desc')->get();
     }
 
-    public function calculate($id)
+    public function calculate(){
+        $applications = Application::all()->pluck('id')->toArray();
+        for($i = 0; $i < count($applications); $i = $i + 1){
+            $calculated = self::calculateById($applications[$i]);
+        }
+
+        return $this->response->created();
+    }
+
+    public static function calculateById($id)
     {
         $application = Application::with('wishes', 'grades')->find($id);
 
