@@ -2,6 +2,7 @@
 
 namespace CollegeApplication\Parsing;
 
+use App\Models\Application;
 use App\Models\ApplicationInterval;
 use App\Models\MaturaScore;
 use Illuminate\Validation\Rule;
@@ -38,26 +39,39 @@ class GeneralScoreParser extends MaturaFileParser
     protected function storeLine(array $line)
     {
         $line['general_matura'] = true;
-        $line['interval_id'] = ApplicationInterval::current()->first()->id;
+//        $line['interval_id'] = ApplicationInterval::current()->first()->id;
+
+        $application = Application::firstOrNew(['emso' => $line['emso']]);
+        $application->emso = $line['emso'];
+        //$application->name = $line['first_name'] . ' ' . $line['last_name'];
+        $application->profession_id = $line['profession_id'];
+        $application->middle_school_id = $line['middle_school_id'];
+        $application->application_interval_id = ApplicationInterval::current()->first()->id;
+        $application->save();
+
+        $score = $application->maturaScores()->first();
 
         switch($line['status']) {
             case 0: case 1: case 2:
-                MaturaScore::create($line);
+                $application->maturaScores()->create($line);
                 $this->created_lines++;
                 break;
             case 3: case 4:
-                $score = MaturaScore::where('emso', $line['emso'])->first();
                 if($score === null)
-                    MaturaScore::create($line);
+                    $application->maturaScores()->create($line);
                 else
                     $score->update(array_except($line, ['emso']));
 
                 $this->updated_lines++;
                 break;
             case 7:
-                // Store new general matura score, but only emso, first_name, last_name and general_matura bool
-                $line['general_matura'] = null;
-                MaturaScore::create(array_only($line, ['emso', 'first_name', 'last_name', 'general_matura']));
+                if($score === null) {
+                    // This is set to null so the app won't delete records,
+                    // imported from general matura scores in vocational matura scores.
+                    $line['general_matura'] = null;
+                    $application->maturaScores()->create(array_only($line, ['general_matura']));
+                }
+
                 break;
         }
     }

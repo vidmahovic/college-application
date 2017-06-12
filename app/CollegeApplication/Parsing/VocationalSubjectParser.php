@@ -1,6 +1,7 @@
 <?php
 
 namespace CollegeApplication\Parsing;
+use App\Models\Application;
 use App\Models\MaturaScore;
 use App\Models\Subject;
 use Illuminate\Validation\Rule;
@@ -36,10 +37,10 @@ class VocationalSubjectParser extends MaturaFileParser
 
     protected function storeLine(array $line)
     {
-        $score = MaturaScore::where('emso', $line['emso'])->first();
+        $application = Application::where('emso', $line['emso'])->first();
 
-        if($score !== null) {
-            $score->subjects()->attach($line['subject_id'], [
+        if($application !== null && $application->maturaScores()->first() !== null) {
+            $application->subjects()->attach($line['subject_id'], [
                 'matura_mark' => $line['matura_mark'],
                 'third_grade_mark' => $line['third_grade_mark'] == null ? null : $line['third_grade_mark'],
                 'fourth_grade_mark' => $line['third_grade_mark'] == null ? null : $line['fourth_grade_mark']

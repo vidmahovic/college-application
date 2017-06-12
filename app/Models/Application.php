@@ -152,9 +152,19 @@ class Application extends Model
         return $this->hasMany(Grade::class);
     }
 
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'grades', 'application_id', 'subject_id')
+            ->withPivot('third_grade_mark', 'fourth_grade_mark', 'matura_mark');
+    }
+
     public function district()
     {
         return $this->belongsTo(District::class);
+    }
+
+    public function maturaScores() {
+        return $this->hasMany(MaturaScore::class);
     }
 
     public function scopeFiled($scope) {
