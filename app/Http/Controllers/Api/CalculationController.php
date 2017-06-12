@@ -223,20 +223,15 @@ class CalculationController extends ApiController
             $failed = true;
         }
 
-        if(count($grades) < 6){
-            $failed = true;
-        }
-        else{
-            for($i = 0; $i < count($grades); $i = $i + 1){
-                if($grades[$i]["matura_mark"] < 2){
-                    $failed = true;
-                }
-                if($grades[$i]["subject_id"] == 'U003'){
-                    $uspeh3L = $grades[$i]["matura_mark"];
-                }
-                if($grades[$i]["subject_id"] == 'U004'){
-                    $uspeh4L = $grades[$i]["matura_mark"];
-                }
+        for($i = 0; $i < count($grades); $i = $i + 1){
+            if($grades[$i]["matura_mark"] < 2){
+                $failed = true;
+            }
+            if($grades[$i]["subject_id"] == 'U003'){
+                $uspeh3L = $grades[$i]["matura_mark"];
+            }
+            if($grades[$i]["subject_id"] == 'U004'){
+                $uspeh4L = $grades[$i]["matura_mark"];
             }
         }
 
@@ -259,7 +254,7 @@ class CalculationController extends ApiController
         for($wish_index = 0; $wish_index < count($wishIds); $wish_index = $wish_index + 1){ // wish
             $wish = $wishIds[$wish_index];
             if($failed){
-                $points = -100;
+                $points = -1000;
             }
             else {
                 $points = 0;
@@ -375,12 +370,7 @@ class CalculationController extends ApiController
             }
 
             $applicationProgram = ApplicationsPrograms::find($wish);
-            if($points > 0) {
-                $applicationProgram->points = $points;
-            }
-            else{
-                $applicationProgram->points = 0;
-            }
+            $applicationProgram->points = $points;
             $applicationProgram->save();
         }
 
