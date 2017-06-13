@@ -71,8 +71,8 @@ import sprejeti_store from './sprejeti_store.js';
     methods: {
       savePdf1: function(){
         var postData = {
-          program_id: this.params.programData.id,
-          faculty_id: this.params.facultyData.id
+          accepted_program: this.params.programData.id,
+          accepted_faculty: this.params.facultyData.id
         };
 
         this.$http.get('/api/applications/accepted', {params: {filters: postData}})

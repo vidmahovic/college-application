@@ -16,8 +16,8 @@ export default {
 		table: null,
     regular: '',
 		params: {
-			program_id: '',
-			faculty_id: '',
+			accepted_program: '',
+			accepted_faculty: '',
 		},
 		apiUrl: '/api/applications/accepted'
 	}),
@@ -146,8 +146,8 @@ export default {
 			this.table = table;
 		},
 		setData(data){
-      this.params.program_id = data.programData.id;
-			this.params.faculty_id = data.facultyData.id;
+      this.params.accepted_program = data.programData.id;
+			this.params.accepted_faculty = data.facultyData.id;
       this.regular = data.regular;
 			this.getRows(this.apiUrl);
 		},

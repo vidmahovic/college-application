@@ -15,7 +15,7 @@ class AcceptedFaculty implements Filter
     public static function apply(Builder $builder, $value): Builder
     {
         return $builder->whereHas('acceptedWish', function($q) use($value) {
-            return $q->where('faculty_id', $value);
+            return $q->where('faculty_programs.faculty_id', $value);
         });
     }
 }
