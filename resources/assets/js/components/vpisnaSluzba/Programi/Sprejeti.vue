@@ -38,6 +38,131 @@
 </template>
 
 <script>
+
+function prijavljeniPdf(data, params) {
+  var doc = new jsPDF('landscape');
+  var header = ["#", "St. prijave", "Ime in priimek", "Naslov", "Mesto", "Točke"];
+
+  //210 je visina, 297mm sirina
+  doc.setLineWidth(0.1);
+  doc.setFont("sans-serif");
+
+  doc.setTextColor(99, 107, 111);
+  doc.setFontSize(20);
+  doc.text(148, 20, "Tabela sprejetih študentov", null, null, "center");
+
+  /*doc.setFontSize(7);
+  var tmp1 = params.facultyData.name.replace("Č", "C").replace("Š", "S");
+  doc.text(148, 25, tmp1, null, null, "center");
+
+  tmp1 = params.programData.name.replace("Č", "C").replace("Š", "S");
+  doc.text(148, 30, tmp1, null, null, "center");*/
+
+  //table header
+  doc.setFontSize(10);
+  var x = 10;
+
+  for(var i in header){
+
+    doc.text(x, 40, header[i].replace("č", "c").replace("Š", "S"));
+
+    if(i == 0){
+      x += 10;
+    }
+    else if(i == 1){
+      x += 35;
+    }
+    else if(i == 2){
+      x+=60;
+    }
+    else if(i == 3){
+      x += 60;
+    }
+    else if(i == 5){
+      x += 50;
+    }
+    else if(i == 4){
+      x += 70;
+    }
+  }
+
+  // začetek vsebine
+  var y = 47
+  var counter = 1;
+  var totalPages = 1;
+  doc.setFontSize(9);
+  for(var i in data){
+    x = 10;
+    doc.text(x, y, counter.toString());
+
+    x += 10;
+    var tmp = data[i].id.toString();
+
+    doc.text(x, y, tmp);
+
+    x += 35;
+
+    tmp = data[i].applicant.data.name.replace("Č", "C");
+
+    doc.text(x, y, tmp);
+
+    x += 60;
+
+    tmp = data[i].mailingAddress.meta.address.replace("Č", "C");
+
+    doc.text(x, y, tmp);
+
+    x += 60;
+
+    tmp = data[i].mailingAddress.data.name.replace("Č", "C");
+
+    doc.text(x, y, tmp);
+
+    x += 70;
+
+    doc.text(x, y, data[i].acceptedWish.meta.points.toString());
+
+    x += 50;
+
+    var tmpY = y;
+    var tmpY1 = y;
+
+    if(tmpY > tmpY1){
+      if(tmpY + 33 < 210){
+        doc.line(6,tmpY+3,289,tmpY+3);
+        y = tmpY+9;
+      }
+      else {
+        doc.addPage();
+        totalPages++;
+        y = 10;
+      }
+
+    }
+    else {
+      if(tmpY1 + 33 < 210){
+        doc.line(6,tmpY1+3,289,tmpY1+3);
+        y = tmpY1+9;
+      }
+      else {
+        doc.addPage();
+        totalPages++;
+        y = 10;
+      }
+    }
+
+    counter++;
+
+  }
+
+  //footer (oštevilčenje strani)
+  for(var i = 1; i <= totalPages; i++){
+    doc.setPage(i).text(277, 207, "Stran "+ i +"/"+ totalPages);
+  }
+
+  doc.output('dataurlnewwindow');
+}
+
 import sprejeti_store from './sprejeti_store.js';
 
   export default {
@@ -56,7 +181,8 @@ import sprejeti_store from './sprejeti_store.js';
         faculties: [],
         faculty_id: '',
         table_columns: [
-          {label: '#', field: 'id'},
+          {label: '#', field:'couter'},
+          {label: 'Prijava', field: 'id'},
           {label: 'Ime in priimek', field: 'applicant.data.name'},
           {label: 'Naslov', field: 'mailingAddress.meta.address'},
           {label: 'Mesto', field: 'mailingAddress.data.name'},
@@ -77,7 +203,16 @@ import sprejeti_store from './sprejeti_store.js';
 
         this.$http.get('/api/applications/accepted', {params: {filters: postData}})
           .then(function(res){
-            //prijavljeniPdf(res.body.data);
+            if(this.regular == '0'){
+              prijavljeniPdf(res.data.data.eu.data);
+            }
+            else if(this.regular == '1'){
+              prijavljeniPdf(res.data.data.other.data);
+            }
+            else {
+              var tmp = res.data.data.eu.data.concat(res.data.data.other.data);
+              prijavljeniPdf(tmp);
+            }
           })
 
       },

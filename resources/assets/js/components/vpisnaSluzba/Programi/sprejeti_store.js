@@ -17,7 +17,7 @@ export default {
     regular: '',
 		params: {
 			accepted_program: '',
-			accepted_faculty: '',
+			accepted_faculty: ''
 		},
 		apiUrl: '/api/applications/accepted'
 	}),
@@ -163,22 +163,30 @@ export default {
 		getRows(url, callback){
 			this.$http.get(url, {params: {filters: this.params}})
 				.then(function(res){
-          console.log(res);
+          var count = 0;
           if(this.regular == '0'){
+            for(var i in res.data.data.eu.data){
+              res.data.data.eu.data[i].couter = count+1;
+            }
+
             this.data = res.data.data.eu.data
           }
           else if(this.regular == '1'){
+            for(var i in res.data.data.other.data){
+              res.data.data.other.data[i].couter = count+1;
+            }
+
             this.data = res.data.data.other.data;
           }
           else {
-            this.data = res.data.data.eu.data.concat(res.data.data.other.data);
-          }
+            var tmp = res.data.data.eu.data.concat(res.data.data.other.data);
 
-          for(var i in this.data){
-            this.data[i].params = this.params;
-          }
+            for(var i in tmp){
+              tmp[i].couter = count+1;
+            }
 
-          debugger;
+            this.data = tmp;
+          }
 
 					//this.page_size = res.data.meta.pagination.per_page;
 					//this.last_pageData = res.data.meta.pagination.total_pages;

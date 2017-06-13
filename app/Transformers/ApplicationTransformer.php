@@ -98,7 +98,7 @@ class ApplicationTransformer extends Fractal\TransformerAbstract
     public function includeAcceptedWish(Application $app) {
         $accepted = $app->acceptedWish()->first();
         if($accepted !== null) {
-            return $this->item($accepted, new FacultyProgramTransformer)->setMetaValue('points', $accepted->points);
+            return $this->item($accepted, new FacultyProgramTransformer)->setMetaValue('points', $accepted->pivot->points);
         }
     }
 
